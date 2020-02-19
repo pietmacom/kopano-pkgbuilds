@@ -1,1 +1,1 @@
-# com-pietma-kopano
+# kopano-pkgbuilds
