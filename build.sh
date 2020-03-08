@@ -45,6 +45,7 @@ echo
 # DEPENDENCIES - KOPANO-CORE
 cd makepkgs/php-xapian
 makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm 
+cp *.pkg.tar.xz /build-target
 cd ../..
 
 exit

@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-VERSION="20180531"
+export VERSION="20180531"
 
 echo
 echo "# CREATE BUILD ENVIRONMENT"
