@@ -1,74 +1,9 @@
-#!/bin/bash -e
-
-_checkupdates="n"
-_release="n"
-_forcebuild="n"
-_repo_name_origin="pietma-kopano"
-_repo_url="https://repository.pietma.com/nexus/content/repositories/archlinux"
-_prefix="sudo /root/git/utils/build-utils"
-
-chroot_create="${_prefix}/chroot_create.sh -d \"${DISTCC_HOSTS}\" -t \"${DISTCC_THREADS}\""
-chroot_build="${_prefix}/chroot_build.sh -c \"${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}\" -u \"${_repo_url}\" -n \"${_repo_name_origin}\" -m "
-chroot_install="${_prefix}/chroot_install.sh"
-chroot_release="${_prefix}/chroot_release.sh"
-repository_create="${_prefix}/repository_create.sh ${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD} ${_repo_url}"
-repository_upload="${_prefix}/repository_upload.sh ${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD} ${_repo_url}"
-repository_check_updates="${_prefix}/repository_check_updates.sh -c \"${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}\" -u \"${_repo_url}\" -n \"${_repo_name_origin}\""
-
-
-_arch="$(uname -m)"
-cp -Rn arch/${_arch}/* .
-
-if [[ "${_checkupdates}" == "y" ]];
-then
-    echo
-    echo "# CHECK FOR UPDATES"
-    echo
-
-    _updates="$($repository_check_updates | tee >(cat - >&2))"
-    if [[ -z "$(echo \"${_updates}\" | grep 'Update found')" ]];
-    then
-	echo
-        echo "No updates found. Quitting build."
-	echo
-        exit
-    fi
-fi
-
-
-
-echo
-echo "# CREATE CHROOT"
-echo
-
-$chroot_create
-#$chroot_install http://tardis.tiny-vps.com/aarm/repos/2018/05/15/armv7h/core/icu-61.1-1-armv7h.pkg.tar.xz
-
-
-
-
-
-if [ "$_arch" != "i686" ] && [ "$_arch" != "x86_64" ] && [ "$_arch" != "aarch64" ] && [ "${_arch%${_arch#arm*}*}" != "arm" ];
-then
- echo
- echo "# BUILD BUILD-DEPENDENCIES"
- echo
-
- $chroot_build ./makepkgs/jdk
- $chroot_build ./makepkgs/gcc
- $chroot_build ./makepkgs/pip2pkgbuild
-
- rm paccache/*
- # => reset chroot?
- cp dependencies/*-${_arch}.pkg.tar.xz paccache || true
- cp dependencies/*-any.pkg.tar.xz paccache || true
-fi
-
-
+#!/bin/sh -ex
 
 echo
 echo "# CHECKOUT"
 echo
+
 
 # DEPENDENCIES
 cd makepkgs
@@ -102,61 +37,18 @@ git clone https://aur.archlinux.org/python2-minimock.git
 cd ..
 
 
-if [[ "${_release}" == "y" ]];
-then
-    echo
-    echo "# RELEASE"
-    echo
-
-    # MAKEDEPENDS    
-    # $chroot_release ./makepkgs/gcc
-    # $chroot_release ./makepkgs/jdk
-
-    # ARCH: SPECIFIC
-    # $chroot_release ./makepkgs/php
-    $chroot_release ./makepkgs/zarafa-libvmime
-    $chroot_release ./makepkgs/zarafa-libical
-    $chroot_release ./makepkgs/zarafa-server
-
-    # ARCH: ANY
-    # $chroot_release ./makepkgs/zarafa-webapp
-    # $chroot_release ./makepkgs/zarafa-webapp-delayeddelivery
-    # $chroot_release ./makepkgs/zarafa-webapp-desktopnotifications
-    # $chroot_release ./makepkgs/zarafa-webapp-filepreviewer
-    # $chroot_release ./makepkgs/zarafa-webapp-passwd
-    # $chroot_release ./makepkgs/zarafa-webapp-smime
-    # $chroot_release ./makepkgs/zarafa-webapp-spellchecker
-    # $chroot_release ./makepkgs/sabre-zarafa
-    # $chroot_release ./makepkgs/z-push
-    # $chroot_release ./makepkgs/zarafa-webapp-mdm
-    # $chroot_release ./makepkgs/zarafa-service-overview
-fi
-
-
-echo
-echo "# UPDATE SOURCE TO MIRROR"
-echo
-
-find makepkgs -name "PKGBUILD" -exec sed -i "s|http://download.oracle.com/|http://${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}@repository.pietma.com/nexus/content/repositories/oracle/|g" {} \;
-find makepkgs -name "PKGBUILD" -exec sed -i "s|http://download.zarafa.com/|https://${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}@repository.pietma.com/nexus/content/repositories/zarafa-community/|g" {} \;
-find makepkgs -name "PKGBUILD" -exec sed -i "s|https://download.zarafa.com/|https://${REPOSITORY_USERNAME}:${REPOSITORY_PASSWORD}@repository.pietma.com/nexus/content/repositories/zarafa-community/|g" {} \;
-
-
-
 echo
 echo "# BUILD"
 echo
 
 
-if [[ "${_forcebuild}" == "y" ]];
-then
-    chroot_build="${_prefix}/chroot_build.sh -m " # force build
-fi
-
-
 # DEPENDENCIES - KOPANO-CORE
-#-$chroot_build ./makepkgs/php
-$chroot_build ./makepkgs/php-xapian
+cd makepkgs/php-xapian
+makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm 
+cd ../..
+
+exit
+
 $chroot_build ./makepkgs/python-sleekxmpp
 $chroot_build ./makepkgs/python2-minimock
 #-$chroot_build ./makepkgs/python2-vobject
