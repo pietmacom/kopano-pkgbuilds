@@ -1,12 +1,12 @@
 #!/bin/sh -ex
 
 build() {
-	PWD=$(pwd)
+	P=$(pwd)
 	cd $1
 	makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm --install
 	# in case there's nothing to copy
 	cp -n *.pkg.tar.xz /build-target || true
-	cd $PWD
+	cd $P
 }
 
 
