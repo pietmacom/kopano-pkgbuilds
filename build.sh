@@ -1,9 +1,18 @@
 #!/bin/sh -ex
 
+build() {
+	PWD=$(pwd)
+	cd $1
+	makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm 
+	# in case there's nothing to copy
+	cp -n *.pkg.tar.xz /build-target || true
+	cd $PWD
+}
+
+
 echo
 echo "# CHECKOUT"
 echo
-
 
 # DEPENDENCIES
 cd makepkgs
@@ -43,10 +52,8 @@ echo
 
 
 # DEPENDENCIES - KOPANO-CORE
-cd makepkgs/php-xapian
-makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm 
-cp *.pkg.tar.xz /build-target
-cd ../..
+build makepkgs/php-xapian
+
 
 exit
 
