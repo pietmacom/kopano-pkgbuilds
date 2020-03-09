@@ -1,11 +1,13 @@
 #!/bin/sh -ex
 
-export VERSION="20180531"
-
 echo
 echo "# CREATE BUILD ENVIRONMENT"
 echo
 
+if [ -z "$VERSION" ];
+then
+	VERSION="latest"
+fi
 
 if [ -z "$(docker image ls -q $(uname -m)/archlinux:$VERSION)" ];
 then
