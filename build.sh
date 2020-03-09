@@ -3,7 +3,7 @@
 build() {
 	PWD=$(pwd)
 	cd $1
-	makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm 
+	makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm --install
 	# in case there's nothing to copy
 	cp -n *.pkg.tar.xz /build-target || true
 	cd $PWD
@@ -53,36 +53,32 @@ echo
 
 # DEPENDENCIES - KOPANO-CORE
 build makepkgs/php-xapian
-
-
-exit
-
-$chroot_build ./makepkgs/python-sleekxmpp
-$chroot_build ./makepkgs/python2-minimock
+build makepkgs/python-sleekxmpp
+build makepkgs/python2-minimock
 #-$chroot_build ./makepkgs/python2-vobject
-$chroot_build ./makepkgs/libvmime
-$chroot_build ./makepkgs/libical2
-$chroot_build ./makepkgs/python2-tlslite
+build makepkgs/libvmime
+build makepkgs/libical2
+build makepkgs/python2-tlslite
 
 
 # DEPENDENCIES - KOPANO-WEBAPP
-$chroot_build ./makepkgs/jdk
+# Mind of this! ####### #### $chroot_build ./makepkgs/jdk
 
 # DEPENDENCIES - KOPANO-POSTFIXADMIN
-$chroot_build ./makepkgs/perl-lockfile-simple
+build makepkgs/perl-lockfile-simple
 
 # MAIN PACKAGES
-$chroot_build ./makepkgs/kopano-core
-$chroot_build ./makepkgs/z-push
-$chroot_build ./makepkgs/kopano-webapp
-$chroot_build ./makepkgs/kopano-sabre
-$chroot_build ./makepkgs/kopano-postfixadmin
-$chroot_build ./makepkgs/kopano-service-overview
+build makepkgs/kopano-core
+build makepkgs/z-push
+build makepkgs/kopano-webapp
+build makepkgs/kopano-sabre
+build makepkgs/kopano-postfixadmin
+build makepkgs/kopano-service-overview
 
 # ADDITIONAL
-$chroot_build ./makepkgs/asekey
-$chroot_build ./makepkgs/openct-git
-$chroot_build ./makepkgs/opensc-openct
+build makepkgs/asekey
+build makepkgs/openct-git
+build makepkgs/opensc-openct
 
 
 #-$chroot_build ./makepkgs/zarafa-libvmime
@@ -102,20 +98,3 @@ $chroot_build ./makepkgs/opensc-openct
 #-$chroot_build ./makepkgs/z-push
 #-$chroot_build ./makepkgs/zarafa-webapp-mdm
 #-$chroot_build ./makepkgs/zarafa-service-overview
-
-
-
-
-echo
-echo "# CREATE REPOSITORY"
-echo
-
-# unique
-_repo_name="${_repo_name_origin}-$(date +%Y%m%d%H%M%S)"
-$repository_create ${_repo_name} ${_repo_name_origin}
-$repository_upload ${_repo_name}
-
-# mainrepo
-$repository_create ${_repo_name_origin}
-$repository_upload ${_repo_name_origin}
-
