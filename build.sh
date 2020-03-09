@@ -3,8 +3,8 @@
 build() {
 	P=$(pwd)
 	cd $1
-	makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm --install
-	# in case there's nothing to copy
+	makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm --install --nocolor
+	# in case there's nothing to copy, don't fail
 	cp -n *.pkg.tar.xz /build-target || true
 	cd $P
 }
@@ -61,12 +61,12 @@ build makepkgs/libical2
 build makepkgs/python2-tlslite
 
 
-# DEPENDENCIES - KOPANO-WEBAPP
+# DEPENDENCIES -
+ KOPANO-WEBAPP
 # Mind of this! ####### #### $chroot_build ./makepkgs/jdk
 
 # DEPENDENCIES - KOPANO-POSTFIXADMIN
 build makepkgs/perl-lockfile-simple
-
 # MAIN PACKAGES
 build makepkgs/kopano-core
 build makepkgs/z-push
