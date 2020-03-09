@@ -3,7 +3,7 @@
 build() {
 	P=$(pwd)
 	cd $1
-	makepkg --nocolor --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm --install
+	makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm --install
 	# in case there's nothing to copy, don't fail
 	cp -n *.pkg.tar.xz /build-target || true
 	cd $P
