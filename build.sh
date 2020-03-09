@@ -62,7 +62,7 @@ build makepkgs/python2-tlslite
 
 
 # DEPENDENCIES -
- KOPANO-WEBAPP
+# KOPANO-WEBAPP
 # Mind of this! ####### #### $chroot_build ./makepkgs/jdk
 
 # DEPENDENCIES - KOPANO-POSTFIXADMIN
