@@ -76,9 +76,9 @@ build makepkgs/kopano-postfixadmin
 build makepkgs/kopano-service-overview
 
 # ADDITIONAL
-build makepkgs/asekey
-build makepkgs/openct-git
-build makepkgs/opensc-openct
+#build makepkgs/asekey
+#build makepkgs/openct-git
+#build makepkgs/opensc-openct
 
 
 #-$chroot_build ./makepkgs/zarafa-libvmime

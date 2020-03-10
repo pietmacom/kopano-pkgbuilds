@@ -7,9 +7,8 @@ url="http://www.vmime.org/"
 license=('GPL')
 depends=('gsasl' 
 	 'gnutls')
-makedepends=('cmake' 'git' 'doxygen' 'postfix')
-source=("git://github.com/kisli/vmime")
-##tag=v0.9.2")
+makedepends=('cmake' 'git' 'postfix' 'doxygen' 'xdot')
+source=("https://github.com/kisli/vmime/archive/v$pkgver.tar.gz")
 conflicts=('zarafa-libvmime')
 replaces=('zarafa-libvmime')
 md5sums=('SKIP')
@@ -21,7 +20,7 @@ prepare() {
 build() {
   cd build
 
-  cmake ../vmime \
+  cmake ../vmime-$pkgver \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DLIB_INSTALL_DIR=/usr/lib/ \
     -DCMAKE_BUILD_TYPE=Release
@@ -30,7 +29,7 @@ build() {
 }
 
 package() {
-  cd 'build'
+  cd build
 
   make DESTDIR="$pkgdir" install
 }

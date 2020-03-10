@@ -3,23 +3,15 @@
 
 # https://wiki.archlinux.org/index.php/Arch_User_Repository
 # https://wiki.archlinux.org/index.php/Arch_packaging_standards
-pkgname=('kopano-core')
 
-replaces=('zarafa-server-arm'
-	  'zarafa-server')
-
-pkgver=8.6.9
-pkgrel=7
-pkgdesc="Open Source Groupware Solution"
-
+pkgname=('kopano-configurator')
+pkgver=1
+pkgrel=1
+pkgdesc="Configurator scripts for Kopano"
 arch=('armv7h'
       'armv6h'
       'x86_64'
       'i686')
-
-url="https://www.kopano.com/"
-license=('AGPL3')
-
 makedepends=(
 	     'gcc'
 	     'gcc-libs'
@@ -30,63 +22,8 @@ makedepends=(
 	     'git'
 	    )
 depends=(
-	 # TEST
-	 'lzo'
-	 'kbproto'
-	 	 
-	 # common
-	 'gperftools'
-	 # 'tidy' => broken
-	 'openldap'
-	 'php'
-	 'mariadb'
-	 'curl'
-	 'libxml2'
-	 'openldap'
-	 'krb5'
-         'bison'
-         'python2'
-         'python'
-         'swig'
-	 'bash-completion'
-	 'icu'
-	 'jsoncpp'
-
-	 # common: version dependend in the past 
-	 'gcc-libs'
-	 'icu'
-	 'libical2'
-         'libvmime'	 	 
-	 'boost'	 
-         'boost-libs'	          
-	 'gsoap'
-	 'openssl'
-	 
-	 # presence
-         'python2-minimock'
-         'python2-dnspython'
-         'python2-nose'
-         'python2-pyopenssl'
-         'python2-tlslite'
-         'python2-soappy'
-         
-         # presence-xmpp
-         'python2-flask'
-	 'python2-sleekxmpp'
-         'ejabberd'     	 
-
-         # search
-         'python2-xapian'
-         'python2-dateutil'
-         'xapian-core'
-         'php-xapian>=1.2.21'
-	 'catdoc'
-	 'poppler'
-         'w3m'	 
-         'libxslt'                  
-         
          # pietma setup
-	 'unzip'         
+	 	 'unzip'         
 	 
          # imap-, smtp-, ical-, carddav-proxy
          'php-fpm'
@@ -97,22 +34,14 @@ depends=(
          'cyrus-sasl'         
         )
 install="install"        
-optdepends=('zarafa-webapp'
-        'sabre-zarafa'
-        'z-push'
-        'apache')
                 
 source=(
-	"git+https://stash.kopano.io/scm/kc/kopanocore.git#tag=kopanocore-${pkgver}"
-	"kopano-pietma::git+https://github.com/pietmacom/com-pietma-zarafa.git#branch=kopano"
-	)
+		"kopano-pietma::git+https://github.com/pietmacom/com-pietma-zarafa.git#branch=kopano"
+		)
 md5sums=(
 	 'SKIP'
 	 'SKIP'
 	)
-
-# DEBUG
-# OPTIONS=(!strip docs libtool staticlibs emptydirs zipman purge !optipng !upx debug)
 
 prepare() {
   cd kopanocore
