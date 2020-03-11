@@ -11,7 +11,7 @@ build() {
 	# Install packages separately.
 	# When building multiple packages with different version numbers and in one PKGBUILD,
 	# on the end makepkg tries to install all packages with the last version number
-	sudo pacman -U *.pkg.tar.xz
+	sudo pacman --noconfirm -U *.pkg.tar.xz
 	
 	cd $P
 }
