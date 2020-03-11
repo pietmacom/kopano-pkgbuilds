@@ -3,9 +3,16 @@
 build() {
 	P=$(pwd)
 	cd $1
-	makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm --install
+	makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm
+	
 	# in case there's nothing to copy, don't fail
 	cp -n *.pkg.tar.xz /build-target || true
+	
+	# Install packages separately.
+	# When building multiple packages with different version numbers and in one PKGBUILD,
+	# on the end makepkg tries to install all packages with the last version number
+	pacman -U *.pkg.tar.xz
+	
 	cd $P
 }
 
