@@ -3,6 +3,13 @@
 build() {
 	P=$(pwd)
 	cd $1
+	
+	# Install compiled make dependencies
+	if [ -e "makedepends" ];
+	then
+		sudo pacman --noconfirm -U makedepends/*.pkg.tar.xz
+	fi
+	
 	makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm
 	
 	# in case there's nothing to copy, don't fail
