@@ -86,7 +86,7 @@ build makepkgs/kopano-core
 build makepkgs/z-push
 build makepkgs/kopano-webapp
 
-sudo pacman --noconfirm -R php-composer
+sudo pacman --noconfirm -R composer
 build makepkgs/kopano-sabre
 build makepkgs/kopano-postfixadmin
 build makepkgs/kopano-service-overview
