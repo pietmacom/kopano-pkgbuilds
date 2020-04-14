@@ -85,6 +85,8 @@ build makepkgs/perl-lockfile-simple
 build makepkgs/kopano-core
 build makepkgs/z-push
 build makepkgs/kopano-webapp
+
+pacman --noconfirm -R php-composer
 build makepkgs/kopano-sabre
 build makepkgs/kopano-postfixadmin
 build makepkgs/kopano-service-overview
