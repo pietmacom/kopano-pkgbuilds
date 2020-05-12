@@ -1,12 +1,12 @@
 # kopano-pkgbuilds
 
 ## Clone
-git clone --recursive https://github.com/pietmacom/kopano-pkgbuilds.git
+$ git clone --recursive https://github.com/pietmacom/kopano-pkgbuilds.git
 
 ### Use latest environment
-cd kopano-pkgbuilds
+$ cd kopano-pkgbuilds
 
-git submodule update --remote 
+$ git submodule update --remote 
 
 ## Milestones/Plans
  - Make the existing packages compile with Archlinux 20180531
