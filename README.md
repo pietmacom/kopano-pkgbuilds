@@ -9,7 +9,7 @@ $ cd kopano-pkgbuilds
 $ git submodule update --remote 
 
 ## Milestones/Plans
- - Make the existing packages compile with Archlinux 20180531
+ - (DONE) Make the existing packages compile with Archlinux 20180531
  - Seperate kopano-configurator and kopano-core
  - Compile package independently. Don't miss neccessary dependencies that had been installed indirectly by other packages.
  - Implement resume function to skip successfull build packages
