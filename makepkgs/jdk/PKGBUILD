@@ -51,7 +51,7 @@ backup=("etc/java-$_jname/images/cursors/cursors.properties"
 options=('!strip') # JDK debug-symbols
 install=$pkgname.install
 
-_baseurl="https://github.com/frekele/oracle-java/releases/download"
+_baseurl="http://github.com/frekele/oracle-java/releases/download"
 source_armv7h=("${_baseurl}/$pkgver-$_build/jdk-$pkgver-linux-arm32-vfp-hflt.tar.gz")
 source_armv6h=("${_baseurl}/$pkgver-$_build/jdk-$pkgver-linux-arm32-vfp-hflt.tar.gz")
 source_aarch64=("${_baseurl}/$pkgver-$_build/jdk-$pkgver-linux-arm64-vfp-hflt.tar.gz")
