@@ -73,7 +73,7 @@ build makepkgs/python2-minimock
 build makepkgs/libvmime
 build makepkgs/libical2
 build makepkgs/python2-tlslite
-
+build makepkgs/jdk
 
 # DEPENDENCIES -
 # KOPANO-WEBAPP
