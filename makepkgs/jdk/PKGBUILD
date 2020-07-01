@@ -31,7 +31,7 @@ provides=("java-runtime=$_major"
           "java-environment-jdk=$_major")
 
 # Variables
-DLAGENTS=('http::/usr/bin/curl -LC - -b oraclelicense=a -O')
+#DLAGENTS=('http::/usr/bin/curl -LC - -b oraclelicense=a -O')
 _jname=${pkgname}${_major}
 _jvmdir=/usr/lib/jvm/java-$_major-$pkgname
 
@@ -71,7 +71,6 @@ package() {
     install -d "$pkgdir"/usr/share/licenses/java$_major-$pkgname
 
     msg2 "Removing redundancies..."
-    rm    db/bin/*.bat
     rm    jre/lib/fontconfig.*.bfc
     rm    jre/lib/fontconfig.*.properties.src
     rm    jre/*.txt
