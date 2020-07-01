@@ -52,11 +52,11 @@ options=('!strip') # JDK debug-symbols
 install=$pkgname.install
 
 _baseurl="https://github.com/frekele/oracle-java/releases/download"
-source_armv7h=("${_basurl}/$pkgver-$_build/jdk-$pkgver-linux-arm32-vfp-hflt.tar.gz")
-source_armv6h=("${_basurl}/$pkgver-$_build/jdk-$pkgver-linux-arm32-vfp-hflt.tar.gz")
-source_aarch64=("${_basurl}/$pkgver-$_build/jdk-$pkgver-linux-arm64-vfp-hflt.tar.gz")
-source_x86_64=("${_basurl}/$pkgver-$_build/jdk-$pkgver-linux-x64.tar.gz")
-source_i686=("${_basurl}/$pkgver-$_build/jdk-$pkgver-linux-i586.tar.gz")
+source_armv7h=("${_baseurl}/$pkgver-$_build/jdk-$pkgver-linux-arm32-vfp-hflt.tar.gz")
+source_armv6h=("${_baseurl}/$pkgver-$_build/jdk-$pkgver-linux-arm32-vfp-hflt.tar.gz")
+source_aarch64=("${_baseurl}/$pkgver-$_build/jdk-$pkgver-linux-arm64-vfp-hflt.tar.gz")
+source_x86_64=("${_baseurl}/$pkgver-$_build/jdk-$pkgver-linux-x64.tar.gz")
+source_i686=("${_baseurl}/$pkgver-$_build/jdk-$pkgver-linux-i586.tar.gz")
 md5sums_armv7h=('SKIP')
 md5sums_armv6h=('SKIP')
 md5sums_aarch64=('SKIP')
