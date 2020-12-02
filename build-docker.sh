@@ -19,7 +19,7 @@ then
 fi
 
 
-if [ ! -z "$DOCKER_REMOTE_REGISTRY"];
+if [ ! -z "$DOCKER_REMOTE_REGISTRY" ];
 then
     echo "# PULL DOCKER IMAGE"
     remoteImage="$DOCKER_REMOTE_REGISTRY/$(uname -m)/archlinux-basedevel:$VERSION"
