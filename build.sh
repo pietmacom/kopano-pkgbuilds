@@ -34,10 +34,10 @@ cd makepkgs
 # gcc
 # jdk
 # pip2pkgbuild
-#git clone https://aur.archlinux.org/python-sleekxmpp.git
+git clone https://aur.archlinux.org/python-sleekxmpp.git
 #-git clone https://aur.archlinux.org/python2-vobject.git
 #git clone https://aur.archlinux.org/php-xapian.git
-git clone https://aur.archlinux.org/python2-minimock.git
+#git clone https://aur.archlinux.org/python2-minimock.git
 #git clone https://aur.archlinux.org/perl-lockfile-simple.git
 
 # MAIN PACKAGES
