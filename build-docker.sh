@@ -47,4 +47,4 @@ then
     cd ../..
 fi
 
-docker/archlinux-basedevel-docker/run.sh ./build.sh
+VERSION=$VERSION docker/archlinux-basedevel-docker/run.sh ./build.sh
