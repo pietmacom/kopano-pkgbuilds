@@ -4,9 +4,16 @@ echo
 echo "# CREATE BUILD ENVIRONMENT"
 echo
 
+# Use version or try using branchname as version
 if [ -z "$VERSION" ];
 then
+    if BRANCH_CURRENT=$(git branch --show-current) \
+    && [ "$BRANCH_CURRENT" != "master" ];
+    then
+	VERSION="$BRANCH_CURRENT"
+    else
 	VERSION="latest"
+    fi
 fi
 
 if [ -z "$(docker image ls -q $(uname -m)/archlinux-basedevel:$VERSION)" ];
