@@ -5,6 +5,7 @@
 
 ### Use latest environment
  $ cd kopano-pkgbuilds
+ 
  $ git submodule update --remote
 
 ## Milestones/Plans
