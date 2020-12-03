@@ -64,6 +64,8 @@ echo
 echo "# BUILD"
 echo
 
+# DEPENDENCIES - KOPANO-WEBAPP
+# OPTIONAL build makepkgs/jdk
 
 # DEPENDENCIES - KOPANO-CORE
 build makepkgs/php-xapian
@@ -73,9 +75,6 @@ build makepkgs/python2-minimock
 build makepkgs/libvmime
 build makepkgs/libical2
 build makepkgs/python2-tlslite
-
-# DEPENDENCIES - KOPANO-WEBAPP
-# OPTIONAL build makepkgs/jdk
 
 # DEPENDENCIES - KOPANO-POSTFIXADMIN
 build makepkgs/perl-lockfile-simple
