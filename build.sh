@@ -74,10 +74,8 @@ build makepkgs/libvmime
 build makepkgs/libical2
 build makepkgs/python2-tlslite
 
-
-# DEPENDENCIES -
-# KOPANO-WEBAPP
-# Mind of this! ####### #### $chroot_build ./makepkgs/jdk
+# DEPENDENCIES - KOPANO-WEBAPP
+# OPTIONAL build makepkgs/jdk
 
 # DEPENDENCIES - KOPANO-POSTFIXADMIN
 build makepkgs/perl-lockfile-simple
