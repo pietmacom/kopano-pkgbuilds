@@ -35,7 +35,7 @@ out_h1 "CHECKOUT"
 	# gcc
 	# jdk
 	# pip2pkgbuild
-	git clone https://aur.archlinux.org/python-sleekxmpp.git makepkg/python-sleekxmpp
+	git clone https://aur.archlinux.org/python-sleekxmpp.git makepkgs/python-sleekxmpp
 	#-git clone https://aur.archlinux.org/python2-vobject.git
 	#git clone https://aur.archlinux.org/php-xapian.git
 	#git clone https://aur.archlinux.org/python2-minimock.git
