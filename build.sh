@@ -24,9 +24,9 @@ build() {
 }
 
 out_h1() {
-	echo
+	echo "\n"
 	echo "# $1"
-	echo
+	echo "\n"
 }
 
 out_h1 "CHECKOUT"
