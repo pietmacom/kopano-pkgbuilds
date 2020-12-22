@@ -8,13 +8,15 @@ echo
 
 if [ -z "$VERSION" ];
 then
-    echo "# RESOLVE VERSION"
+    echo "# RESOLVE VERSION: "
     if BRANCH_CURRENT=$(git branch --show-current) \
     && [ "$BRANCH_CURRENT" != "master" ];
     then
 	VERSION="$BRANCH_CURRENT"
+	echo "$VERSION (branch)"
     else
 	VERSION="latest"
+	echo "$VERSION (master)"
     fi
 fi
 
