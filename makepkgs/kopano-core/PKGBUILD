@@ -30,7 +30,7 @@ makedepends=(
 	    'libical>=0.9'
 	    'libiconv' # src:https://aur.archlinux.org/packages/libiconv/
 	    'openssl' # for: librcrypto/libssl
-	    'libncurses>=5'
+	    'ncurses>=5'
 	    'util-linux-libs' # libuuid
 	    'libvmime>=0.9.2' # src:https://aur.archlinux.org/packages/zarafa-libvmime/
 	    'libxml2'
