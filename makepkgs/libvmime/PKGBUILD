@@ -31,7 +31,7 @@ prepare() {
 
 build() {
   cd build
-  cmake ../vmime-$pkgver \
+  cmake ../vmime \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DLIB_INSTALL_DIR=/usr/lib/ \
     -DCMAKE_BUILD_TYPE=Release
