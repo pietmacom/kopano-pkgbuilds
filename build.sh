@@ -7,18 +7,18 @@ build() {
 	# Install compiled make dependencies
 	if [ -e "makedepends" ];
 	then
-		sudo pacman --noconfirm -U makedepends/*.pkg.tar.xz
+		sudo pacman --noconfirm -U makedepends/*.pkg.*
 	fi
 	
 	makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm --skipinteg
 	
 	# in case there's nothing to copy, don't fail
-	cp -n *.pkg.tar.xz /build-target || true
+	cp -n *.pkg.* /build-target || true
 	
 	# Install packages separately.
 	# When building multiple packages with different version numbers and in one PKGBUILD,
 	# on the end makepkg tries to install all packages with the last version number
-	sudo pacman --noconfirm -U *.pkg.tar.xz
+	sudo pacman --noconfirm -U *.pkg.*
 	
 	cd $P
 }
