@@ -12,7 +12,7 @@ arch=('armv6h'
 url="https://www.kopano.com/"
 license=('AGPL3')
 source=(
-	"git+https://stash.kopano.io/scm/kc/kopanocore.git#tag=kopanocore-${pkgver}"
+	"git+https://stash.kopano.io/scm/kc/kopanocore.git#branch=master" #tag=kopanocore-${pkgver}"
 	)
 md5sums=(
 	 'SKIP'
@@ -21,11 +21,11 @@ md5sums=(
 # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt
 makedepends=(
 	    'gcc'
-	    'binutils'
+	    'binutils>=2.22'
 	    'pkgconf'
-	    'gsoap'
+	    'gsoap>=2.8.73'
 	    'icu>=52'
-	    'libxcrypt' # for:libcrypt with crypt_r # in glibc as well 
+	    'libxcrypt' # for:libcrypt with crypt_r
 	    'gettext'
 	    'libical>=0.9'
 	    'libiconv' # src:https://aur.archlinux.org/packages/libiconv/
@@ -37,6 +37,8 @@ makedepends=(
 	    'mariadb-libs>=5.1' # for:MariaDB Connector/C 3.0 or MySQL Connector/C 5.1
 	    'xapian-core' version:>=1.2.21
 	    'zlib' # version:>=1.2
+
+	    # Makepkg deps
 	    'git'
 	    )
 optmakedepends=(
