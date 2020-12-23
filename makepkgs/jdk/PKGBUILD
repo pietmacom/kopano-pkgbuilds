@@ -31,7 +31,7 @@ provides=("java-runtime=$_major"
           "java-environment-jdk=$_major")
 
 # Variables
-#DLAGENTS=('http::/usr/bin/curl -LC - -b oraclelicense=a -O')
+DLAGENTS=('https::/usr/bin/curl -k -LC - -b oraclelicense=a -O')
 _jname=${pkgname}${_major}
 _jvmdir=/usr/lib/jvm/java-$_major-$pkgname
 
