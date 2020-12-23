@@ -10,7 +10,7 @@ build() {
 		sudo pacman --noconfirm -U makedepends/*.pkg.tar.xz
 	fi
 	
-	makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm
+	makepkg --ignorearch --syncdeps --clean --cleanbuild --force --noconfirm --skipinteg
 	
 	# in case there's nothing to copy, don't fail
 	cp -n *.pkg.tar.xz /build-target || true
