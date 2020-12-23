@@ -24,9 +24,9 @@ build() {
 }
 
 out_h1() {
-	echo "\n"
+	echo
 	echo "# $1"
-	echo "\n"
+	echo
 }
 
 out_h1 "CHECKOUT"
@@ -65,7 +65,6 @@ out_h1 "BUILD"
 	build makepkgs/z-push
 	build makepkgs/kopano-webapp
 
-	# sudo pacman --noconfirm -R composer
 	build makepkgs/kopano-sabre
 	build makepkgs/kopano-postfixadmin
 	build makepkgs/kopano-service-overview
