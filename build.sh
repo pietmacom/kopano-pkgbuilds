@@ -30,7 +30,10 @@ out_h1() {
 }
 
 out_h1 "CHECKOUT"
-
+	git clone https://aur.archlinux.org/libiconv.git makepkgs/libiconv
+	
+	
+	# ARCHIVE
 	# php
 	# gcc
 	# jdk
@@ -45,10 +48,12 @@ out_h1 "CHECKOUT"
 	#-git clone ssh://aur@aur.archlinux.org/z-push.git ; cd z-push ; git checkout -b "v2.3.3" 56db7b35459438dc6228b307f0f8855ac7fd9138 ; cd ..
 
 out_h1 "BUILD"
-
+	build makepkgs/libiconv
 	build makepkgs/libvmime
 	build makepkgs/kopano-core
 
+
+	# ARCHIVE
 	# DEPENDENCIES - KOPANO-WEBAPP
 	# OPTIONAL build makepkgs/jdk
 
