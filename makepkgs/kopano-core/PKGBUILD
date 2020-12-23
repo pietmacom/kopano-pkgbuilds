@@ -20,6 +20,7 @@ md5sums=(
 
 # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt
 makedepends=(
+	    # Mandatory build-time dependencies
 	    'gcc'
 	    'binutils>=2.22'
 	    'pkgconf'
@@ -38,6 +39,9 @@ makedepends=(
 	    'xapian-core' # version:>=1.2.21
 	    'zlib' # version:>=1.2
 
+	    # Optional build-time dependencies
+	    'php>=7'
+
 	    # Makepkg deps
 	    'git'
 	    )
@@ -48,7 +52,6 @@ optmakedepends=(
 	    'libs3' # src:https://aur.archlinux.org/packages/libs3-git/
 	    'pam>=1'
 	    'openldap>=2.4'
-	    'php>=7'
 	    'python>=3'
 	    'swig>=2.x'
 	    'rrdtool>=1.3'
