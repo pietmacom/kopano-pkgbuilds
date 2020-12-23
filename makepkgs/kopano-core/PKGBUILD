@@ -35,7 +35,7 @@ makedepends=(
 	    'libvmime>=0.9.2' # src:https://aur.archlinux.org/packages/zarafa-libvmime/
 	    'libxml2'
 	    'mariadb-libs>=5.1' # for:MariaDB Connector/C 3.0 or MySQL Connector/C 5.1
-	    'xapian-core' version:>=1.2.21
+	    'xapian-core' # version:>=1.2.21
 	    'zlib' # version:>=1.2
 
 	    # Makepkg deps
