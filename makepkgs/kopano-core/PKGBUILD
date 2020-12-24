@@ -42,6 +42,9 @@ makedepends=(
 	    # Optional build-time dependencies
 	    'php>=7'
 
+	    # Unmentioned dependencies
+	    'libhx'
+
 	    # Makepkg deps
 	    'git'
 	    )
