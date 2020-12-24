@@ -43,7 +43,7 @@ makedepends=(
 	    'php>=7'
 
 	    # Unmentioned dependencies
-	    'libhx'
+	    'libhx>=1.10'
 
 	    # Makepkg deps
 	    'git'

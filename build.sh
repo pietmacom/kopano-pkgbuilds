@@ -29,6 +29,9 @@ out_h1() {
 	echo
 }
 
+# Improvised update
+pacman -Sy
+
 out_h1 "CHECKOUT"
 	git clone https://aur.archlinux.org/libiconv.git makepkgs/libiconv
 	
