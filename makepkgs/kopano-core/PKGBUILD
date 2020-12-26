@@ -76,8 +76,9 @@ build() {
   cd kopanocore
 
   # https://documentation.kopano.io/kopanocore_administrator_manual/compiling_from_source.html
-  vmime_CFLAGS="$(pkg-config vmime --cflags)" vmime_LIBS="$(pkg-config vmime --libs)" \
-    ./configure \
+  ./configure \
+    vmime_CFLAGS="$(pkg-config vmime --cflags)" \
+    vmime_LIBS="$(pkg-config vmime --libs)" \
     --prefix=/ \
     --localstatedir=/var \
     --sysconfdir=/etc \
