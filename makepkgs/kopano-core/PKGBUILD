@@ -12,7 +12,7 @@ arch=('armv6h'
 url='https://www.kopano.com/'
 license=('AGPL3')
 source=(
-	"git+https://stash.kopano.io/scm/kc/kopanocore.git#branch=kc-9.x" #tag=kopanocore-${pkgver}"
+	"git+https://stash.kopano.io/scm/kc/kopanocore.git#tag=kopanocore-9.0.12" #tag=kopanocore-${pkgver}"
 	)
 md5sums=(
 	 'SKIP'
