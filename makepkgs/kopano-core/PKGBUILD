@@ -81,6 +81,7 @@ build() {
   ./configure \
     vmime_CFLAGS="$(pkg-config vmime --cflags)" \
     vmime_LIBS="$(pkg-config vmime --libs)" \
+    PYTHON="/usr/bin/python3" \
     --prefix=/ \
     --localstatedir=/var \
     --sysconfdir=/etc \
