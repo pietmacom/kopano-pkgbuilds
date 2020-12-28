@@ -41,10 +41,11 @@ makedepends=(
 
 	    # Optional build-time dependencies
 	    'php>=7'
+	    'python>=3'
 
 	    # Unmentioned dependencies
 	    'libhx>=1.10'
-
+	    
 	    # Makepkg deps
 	    'git'
 	    )
@@ -55,7 +56,7 @@ optmakedepends=(
 	    'libs3' # src:https://aur.archlinux.org/packages/libs3-git/
 	    'pam>=1'
 	    'openldap>=2.4'
-	    'python>=3'
+
 	    'swig>=2.x'
 	    'rrdtool>=1.3'
 	    )
