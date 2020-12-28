@@ -76,10 +76,11 @@ prepare() {
 build() {
   cd kopanocore
 
+#    VMIME_CFLAGS='$(pkg-config vmime --cflags)' \
+#    VMIME_LIBS='$(pkg-config vmime --libs)' \
+
   # https://documentation.kopano.io/kopanocore_administrator_manual/compiling_from_source.html
   ./configure \
-    VMIME_CFLAGS='$(pkg-config vmime --cflags)' \
-    VMIME_LIBS='$(pkg-config vmime --libs)' \
     PYTHON='/usr/bin/python3' \
     --prefix=/ \
     --localstatedir=/var \
