@@ -36,13 +36,14 @@ makedepends=(
     'openssl' # for: librcrypto/libssl
     'ncurses>=5'
     'util-linux-libs' # libuuid
-    'kopano-libvmime>=0.9.2k2' # src:https://aur.archlinux.org/packages/zarafa-libvmime/
+    'kopano-libvmime>=0.9.2k2' # src:https://aur.archlinux.org/packages/kopano-libvmime/
     'libxml2'
     'mariadb-libs>=5.1' # for:MariaDB Connector/C 3.0 or MySQL Connector/C 5.1
     'xapian-core' # version:>=1.2.21
     'zlib' # version:>=1.2
 
     # Optional build-time dependencies
+    'gperftools>=2'
     'curl>=7' # libcurl
     'pam>=1'
     'php>=7'
@@ -54,9 +55,9 @@ makedepends=(
 
     # PKGBUILD dependencies
     'git'
+    'sed'
 	    )
 optmakedepends=(
-    'gperftools>=2'
     'krb5'
     'libs3' # src:https://aur.archlinux.org/packages/libs3-git/
     'openldap>=2.4'
@@ -69,6 +70,16 @@ optdepends=(
     'gperftools' # for:libtcmalloc
     'libs3'
 	    )
+
+pkgver() {
+    cd kopanocore
+    if [[ "${pkgname}" == *-git ]];
+    then
+	git tag -l kopanocore-* --sort=v:refname | tail -n 1 | sed 's|kopanocore-||' | sed "s|$|-$(git rev-list --count HEAD)|"
+    else
+	echo ${pkgver}
+    fi
+}
 
 prepare() {
     cd kopanocore
@@ -83,8 +94,11 @@ build() {
     # VMIME_LIBS='$(pkg-config vmime --libs)' \
 
     # https://documentation.kopano.io/kopanocore_administrator_manual/compiling_from_source.html
+    # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile
     ./configure \
-    PYTHON='/usr/bin/python3' \
+    PYTHON="$(which python3)" \
+    PYTHON_CFLAGS="$(pkg-config python3 --cflags)" \
+    PYTHON_LIBS="$(pkg-config python3 --libs)" \
     --prefix=/ \
     --localstatedir=/var \
     --sysconfdir=/etc \
@@ -114,10 +128,6 @@ cfg_set() {
 }
 
 package() {
-    echo "dummy"
-}
-
-ppackage() {
   cd kopanocore
   
   # => multithreaded build breaks everything
@@ -318,27 +328,4 @@ ppackage() {
   cfg_set "log_level" "3" ${cfg}
   #=> server-connection
   cfg_set "server_socket" "file://${server_socket}" ${cfg}
-
-
-  # PIETMA
-  ###
-  cd ${srcdir}/kopano-pietma
-  mkdir -p ${pkgdir}/usr/share/doc/kopano
-  cp -LRf doc/* ${pkgdir}/usr/share/doc/kopano
-  cp -LRf usr/* ${pkgdir}/usr
-  
-  
-  # ADDITIONS
-  ###
-#  cd ${srcdir}/kopano-tools
-#  mkdir -p ${pkgdir}/usr/share/doc/kopano/kopano-tools
-#  cp -LR * ${pkgdir}/usr/share/doc/kopano/kopano-tools/
-  
-#  cd ${srcdir}/python-kopano
-#  mkdir -p ${pkgdir}/usr/share/doc/kopano/python-kopano
-#  cp -LR * ${pkgdir}/usr/share/doc/kopano/python-kopano/
-  
-#  cd ${srcdir}/kopano-inspector
-#  mkdir -p ${pkgdir}/usr/share/doc/kopano/kopano-inspector
-#  cp -LR * ${pkgdir}/usr/share/doc/kopano/kopano-inspector/
 }
