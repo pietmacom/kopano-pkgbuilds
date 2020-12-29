@@ -94,14 +94,15 @@ build() {
     # VMIME_CFLAGS='$(pkg-config vmime --cflags)' \
     # VMIME_LIBS='$(pkg-config vmime --libs)' \
 
+#    PYTHON_CFLAGS="$(pkg-config python3 --cflags)" \
+#    PYTHON_LIBS="$(pkg-config python3 --libs)" \
+
     ./configure \
     \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile` \
     TCMALLOC_CFLAGS=" " \
     TCMALLOC_LIBS="-ltcmalloc_minimal" \
     PYTHON="$(which python3)" \
-    PYTHON_CFLAGS="$(pkg-config python3 --cflags)" \
-    PYTHON_LIBS="$(pkg-config python3 --libs)" \
     --enable-release \
     --enable-pybind \
     \
