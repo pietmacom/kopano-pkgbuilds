@@ -88,17 +88,32 @@ prepare() {
 
 build() {
     cd kopanocore
-  
+
+    # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt
     # When using official VMIME
     # VMIME_CFLAGS='$(pkg-config vmime --cflags)' \
     # VMIME_LIBS='$(pkg-config vmime --libs)' \
 
-    # https://documentation.kopano.io/kopanocore_administrator_manual/compiling_from_source.html
-    # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile
     ./configure \
+    \
+`# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile` \
+    TCMALLOC_CFLAGS=" " \
+    TCMALLOC_LIBS="-ltcmalloc_minimal" \
     PYTHON="$(which python3)" \
     PYTHON_CFLAGS="$(pkg-config python3 --cflags)" \
     PYTHON_LIBS="$(pkg-config python3 --libs)" \
+    --enable-release \
+    --enable-pybind \
+    \
+`# https://documentation.kopano.io/kopanocore_administrator_manual/compiling_from_source.html` \
+    --enable-epoll \
+    --enable-unicode \
+    --enable-python \
+    --disable-static \
+    --with-userscript-prefix=/etc/kopano/userscripts \
+    --with-quotatemplate-prefix=/etc/kopano/quotamails \
+    \
+`# Arch specific` \
     --prefix=/ \
     --localstatedir=/var \
     --sysconfdir=/etc \
@@ -106,14 +121,6 @@ build() {
     --sbindir=/usr/bin \
     --datarootdir=/usr/share \
     --includedir=/usr/include \
-    --enable-release \
-    --enable-epoll \
-    --enable-unicode \
-    --enable-python \
-    --disable-debug \
-    --disable-static \
-    --with-userscript-prefix=/etc/kopano/userscripts \
-    --with-quotatemplate-prefix=/etc/kopano/quotamails \
     --with-searchscripts-prefix=/etc/kopano/searchscripts
 
     make
