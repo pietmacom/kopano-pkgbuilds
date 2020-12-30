@@ -99,6 +99,7 @@ build() {
     ./configure \
     \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile` \
+    DESTDIR="$(realpath ${pkgdir})" \
     TCMALLOC_CFLAGS=" " \
     TCMALLOC_LIBS="-ltcmalloc_minimal" \
     PYTHON="$(which python3)" \
@@ -142,7 +143,7 @@ package() {
   # => multithreaded build breaks everything
   export MAKEFLAGS="-j1"
 
-  DESTDIR="$(realpath ${pkgdir})" make install
+  make install DESTDIR="$(realpath ${pkgdir})"
 
 #  pkgpythondir
 #  pkgexecdir=
