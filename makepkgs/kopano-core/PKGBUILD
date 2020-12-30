@@ -89,6 +89,8 @@ prepare() {
 build() {
     cd kopanocore
 
+    # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Dockerfile.build
+
     # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt
     # When using official VMIME
     # VMIME_CFLAGS='$(pkg-config vmime --cflags)' \
@@ -140,8 +142,10 @@ package() {
   # => multithreaded build breaks everything
   export MAKEFLAGS="-j1"
 
-  make install \
-  DESTDIR="$(realpath ${pkgdir})"
+  DESTDIR="$(realpath ${pkgdir})" make install
+
+#  pkgpythondir
+#  pkgexecdir=
 
 
   # => move bash-completion to arch location 
