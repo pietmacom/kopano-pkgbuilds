@@ -98,23 +98,7 @@ build() {
 #    PYTHON_LIBS="$(pkg-config python3 --libs)" \
 
     ./configure \
-    \
-`# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile` \
-    TCMALLOC_CFLAGS=" " \
-    TCMALLOC_LIBS="-ltcmalloc_minimal" \
-    PYTHON="$(which python3)" \
-    --enable-release \
-    --enable-pybind \
-    \
-`# https://documentation.kopano.io/kopanocore_administrator_manual/compiling_from_source.html` \
-    --enable-epoll \
-    --enable-unicode \
-    --enable-python \
-    --disable-static \
-    --with-userscript-prefix=/etc/kopano/userscripts \
-    --with-quotatemplate-prefix=/etc/kopano/quotamails \
-    \
-`# Arch specific` \
+    PYTHON='/usr/bin/python3' \
     --prefix=/ \
     --localstatedir=/var \
     --sysconfdir=/etc \
@@ -122,7 +106,42 @@ build() {
     --sbindir=/usr/bin \
     --datarootdir=/usr/share \
     --includedir=/usr/include \
+    --enable-release \
+    --enable-epoll \
+    --enable-unicode \
+    --enable-python \
+    --disable-debug \
+    --disable-static \
+    --with-userscript-prefix=/etc/kopano/userscripts \
+    --with-quotatemplate-prefix=/etc/kopano/quotamails \
     --with-searchscripts-prefix=/etc/kopano/searchscripts
+
+#    ./configure \
+#    \
+#`# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile` \
+#    TCMALLOC_CFLAGS=" " \
+#    TCMALLOC_LIBS="-ltcmalloc_minimal" \
+#    PYTHON="$(which python3)" \
+#    --enable-release \
+#    --enable-pybind \
+#    \
+#`# https://documentation.kopano.io/kopanocore_administrator_manual/compiling_from_source.html` \
+#    --enable-epoll \
+#    --enable-unicode \
+#    --enable-python \
+#    --disable-static \
+#    --with-userscript-prefix=/etc/kopano/userscripts \
+#    --with-quotatemplate-prefix=/etc/kopano/quotamails \
+#    \
+#`# Arch specific` \
+#    --prefix=/ \
+#    --localstatedir=/var \
+#    --sysconfdir=/etc \
+#    --exec-prefix=/usr \
+#    --sbindir=/usr/bin \
+#    --datarootdir=/usr/share \
+#    --includedir=/usr/include \
+#    --with-searchscripts-prefix=/etc/kopano/searchscripts
 
     make
 }
