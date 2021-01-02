@@ -148,6 +148,15 @@ package() {
   export MAKEFLAGS="-j1"
 
   make install DESTDIR="$(realpath ${pkgdir})"
+}
+
+ppackage() {
+  cd kopanocore
+  
+  # => multithreaded build breaks everything
+  export MAKEFLAGS="-j1"
+
+  make install DESTDIR="$(realpath ${pkgdir})"
 
 #  pkgpythondir
 #  pkgexecdir=
