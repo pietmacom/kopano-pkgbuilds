@@ -85,7 +85,7 @@ prepare() {
     cd kopanocore
 
     # Patch Python-Module install path
-    sed -i 's|--install-purelib="${pythondir}"|--install-purelib="${DESTDIR}${pythondir}"|' $(grep -Flr 'install-purelib="${pythondir}"' ./ | grep 'Makefile.am')
+    # sed -i 's|--install-purelib="${pythondir}"|--install-purelib="${DESTDIR}${pythondir}"|' $(grep -Flr 'install-purelib="${pythondir}"' ./ | grep 'Makefile.am')
 
     ./bootstrap.sh
 }
