@@ -122,6 +122,7 @@ build() {
     \
 `# Arch specific` \
     --prefix=/ \
+    --libdir=/usr/lib \
     --localstatedir=/var \
     --sysconfdir=/etc \
     --exec-prefix=/usr \
