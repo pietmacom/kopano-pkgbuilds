@@ -83,10 +83,6 @@ pkgver() {
 
 prepare() {
     cd kopanocore
-
-    # Patch Python-Module install path
-    # sed -i 's|--install-purelib="${pythondir}"|--install-purelib="${DESTDIR}${pythondir}"|' $(grep -Flr 'install-purelib="${pythondir}"' ./ | grep 'Makefile.am')
-
     ./bootstrap.sh
 }
 
@@ -122,6 +118,7 @@ build() {
     \
 `# Arch specific` \
     --prefix=/usr \
+    --sbindir=@prefix@/bin \
     --localstatedir=/var \
     --sysconfdir=/etc \
     --with-searchscripts-prefix=/etc/kopano/searchscripts
@@ -156,11 +153,6 @@ ppackage() {
 
 #  pkgpythondir
 #  pkgexecdir=
-
-
-  # => move bash-completion to arch location 
-  mkdir -p ${pkgdir}/usr/share/bash-completion/completions
-  mv ${pkgdir}/etc/bash_completion.d/kopano-bash-completion.sh ${pkgdir}/usr/share/bash-completion/completions/kopano
 
   # => move /lib/* to /usr/lib/ arch location. /lib is a symlink to /usr/lib anyways.
   mv ${pkgdir}/lib/* ${pkgdir}/usr/lib/
