@@ -118,7 +118,7 @@ build() {
     \
 `# Arch specific` \
     --prefix=/usr \
-    --sbindir=@prefix@/bin \
+    --sbindir=/usr/bin \
     --localstatedir=/var \
     --sysconfdir=/etc \
     --with-searchscripts-prefix=/etc/kopano/searchscripts
