@@ -121,14 +121,9 @@ build() {
     --with-quotatemplate-prefix=/etc/kopano/quotamails \
     \
 `# Arch specific` \
-    --prefix=/ \
-    --libdir=/usr/lib \
+    --prefix=/usr \
     --localstatedir=/var \
     --sysconfdir=/etc \
-    --exec-prefix=/usr \
-    --sbindir=/usr/bin \
-    --datarootdir=/usr/share \
-    --includedir=/usr/include \
     --with-searchscripts-prefix=/etc/kopano/searchscripts
 
     make
