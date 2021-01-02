@@ -83,6 +83,16 @@ pkgver() {
 
 prepare() {
     cd kopanocore
+
+    # Patch
+    sed -i 's|--install-purelib="${pythondir}"|--install-purelib="${DESTDIR}${pythondir}"|' \
+    ./ECtools/spamd/Makefile.am \
+    ./ECtools/search/Makefile.am \
+    ./ECtools/backup/Makefile.am \
+    ./ECtools/utils/Makefile.am \
+    ./swig/python/Makefile.am \
+    ./swig/python/kopano/Makefile.am
+
     ./bootstrap.sh
 }
 
