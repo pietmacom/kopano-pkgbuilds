@@ -152,9 +152,11 @@ package() {
 }
 
 
+# User-Scripts
+
 prepare_configs() {
     # Common
-    config_path= "$1"
+    config_path="$1"
     run_as_user="kopano"
     run_as_group="kopano"
     running_path="/var/lib/kopano"
