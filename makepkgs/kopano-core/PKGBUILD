@@ -77,11 +77,12 @@ optdepends=(
 	    )
 install='install'
 
+# https://wiki.archlinux.org/index.php/VCS_package_guidelines#Git
 pkgver() {
     cd kopanocore
     if [[ "${pkgname}" == *-git ]];
     then
-	git tag -l kopanocore-* --sort=v:refname | tail -n 1 | sed 's|kopanocore-||' | sed "s|$|.r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)|"
+	git tag -l kopanocore-* --sort=v:refname | tail -n 1 | sed "s|kopanocore-\(.*\)|\1.r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)|"
     else
 	echo ${pkgver}
     fi
