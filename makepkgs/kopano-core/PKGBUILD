@@ -309,10 +309,10 @@ prepare_configs() {
 }
 
 set_config() {
-    config_attribute="$1"
-    config_attribute_prefix=$(echo -n "${config_attribute}" | sed "s|\(_\).*|\1|")
-    config_value="$2"
-    config_file="$3"
+    local config_attribute="$1"
+    local config_attribute_prefix=$(echo -n "${config_attribute}" | sed "s|\(_\).*|\1|")
+    local config_value="$2"
+    local config_file="$3"
 
     # Set/Uncomment Attribute
     if grep -q "${config_attribute}" ${config_file} ;
@@ -328,7 +328,7 @@ set_config() {
 	&& grep -q "${config_attribute_prefix}" ${config_file} ;
     then
 	# Find Last Attribut From Prefix-Group
-	config_attribute_last_from_group=$(tac ${config_file} | grep -m 1 "^#*\s*${config_attribute_prefix}" | grep -o "${config_attribute_prefix}[^ =]*")
+	local config_attribute_last_from_group=$(tac ${config_file} | grep -m 1 "^#*\s*${config_attribute_prefix}" | grep -o "${config_attribute_prefix}[^ =]*")
 	sed -i "s|\(${config_attribute_last_from_group}.*$\)|\1\n${config_attribute} = ${config_value}|" ${config_file}
 
     # Add Attribute At The End of File 
