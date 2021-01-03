@@ -105,8 +105,8 @@ build() {
     \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile` \
     DESTDIR="$(realpath ${pkgdir})" \
-    TCMALLOC_CFLAGS=" " \
-    TCMALLOC_LIBS="-ltcmalloc_minimal" \
+    TCMALLOC_CFLAGS=' ' \
+    TCMALLOC_LIBS='-ltcmalloc_minimal' \
     PYTHON="$(which python3)" \
     PYTHON_CFLAGS="$(pkg-config python3 --cflags)" \
     PYTHON_LIBS="$(pkg-config python3 --libs)" \
@@ -118,15 +118,15 @@ build() {
     --enable-unicode \
     --enable-python \
     --disable-static \
-    --with-userscript-prefix=/etc/kopano/userscripts \
-    --with-quotatemplate-prefix=/etc/kopano/quotamails \
+    --with-userscript-prefix='/etc/kopano/userscripts' \
+    --with-quotatemplate-prefix='/etc/kopano/quotamails' \
     \
 `# Arch specific` \
-    --prefix=/usr \
-    --sbindir=/usr/bin \
-    --localstatedir=/var \
-    --sysconfdir=/etc \
-    --with-searchscripts-prefix=/etc/kopano/searchscripts
+    --prefix='/usr' \
+    --sbindir='$(prefix)/bin' \
+    --localstatedir='/var' \
+    --sysconfdir='/etc' \
+    --with-searchscripts-prefix='/etc/kopano/searchscripts'
 
     make
 }
@@ -140,9 +140,6 @@ package() {
     export MAKEFLAGS="-j1"
 
     make install DESTDIR="$(realpath ${pkgdir})"
-
-    # => move /lib/* to /usr/lib/ arch location. /lib is a symlink to /usr/lib anyways.
-    mv ${pkgdir}/lib/* ${pkgdir}/usr/lib/
 
     # PREPARE LICENSE 
     mkdir -p ${pkgdir}/usr/share/licenses/${pkgname}
