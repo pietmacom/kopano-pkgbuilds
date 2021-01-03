@@ -75,12 +75,13 @@ optdepends=(
     'gperftools' # for:libtcmalloc
     'libs3'
 	    )
+install='install'
 
 pkgver() {
     cd kopanocore
     if [[ "${pkgname}" == *-git ]];
     then
-	git tag -l kopanocore-* --sort=v:refname | tail -n 1 | sed 's|kopanocore-||' | sed "s|$|-$(git rev-list --count HEAD)|"
+	git tag -l kopanocore-* --sort=v:refname | tail -n 1 | sed 's|kopanocore-||' | sed "s|$|.r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)|"
     else
 	echo ${pkgver}
     fi
@@ -145,8 +146,8 @@ package() {
 	${pkgdir}/usr/share/licenses/${pkgname}
 
     cp -r "${pkgdir}/usr/share/doc/kopano/example-config" \
-	"${pkgdir}/usr/share/doc/kopano/example-config-prepared"
-    prepare_configs "${pkgdir}/usr/share/doc/kopano/example-config-prepared"
+	"${pkgdir}/usr/share/doc/kopano/installed-config"
+    prepare_configs "${pkgdir}/usr/share/doc/kopano/installed-config"
 }
 
 # User-Scripts
