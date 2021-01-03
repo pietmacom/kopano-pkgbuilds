@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 post_install() {
     post_install_always
 
@@ -46,7 +44,6 @@ post_upgrade() {
 pre_remove() {
     return 0
 }
-
 
 # User Scripts
 

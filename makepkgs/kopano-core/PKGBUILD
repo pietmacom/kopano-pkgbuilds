@@ -5,7 +5,7 @@
 # User Manual: http://documentation.kopano.io/user_manual_kopanocore
 # Migration 7.2.1: https://documentation.kopano.io/kopano_migration_manual/KopanoMigrationManual.pdf
 pkgname=kopano-core
-pkgver=9.0.12
+pkgver=9.0.12-git
 pkgrel=1
 pkgdesc='Foundation for groupware messaging enabling clients'
 arch=(
@@ -131,8 +131,6 @@ build() {
     make
 }
 
-
-
 package() {
     cd kopanocore
 
@@ -150,7 +148,6 @@ package() {
 	"${pkgdir}/usr/share/doc/kopano/example-config-prepared"
     prepare_configs "${pkgdir}/usr/share/doc/kopano/example-config-prepared"
 }
-
 
 # User-Scripts
 
