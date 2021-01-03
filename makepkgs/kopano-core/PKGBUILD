@@ -1,5 +1,9 @@
 # Maintainer: MartiMcFly <martimcfly [at] autorisation.de>
 # Contributor: MartiMcFly <martimcfly [at] autorisation.de>
+
+# Administrator Manual: https://documentation.kopano.io/kopanocore_administrator_manual/
+# User Manual: http://documentation.kopano.io/user_manual_kopanocore
+# Migration 7.2.1: https://documentation.kopano.io/kopano_migration_manual/KopanoMigrationManual.pdf
 pkgname=kopano-core
 pkgver=9.0.12
 pkgrel=1
@@ -86,13 +90,13 @@ prepare() {
     ./bootstrap.sh
 }
 
+# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Dockerfile.build
 build() {
     cd kopanocore
 
-    # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Dockerfile.build
-
-    # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt
     # When using official VMIME
+    # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt#68
+    #
     # VMIME_CFLAGS='$(pkg-config vmime --cflags)' \
     # VMIME_LIBS='$(pkg-config vmime --libs)' \
 
@@ -126,56 +130,33 @@ build() {
     make
 }
 
-cfg_set() {
-    # 1: field / 2: value / 3: file
-    # Replaces optional comments and spaces
-    # "# name = value" => "name = newvalue"
-    #
-    sed -i "s|^#*\s*\($1\)\s*\=.*|\1 = $2|" $3
-}
+
 
 package() {
-  cd kopanocore
-  
-  # => multithreaded build breaks everything
-  export MAKEFLAGS="-j1"
+    cd kopanocore
 
-  make install DESTDIR="$(realpath ${pkgdir})"
+    # => multithreaded build breaks everything
+    export MAKEFLAGS="-j1"
+
+    make install DESTDIR="$(realpath ${pkgdir})"
+
+    # => move /lib/* to /usr/lib/ arch location. /lib is a symlink to /usr/lib anyways.
+    mv ${pkgdir}/lib/* ${pkgdir}/usr/lib/
+
+    # PREPARE LICENSE 
+    mkdir -p ${pkgdir}/usr/share/licenses/${pkgname}
+    cp -R {RELNOTES.txt,CONTRIBUTING.md,AGPL-3,LICENSE.txt} \
+	${pkgdir}/usr/share/licenses/${pkgname}
+
+    cp -r "${pkgdir}/usr/share/doc/kopano/example-config" \
+	"${pkgdir}/usr/share/doc/kopano/example-config-prepared"
+    prepare_configs "${pkgdir}/usr/share/doc/kopano/example-config-prepared"
 }
 
-ppackage() {
-  cd kopanocore
-  
-  # => multithreaded build breaks everything
-  export MAKEFLAGS="-j1"
 
-  make install DESTDIR="$(realpath ${pkgdir})"
-
-#  pkgpythondir
-#  pkgexecdir=
-
-  # => move /lib/* to /usr/lib/ arch location. /lib is a symlink to /usr/lib anyways.
-  mv ${pkgdir}/lib/* ${pkgdir}/usr/lib/
-
-  # => remove not appliable content
-  rm -Rf ${pkgdir}/lib
-  rm -Rf ${pkgdir}/etc/init.d
-  rm -Rf ${pkgdir}/etc/sysconfig
-  rm -Rf ${pkgdir}/etc/cron.daily
-  rm -Rf ${pkgdir}/etc/logrotate.d
-  rm -Rf ${pkgdir}/etc/bash_completion.d
-  rm -Rf ${pkgdir}/etc/kopano/license
-
-  # PREPARE LICENSE 
-  mkdir -p ${pkgdir}/usr/share/licenses/${pkgname}
-  cp -R {RELNOTES.txt,CONTRIBUTING.md,AGPL-3,LICENSE.txt} ${pkgdir}/usr/share/licenses/${pkgname}
-
-
-  # PREPARE SETTINGS
-#??  rm ${pkgdir}/etc/kopano/*.cfg
-
+prepare_configs() {
   # General
-  cfg_path="/usr/share/doc/kopano/example-config"
+  config_path= "$1"
   run_as_user="kopano"
   run_as_group="kopano"
   running_path="/var/lib/kopano"
@@ -188,159 +169,171 @@ ppackage() {
   ssl_certificate="/etc/ssl/private/kopano.crt"
 
 
-  # server.cfg
-  cfg="${pkgdir}${cfg_path}/server.cfg"
-  cfg_set "attachment_compression" "0" ${cfg}
-  cfg_set "disabled_features" "" ${cfg}
-  cfg_set "hide_everyone" "yes" ${cfg}
-  cfg_set "search_enabled" "yes" "${cfg}"
-  cfg_set "search_socket" "file://${search_socket}" "${cfg}"
-  cfg_set "mysql_socket" "/run/mysqld/mysqld.sock" ${cfg}
-  cfg_set "mysql_user" "kopano" ${cfg}
-  cfg_set "mysql_password" "kopano" ${cfg}
+  # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/kopano-server.cfg.5
+  config_file="${config_path}/server.cfg"
+  set_config "attachment_storage" "files" ${config_file} 
+  set_config "attachment_compression" "0" ${config_file}
+  set_config "disabled_features" "" ${config_file}
+  set_config "hide_everyone" "yes" ${config_file}
+  set_config "search_enabled" "yes" "${config_file}"
+  set_config "search_socket" "file://${search_socket}" "${config_file}"
+  set_config "mysql_socket" "/run/mysqld/mysqld.sock" ${config_file}
+  set_config "mysql_user" "kopano" ${config_file}
+  set_config "mysql_password" "kopano" ${config_file}
   #=> service
-  cfg_set "run_as_user" "${run_as_user}" ${cfg}
-  cfg_set "run_as_group" "${run_as_group}" ${cfg}
-  cfg_set "running_path" "${running_path}" ${cfg}
-  cfg_set "log_method" "syslog" ${cfg}  
-  cfg_set "log_file" "-" ${cfg}
-  cfg_set "log_level" "3" ${cfg}
+  set_config "run_as_user" "${run_as_user}" ${config_file}
+  set_config "run_as_group" "${run_as_group}" ${config_file}
+  set_config "log_method" "syslog" ${config_file}  
+  set_config "log_file" "-" ${config_file}
+  set_config "log_level" "3" ${config_file}
   #=> server-connection (socket only)
-  cfg_set "server_pipe_name" "${server_socket}" ${cfg}
-  cfg_set "server_pipe_priority" "${server_socket_prio}" ${cfg}
-  cfg_set "server_listen" "" ${cfg}
-  cfg_set "server_listen_tls" "" ${cfg}
-  cfg_set "server_ssl_prefer_server_ciphers" "yes" ${cfg}
-  cfg_set "server_ssl_protocols" "${ssl_protocols}" ${cfg}
-  cfg_set "server_ssl_ciphers" "${ssl_ciphers}" ${cfg}
-  cfg_set "server_ssl_key_file" "${ssl_privatekey}" ${cfg}
-  cfg_set "server_ssl_key_pass" "" ${cfg}
-  cfg_set "server_ssl_ca_file" "${ssl_certificate}" ${cfg}
-  cfg_set "server_ssl_ca_path" "/etc/ssl/certs" ${cfg}
+  set_config "server_pipe_name" "${server_socket}" ${config_file}
+  set_config "server_pipe_priority" "${server_socket_prio}" ${config_file}
+  set_config "server_listen" "" ${config_file}
+  set_config "server_listen_tls" "" ${config_file}
+  set_config "server_ssl_prefer_server_ciphers" "yes" ${config_file}
+  set_config "server_ssl_protocols" "${ssl_protocols}" ${config_file}
+  set_config "server_ssl_ciphers" "${ssl_ciphers}" ${config_file}
+  set_config "server_ssl_key_file" "${ssl_privatekey}" ${config_file}
+  set_config "server_ssl_key_pass" "" ${config_file}
+  set_config "server_ssl_ca_file" "${ssl_certificate}" ${config_file}
+  set_config "server_ssl_ca_path" "/etc/ssl/certs" ${config_file}
 
-  # archiver.cfg
-  cfg="${pkgdir}${cfg_path}/archiver.cfg"
+  # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/kopano-archiver.cfg.5
+  config_file="${config_path}/archiver.cfg"
   #=> service
-  cfg_set "log_method" "syslog" ${cfg}  
-  cfg_set "log_file" "-" ${cfg}
-  cfg_set "log_level" "3" ${cfg}
+  set_config "log_method" "syslog" ${config_file}  
+  set_config "log_file" "-" ${config_file}
+  set_config "log_level" "3" ${config_file}
   #=> server-connection
-  cfg_set "server_socket" "file://${server_socket}" ${cfg}
+  set_config "server_socket" "file://${server_socket}" ${config_file}
 
-  # backup.cfg
-  cfg="${pkgdir}${cfg_path}/backup.cfg"
+  # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/kopano-backup.cfg.5
+  config_file="${config_path}/backup.cfg"
   #=> service
-  cfg_set "log_method" "syslog" ${cfg}  
-  cfg_set "log_file" "-" ${cfg}
-  cfg_set "log_level" "3" ${cfg}
+  set_config "log_method" "syslog" ${config_file}  
+  set_config "log_file" "-" ${config_file}
+  set_config "log_level" "3" ${config_file}
   #=> server-connection
-  cfg_set "server_socket" "file://${server_socket}" ${cfg}
+  set_config "server_socket" "file://${server_socket}" ${config_file}
 
-  # dagent.cfg
-  cfg="${pkgdir}${cfg_path}/dagent.cfg"
+  # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/kopano-dagent.cfg.5
+  config_file="${config_path}/dagent.cfg"
   #=> service
-  cfg_set "run_as_user" "${run_as_user}" ${cfg}
-  cfg_set "run_as_group" "${run_as_group}" ${cfg}
-  cfg_set "running_path" "${running_path}" ${cfg}
-  cfg_set "log_method" "syslog" ${cfg}  
-  cfg_set "log_file" "-" ${cfg}
-  cfg_set "log_level" "3" ${cfg}
+  set_config "run_as_user" "${run_as_user}" ${config_file}
+  set_config "run_as_group" "${run_as_group}" ${config_file}
+  set_config "log_method" "syslog" ${config_file}  
+  set_config "log_file" "-" ${config_file}
+  set_config "log_level" "3" ${config_file}
   #=> server-connection
-  cfg_set "server_bind" "127.0.0.1" ${cfg}
-  cfg_set "server_socket" "file://${server_socket}" ${cfg}
+  set_config "server_bind" "127.0.0.1" ${config_file}
+  set_config "server_socket" "file://${server_socket}" ${config_file}
 
-  # gateway.cfg
-  cfg="${pkgdir}${cfg_path}/gateway.cfg"
-  cfg_set "imap_generate_utf8" "no" "${cfg}"
-  cfg_set "imap_public_folders" "yes" "${cfg}"
-  cfg_set "process_model" "fork" ${cfg}
+  # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/kopano-gateway.cfg.5
+  config_file="${config_path}/gateway.cfg"
+  set_config "imap_generate_utf8" "no" "${config_file}"
+  set_config "imap_public_folders" "yes" "${config_file}"
+  set_config "process_model" "fork" ${config_file}
   #=> service (avoid requests to be upgraded to admin privileges)
-  cfg_set "run_as_user" "nobody" ${cfg}
-  cfg_set "run_as_group" "nobody" ${cfg}
-  cfg_set "running_path" "${running_path}" ${cfg}
-  cfg_set "log_method" "syslog" ${cfg}  
-  cfg_set "log_file" "-" ${cfg}
-  cfg_set "log_level" "3" ${cfg}
+  set_config "run_as_user" "nobody" ${config_file}
+  set_config "run_as_group" "nobody" ${config_file}
+  set_config "log_method" "syslog" ${config_file}  
+  set_config "log_file" "-" ${config_file}
+  set_config "log_level" "3" ${config_file}
   #=> server-connection
-  cfg_set "server_bind" "127.0.0.1" ${cfg}
-  cfg_set "server_socket" "file://${server_socket}" ${cfg}
-  cfg_set "ssl_prefer_server_ciphers" "yes" ${cfg}   
-  cfg_set "ssl_protocols" "${ssl_protocols}" ${cfg}
-  cfg_set "ssl_ciphers" "${ssl_ciphers}" ${cfg}
-  cfg_set "ssl_private_key_file" "${ssl_privatekey}" ${cfg}   
-  cfg_set "ssl_certificate_file" "${ssl_certificate}" ${cfg}   
+  set_config "server_bind" "127.0.0.1" ${config_file}
+  set_config "server_socket" "file://${server_socket}" ${config_file}
+  set_config "ssl_prefer_server_ciphers" "yes" ${config_file}   
+  set_config "ssl_protocols" "${ssl_protocols}" ${config_file}
+  set_config "ssl_ciphers" "${ssl_ciphers}" ${config_file}
+  set_config "ssl_private_key_file" "${ssl_privatekey}" ${config_file}   
+  set_config "ssl_certificate_file" "${ssl_certificate}" ${config_file}   
 
-  # ical.cfg
-  cfg="${pkgdir}${cfg_path}/ical.cfg"
-  cfg_set "process_model" "fork" ${cfg}
+  # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/kopano-ical.cfg.5
+  config_file="${config_path}/ical.cfg"
+  set_config "process_model" "fork" ${config_file}
   #=> service (avoid requests to be upgraded to kopano-admin)
-  cfg_set "run_as_user" "nobody" ${cfg}
-  cfg_set "run_as_group" "nobody" ${cfg}
-  cfg_set "running_path" "${running_path}" ${cfg}
-  cfg_set "log_method" "syslog" ${cfg}  
-  cfg_set "log_file" "-" ${cfg}
-  cfg_set "log_level" "3" ${cfg}
+  set_config "run_as_user" "nobody" ${config_file}
+  set_config "run_as_group" "nobody" ${config_file}
+  set_config "log_method" "syslog" ${config_file}  
+  set_config "log_file" "-" ${config_file}
+  set_config "log_level" "3" ${config_file}
   #=> server-connection
-  cfg_set "server_bind" "127.0.0.1" ${cfg}
-  cfg_set "server_socket" "file://${server_socket}" ${cfg}
-  cfg_set "ssl_prefer_server_ciphers" "yes" ${cfg}
-  cfg_set "ssl_protocols" "${ssl_protocols}" ${cfg}
-  cfg_set "ssl_ciphers" "${ssl_ciphers}" ${cfg}
-  cfg_set "ssl_private_key_file" "${ssl_privatekey}" ${cfg}   
-  cfg_set "ssl_certificate_file" "${ssl_certificate}" ${cfg}   
+  set_config "server_bind" "127.0.0.1" ${config_file}
+  set_config "server_socket" "file://${server_socket}" ${config_file}
+  set_config "ssl_prefer_server_ciphers" "yes" ${config_file}
+  set_config "ssl_protocols" "${ssl_protocols}" ${config_file}
+  set_config "ssl_ciphers" "${ssl_ciphers}" ${config_file}
+  set_config "ssl_private_key_file" "${ssl_privatekey}" ${config_file}
+  set_config "ssl_certificate_file" "${ssl_certificate}" ${config_file}
 
-  # monitor.cfg
-  cfg="${pkgdir}${cfg_path}/monitor.cfg"
+  # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/kopano-monitor.cfg.5
+  config_file="${config_path}/monitor.cfg"
   #=> service
-  cfg_set "run_as_user" "${run_as_user}" ${cfg}
-  cfg_set "run_as_group" "${run_as_group}" ${cfg}
-  cfg_set "running_path" "${running_path}" ${cfg}
-  cfg_set "log_method" "syslog" ${cfg}
-  cfg_set "log_file" "-" ${cfg}
-  cfg_set "log_level" "3" ${cfg}
+  set_config "run_as_user" "${run_as_user}" ${config_file}
+  set_config "run_as_group" "${run_as_group}" ${config_file}
+  set_config "log_method" "syslog" ${config_file}
+  set_config "log_file" "-" ${config_file}
+  set_config "log_level" "3" ${config_file}
   #=> server-connection
-  cfg_set "server_socket" "file://${server_socket}" ${cfg}
+  set_config "server_socket" "file://${server_socket}" ${config_file}
 
-  # presence.cfg
-  cfg="${pkgdir}${cfg_path}/presence.cfg"
-  cfg_set "plugins" "xmpp" "${cfg}"
-  cfg_set "server_bind" "127.0.0.1" ${cfg}
+  # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/kopano-unix.cfg.5
+
+  # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/kopano-search.cfg.5
+  config_file="${config_path}/search.cfg"
+  set_config "index_attachements" "yes" "${config_file}"
+  set_config "server_bind_name" "file://${search_socket}" "${config_file}"
+  set_config "ssl_private_key_file" "${ssl_privatekey}" ${config_file}   
+  set_config "ssl_certificate_file" "${ssl_certificate}" ${config_file}   
   #=> service
-  cfg_set "run_as_user" "${run_as_user}" ${cfg}
-  cfg_set "run_as_group" "${run_as_group}" ${cfg}
-  cfg_set "running_path" "${running_path}" ${cfg}
-  cfg_set "log_method" "syslog" ${cfg}  
-  cfg_set "log_file" "-" ${cfg}
-  cfg_set "log_level" "3" ${cfg}
-
-  # unix.cfg
-
-  # search.cfg
-  cfg="${pkgdir}${cfg_path}/search.cfg"
-  cfg_set "index_attachements" "yes" "${cfg}"
-  cfg_set "server_bind_name" "file://${search_socket}" "${cfg}"
-  cfg_set "ssl_private_key_file" "${ssl_privatekey}" ${cfg}   
-  cfg_set "ssl_certificate_file" "${ssl_certificate}" ${cfg}   
-  #=> service
-  cfg_set "run_as_user" "${run_as_user}" ${cfg}
-  cfg_set "run_as_group" "${run_as_group}" ${cfg}
-  cfg_set "running_path" "${running_path}" ${cfg}
-  cfg_set "log_method" "syslog" ${cfg}  
-  cfg_set "log_file" "-" ${cfg}
-  cfg_set "log_level" "3" ${cfg}
+  set_config "run_as_user" "${run_as_user}" ${config_file}
+  set_config "run_as_group" "${run_as_group}" ${config_file}
+  set_config "log_method" "syslog" ${config_file}  
+  set_config "log_file" "-" ${config_file}
+  set_config "log_level" "3" ${config_file}
   #=> server-connection
-  cfg_set "server_socket" "file://${server_socket}" ${cfg}
+  set_config "server_socket" "file://${server_socket}" ${config_file}
 
-  # spooler.cfg
-  cfg="${pkgdir}${cfg_path}/spooler.cfg" 
-  cfg_set "allow_send_to_everyone" "no" "${cfg}"
+  # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/kopano-spooler.cfg.5
+  cfg="${config_path}/spooler.cfg" 
+  set_config "allow_send_to_everyone" "no" "${config_file}"
   #=> service
-  cfg_set "run_as_user" "${run_as_user}" ${cfg}
-  cfg_set "run_as_group" "${run_as_group}" ${cfg}
-  cfg_set "running_path" "${running_path}" ${cfg}
-  cfg_set "log_method" "syslog" ${cfg}  
-  cfg_set "log_file" "-" ${cfg}
-  cfg_set "log_level" "3" ${cfg}
+  set_config "run_as_user" "${run_as_user}" ${config_file}
+  set_config "run_as_group" "${run_as_group}" ${config_file}
+  set_config "log_method" "syslog" ${config_file}  
+  set_config "log_file" "-" ${config_file}
+  set_config "log_level" "3" ${config_file}
   #=> server-connection
-  cfg_set "server_socket" "file://${server_socket}" ${cfg}
+  set_config "server_socket" "file://${server_socket}" ${config_file}
+}
+
+set_config() {
+    config_attribute="$1"
+    config_attribute_prefix=$(echo -n "${config_attribute}" | sed "s|\(_\).*|\1|")
+    config_value="$2"
+    config_file="$3"
+
+    # Set/Uncomment Attribute
+    if grep -q "${config_attribute}" ${config_file} ;
+    then
+	# Uncomment (Replaces Optional Comments And Spaces)
+	sed -i "s|^#*\s*\(${config_attribute}.*\)|\1|" ${config_file}
+
+	# Set ("name = value" => "name = newvalue")
+	sed -i "s|^\(${config_attribute}\)\s*\=.*|\1 = ${config_value}|" ${config_file}
+
+    # Add Attribute At Right Position
+    elif [ ! -z "${config_attribute_prefix}" ] \
+	&& grep -q "${config_attribute_prefix}" ${config_file} ;
+    then
+	# Find Last Attribut From Prefix-Group
+	config_attribute_last_from_group=$(tac ${config_file} | grep -m 1 "^#*\s*${config_attribute_prefix}" | grep -o "${config_attribute_prefix}[^ =]*")
+	sed -i "s|\(${config_attribute_last_from_group}.*$\)|\1\n${config_attribute} = ${config_value}|" ${config_file}
+
+    # Add Attribute At The End of File 
+    else
+	sed -i -z "s|\(.*[^\n]\)|\1\n${config_attribute} = ${config_value}|" ${config_file}
+
+    fi
 }
