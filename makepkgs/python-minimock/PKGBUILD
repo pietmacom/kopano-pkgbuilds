@@ -19,7 +19,13 @@ makedepends+=(
 	    )
 
 pkgInfo() {
-    grep -o -m 1 "^$1: .*" src/${_module}-${pkgver}/PKG-INFO  | sed 's|.*: ||'
+    pkgInfoFile="src/${_module}-${pkgver}/PKG-INFO"
+    if [ -e "${pkgInfoFile}" ];
+    then
+	grep -o -m 1 "^$1: .*" ${pkgInfoFile}  | sed 's|.*: ||'
+    else
+	echo
+    fi
 }
 pkgdesc="$(pkgInfo 'Summary')"
 url="$(pkgInfo 'Home-page')"
