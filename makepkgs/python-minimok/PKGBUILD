@@ -1,0 +1,39 @@
+_module='MiniMock'
+pkgver='1.2.8'
+
+# template start; name=python; version=1;
+# https://wiki.archlinux.org/index.php/Python_package_guidelines
+pkgname=${_module,,}
+pkgrel=1
+arch=(
+    'any'
+     )
+source=(
+    "https://pypi.python.org/packages/source/${_module::1}/$_module/$_module-$pkgver.tar.gz"
+	)
+md5sums=(
+    'SKIP'
+	)
+makedepends+=(
+    'python-setuptools'
+	    )
+
+build() {
+    cd "${srcdir}/${_module}-${pkgver}"
+
+    pkgdesc=$(pkgInfo 'Summary')
+    url=$(pkgInfo 'Home-page')
+    license=$(pkgInfo 'License')
+
+    python setup.py build
+}
+
+package() {
+    cd "${srcdir}/${_module}-${pkgver}"
+    python setup.py install --root="${pkgdir}" --optimize=1 --skip-build
+}
+
+pkgInfo() {
+    grep -o -m 1 "^$1: .*" PKG-INFO  | sed 's|.*: ||'
+}
+# template end;
