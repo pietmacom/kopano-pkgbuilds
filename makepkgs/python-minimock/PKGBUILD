@@ -3,7 +3,7 @@ pkgver='1.2.8'
 
 # template start; name=python; version=1;
 # https://wiki.archlinux.org/index.php/Python_package_guidelines
-pkgname=("${_module,,}")
+pkgname=${_module,,}
 pkgrel=1
 arch=(
     'any'
@@ -18,12 +18,12 @@ makedepends+=(
     'python-setuptools'
 	    )
 
-prepare() {
-    cd "${srcdir}/${_module}-${pkgver}"
-    pkgdesc_${pkgname}="$(pkgInfo 'Summary')"
-    url_${pkgname}="$(pkgInfo 'Home-page')"
-    license_${pkgname}=("$(pkgInfo 'License')")
+pkgInfo() {
+    grep -o -m 1 "^$1: .*" ${srcdir}/${_module}-${pkgver}/PKG-INFO  | sed 's|.*: ||'
 }
+pkgdesc="$(pkgInfo 'Summary')"
+url="$(pkgInfo 'Home-page')"
+license=("$(pkgInfo 'License')")
 
 build() {
     cd "${srcdir}/${_module}-${pkgver}"
@@ -33,9 +33,5 @@ build() {
 package() {
     cd "${srcdir}/${_module}-${pkgver}"
     python setup.py install --root="${pkgdir}" --optimize=1 --skip-build
-}
-
-pkgInfo() {
-    grep -o -m 1 "^$1: .*" PKG-INFO  | sed 's|.*: ||'
 }
 # template end;
