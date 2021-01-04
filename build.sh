@@ -29,6 +29,13 @@ out_h1() {
 	echo
 }
 
+out_h1 "PREPARE"
+	# Work all PKGBUILD.template
+	find makepkgs -name "PKGBUILD.template" -print0 | while read -d $'\0' pkgBuildTemplate
+	do
+	     makepkg-template --template-dir makepkgs-templates --input $pkgBuildTemplate --output $(dirname $pkgBuildTemplate)/PKGBUILD
+	done
+
 out_h1 "CHECKOUT"
 	git clone https://aur.archlinux.org/libiconv.git makepkgs/libiconv
 	
