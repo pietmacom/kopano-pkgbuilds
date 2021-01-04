@@ -1,11 +1,15 @@
-
+# _name="MiniMock"
+# pkgver=1.2.8
+# pkgrel=1
 
 # https://wiki.archlinux.org/index.php/Python_package_guidelines
-#_name="MiniMock"
 source=(
 	"https://pypi.python.org/packages/source/${_name::1}/$_name/$_name-$pkgver.tar.gz"
 	)
 md5sum=('SKIP')
+build() {
+
+}
 
 
 
