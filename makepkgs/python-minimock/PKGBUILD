@@ -18,15 +18,16 @@ makedepends+=(
     'python-setuptools'
 	    )
 
-build() {
+pkgver() {
     cd "${srcdir}/${_module}-${pkgver}"
-
-    echo "PKGINFO: $(pkgInfo 'Summary')"
-
     pkgdesc="$(pkgInfo 'Summary')"
     url="$(pkgInfo 'Home-page')"
     license=("$(pkgInfo 'License')")
+    echo ${pkgver}
+}
 
+build() {
+    cd "${srcdir}/${_module}-${pkgver}"
     python setup.py build
 }
 
