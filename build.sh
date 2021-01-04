@@ -49,7 +49,7 @@ out_h1 "CHECKOUT"
 
 out_h1 "BUILD"
 	build makepkgs/libiconv
-	build makepkgs/libvmime
+	build makepkgs/kopano-libvmime
 	build makepkgs/kopano-core
 
 
