@@ -19,10 +19,10 @@ makedepends+=(
 	    )
 
 pkgInfo() {
-    pkgInfoFile="src/${_module}-${pkgver}/PKG-INFO"
-    if [ -e "${pkgInfoFile}" ];
+    _pkgInfoFile="src/${_module}-${pkgver}/PKG-INFO"
+    if [ -e "${_pkgInfoFile}" ];
     then
-	grep -o -m 1 "^$1: .*" ${pkgInfoFile}  | sed 's|.*: ||'
+	grep -o -m 1 "^$1: .*" ${_pkgInfoFile}  | sed 's|.*: ||'
     else
 	echo
     fi
