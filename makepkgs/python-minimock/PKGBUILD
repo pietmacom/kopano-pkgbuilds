@@ -21,7 +21,7 @@ makedepends+=(
 build() {
     cd "${srcdir}/${_module}-${pkgver}"
 
-    echo "PKGINFO: $(pkgInfo 'Summary)"
+    echo "PKGINFO: $(pkgInfo 'Summary')"
 
     pkgdesc="$(pkgInfo 'Summary')"
     url="$(pkgInfo 'Home-page')"
