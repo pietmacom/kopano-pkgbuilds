@@ -48,7 +48,7 @@ out_h1 "CHECKOUT"
 	#-git clone ssh://aur@aur.archlinux.org/z-push.git ; cd z-push ; git checkout -b "v2.3.3" 56db7b35459438dc6228b307f0f8855ac7fd9138 ; cd ..
 
 out_h1 "BUILD"
-	build makepkg/python-minimock
+	build makepkgs/python-minimock
 	build makepkgs/libiconv
 	build makepkgs/kopano-libvmime
 	build makepkgs/kopano-core
