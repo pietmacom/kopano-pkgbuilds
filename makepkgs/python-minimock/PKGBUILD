@@ -21,9 +21,11 @@ makedepends+=(
 build() {
     cd "${srcdir}/${_module}-${pkgver}"
 
-    pkgdesc=$(pkgInfo 'Summary')
-    url=$(pkgInfo 'Home-page')
-    license=$(pkgInfo 'License')
+    echo "PKGINFO: $(pkgInfo 'Summary)"
+
+    pkgdesc="$(pkgInfo 'Summary')"
+    url="$(pkgInfo 'Home-page')"
+    license=("$(pkgInfo 'License')")
 
     python setup.py build
 }
