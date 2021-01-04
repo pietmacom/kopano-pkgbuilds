@@ -4,7 +4,7 @@
 # Administrator Manual: https://documentation.kopano.io/kopanocore_administrator_manual/
 # User Manual: http://documentation.kopano.io/user_manual_kopanocore
 # Migration 7.2.1: https://documentation.kopano.io/kopano_migration_manual/KopanoMigrationManual.pdf
-pkgname=kopano-core
+pkgname=kopano-core-git
 pkgver=9.0.12
 pkgrel=1
 pkgdesc='Foundation for groupware messaging enabling clients'
