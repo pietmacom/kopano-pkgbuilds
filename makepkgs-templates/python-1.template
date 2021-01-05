@@ -27,6 +27,14 @@ pkgdesc="$(pkgInfo 'Summary')"
 url="$(pkgInfo 'Home-page')"
 license=("$(pkgInfo 'License')")
 
+_requirementsTxt="src/${_module}-${pkgver}/requirements.txt"
+if [ -e "${_requirementsTxt}" ];
+then
+    while read LINE; do
+	depends+=("python-$(echo $LINE | sed 's|==|=|')'")
+    done < ${_requirementsTxt}
+fi
+
 build() {
     cd "${srcdir}/${_module}-${pkgver}"
     python setup.py build

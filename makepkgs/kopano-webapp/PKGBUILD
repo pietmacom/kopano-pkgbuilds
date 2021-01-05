@@ -1,0 +1,92 @@
+# Maintainer: MartiMcFly <martimcfly [at] autorisation.de>
+# Contributor: Archist archist@die-optimisten.net
+
+pkgname='kopano-webapp'
+groups=(
+    'kopano'
+	)
+pkgver='4.6.3'
+pkgdesc='Provides all the familiar email, advanced calendaring and contacts features you need to be productive'
+arch=(
+    'any'
+     )
+url='http://www.kopano.com/'
+license=('AGPL3')
+
+sourcebranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=v${pkgver}"; fi)
+source=(
+    "${pkgname}::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${sourcebranch}"
+	)
+md5sums=(
+    'SKIP'
+	)
+
+
+makedepends=(
+    # WEBAPP: https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
+    'apache-ant'
+    'gettext'
+    'libxml2'
+
+    # PKGBUILD
+    'git'
+	     )
+depends=(
+    'kopano-core' # php-mapi
+    'php' # with json, xml and gettext modules
+
+    # Runtime
+#    'nginx'
+#    'php-fpm'
+	)
+#install="${pkgname}.install"
+#backup=(
+#    "etc/webapps/${pkgname}/debug.php"
+#    "etc/webapps/${pkgname}/config.php"
+#    "etc/webapps/${pkgname}/nginx-location.conf"
+#    "etc/php/conf.d/${pkgname}.ini"
+#    "etc/php/fpm.d/${pkgname}.conf"
+	)
+
+# https://wiki.archlinux.org/index.php/VCS_package_guidelines#Git
+pkgver() {
+    cd ${srcdir}/${pkgname}
+    if [[ "${pkgname}" == *-git ]];
+    then
+        git tag -l v* --sort=v:refname | tail -n 1 | sed "s|v\(.*\)|\1.r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)|"
+    else
+        echo ${pkgver}
+    fi
+}
+
+build() {
+    cd ${srcdir}/${pkgname}
+    ant deploy
+    ant deploy-plugins
+
+    # $ant deploy-plugins leads to errors
+    # execution one by one
+#    cd ${srcdir}
+
+#    for f in kopano-webapp-*; do
+#	if [ -d "$f" ];
+#	then
+	    ## Standalone plugins seem not ment to be compiled
+	    #dest="kopano-webapp/deploy/plugins/${f//kopano-webapp-/}"
+        #mv $f $dest
+        
+#        dest="kopano-webapp/plugins/${f//kopano-webapp-/}"
+#        mv $f $dest
+#	    cd $dest
+#	    ant deploy -Droot-folder="$(pwd)/../../" -Dtarget-folder="$(pwd)/../../deploy/plugins"
+#	    cd ${srcdir}
+#	fi
+#    done
+}
+
+package() {
+    cd ${srcdir}/${pkgname}/deploy
+
+    mkdir -p ${pkgdir}/usr/share/webapps/${pkgname}/
+    cp -r * ${pkgdir}/usr/share/webapps/${pkgname}/
+}

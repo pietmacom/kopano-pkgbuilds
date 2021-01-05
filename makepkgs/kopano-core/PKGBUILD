@@ -4,9 +4,9 @@
 # Administrator Manual: https://documentation.kopano.io/kopanocore_administrator_manual/
 # User Manual: http://documentation.kopano.io/user_manual_kopanocore
 # Migration 7.2.1: https://documentation.kopano.io/kopano_migration_manual/KopanoMigrationManual.pdf
-pkgname=kopano-core
-pkgver=9.0.12
-pkgrel=1
+pkgname='kopano-core'
+pkgver='9.0.12'
+pkgrel='1'
 pkgdesc='Foundation for groupware messaging enabling clients'
 arch=(
     'armv7l'
@@ -20,7 +20,7 @@ license=(
 	)
 sourcebranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=kopanocore-${pkgver}"; fi)
 source=(
-    "git+https://stash.kopano.io/scm/kc/kopanocore.git${sourcebranch}"
+    "${pkgname}::git+https://stash.kopano.io/scm/kc/kopanocore.git${sourcebranch}"
 	)
 md5sums=(
     'SKIP'
@@ -117,7 +117,7 @@ install='install'
 
 # https://wiki.archlinux.org/index.php/VCS_package_guidelines#Git
 pkgver() {
-    cd kopanocore
+    cd ${srcdir}/${pkgname}
     if [[ "${pkgname}" == *-git ]];
     then
 	git tag -l kopanocore-* --sort=v:refname | tail -n 1 | sed "s|kopanocore-\(.*\)|\1.r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)|"
@@ -127,13 +127,13 @@ pkgver() {
 }
 
 prepare() {
-    cd kopanocore
+    cd ${srcdir}/${pkgname}
     ./bootstrap.sh
 }
 
 # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Dockerfile.build
 build() {
-    cd kopanocore
+    cd ${srcdir}/${pkgname}
 
     # When using official VMIME
     # https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt#68
@@ -172,7 +172,7 @@ build() {
 }
 
 package() {
-    cd kopanocore
+    cd ${srcdir}/${pkgname}
 
     # => multithreaded build breaks everything
     export MAKEFLAGS="-j1"

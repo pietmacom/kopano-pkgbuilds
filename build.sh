@@ -30,7 +30,7 @@ out_h1() {
 }
 
 out_h1 "PREPARE"
-	# Work all PKGBUILD.template
+	# Work all 'PKGBUILD.template'-Files
 	find makepkgs -name "PKGBUILD.template" -print0 | while read -d $'\0' pkgBuildTemplate
 	do
 	     makepkg-template --template-dir makepkgs-templates --input $pkgBuildTemplate --output $(dirname $pkgBuildTemplate)/PKGBUILD
@@ -55,11 +55,10 @@ out_h1 "CHECKOUT"
 	#-git clone ssh://aur@aur.archlinux.org/z-push.git ; cd z-push ; git checkout -b "v2.3.3" 56db7b35459438dc6228b307f0f8855ac7fd9138 ; cd ..
 
 out_h1 "BUILD"
-	build makepkgs/python-minimock
 	build makepkgs/libiconv
 	build makepkgs/kopano-libvmime
 	build makepkgs/kopano-core
-
+	build makepkgs/kopano-webapp
 
 	# ARCHIVE
 	# DEPENDENCIES - KOPANO-WEBAPP
