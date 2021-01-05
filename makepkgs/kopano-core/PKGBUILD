@@ -186,7 +186,7 @@ package() {
 
     make install DESTDIR="$(realpath ${pkgdir})"
 
-    mkdir -p ${pkgdir}/usr/share/docs/${pkgname}
+    mkdir -p ${pkgdir}/usr/share/doc/${pkgname}
     cp RELNOTES.txt \
 	${pkgdir}/usr/share/docs/${pkgname}/
 
