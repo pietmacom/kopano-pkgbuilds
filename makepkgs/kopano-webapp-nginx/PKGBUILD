@@ -23,7 +23,7 @@ md5sums=(
     'SKIP'
     'SKIP'
     'SKIP'
-
+)
 depends=(
     'php'
     'nginx'
