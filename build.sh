@@ -55,6 +55,9 @@ out_h1 "CHECKOUT"
 	#-git clone ssh://aur@aur.archlinux.org/z-push.git ; cd z-push ; git checkout -b "v2.3.3" 56db7b35459438dc6228b307f0f8855ac7fd9138 ; cd ..
 
 out_h1 "BUILD"
+	# TEST
+	build makepkgs/kopano-webapp-nginx
+	
 	# CORE
 	build makepkgs/libiconv
 	build makepkgs/kopano-libvmime

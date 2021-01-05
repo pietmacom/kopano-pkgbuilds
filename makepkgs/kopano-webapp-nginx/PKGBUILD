@@ -1,0 +1,54 @@
+# Maintainer: MartiMcFly <martimcfly [at] autorisation.de>
+
+pkgname='kopano-webapp-nginx'
+pkgver=1
+pkgrel=1
+pkgdesc='NGINX-, PHP-FPM-, PHP-Settings'
+groups=(
+    'kopano'
+	)
+arch=(
+    'any'
+     )
+source=(
+    'nginx-location.conf'
+    'nginx-ssl.example.conf'
+    'php-fpm.example.conf'
+    'kopano-webapp.conf'
+    'kopano-webapp.ini'
+    )
+md5sums=(
+    'SKIP'
+    'SKIP'
+    'SKIP'
+    'SKIP'
+    'SKIP'
+
+depends=(
+    'php'
+    'nginx'
+    'php-fpm'
+    'gettext'
+    'libxml2'
+	)
+backup=(
+    "etc/php/conf.d/${pkgname}.ini"
+    "etc/php/fpm.d/${pkgname}.conf"
+)
+
+package() {
+    cd ${srcdir}
+
+    # NGINX
+    mkdir -p ${pkgdir}/usr/share/doc/${pkgname}
+    cp nginx-location.conf nginx-ssl.example.conf php-fpm.example.conf \
+	${pkgdir}/usr/share/doc/${pkgname}
+
+    # PHP-FPM
+    mkdir -p ${pkgdir}/etc/php/fpm.d
+    cp ${pkgname}.conf ${pkgdir}/etc/php/fpm.d
+
+    # PHP
+    mkdir -p ${pkgdir}/etc/php/conf.d
+    cp ${pkgname}.ini ${pkgdir}/etc/php/conf.d
+}
