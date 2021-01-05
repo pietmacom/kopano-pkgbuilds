@@ -62,8 +62,10 @@ pkgver() {
 
 build() {
     cd ${srcdir}/${pkgname}
-    ant deploy
-    ant deploy-plugins
+    make deploy DESTDIR="$(realpath ${pkgdir})"
+
+#    ant deploy
+#    ant deploy-plugins
 
     # $ant deploy-plugins leads to errors
     # execution one by one

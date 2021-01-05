@@ -149,9 +149,7 @@ build() {
     # VMIME_LIBS='$(pkg-config vmime --libs)' \
 
     ./configure \
-    \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile` \
-    DESTDIR="$(realpath ${pkgdir})" \
     TCMALLOC_CFLAGS=' ' \
     TCMALLOC_LIBS='-ltcmalloc_minimal' \
     PYTHON="$(which python3)" \
