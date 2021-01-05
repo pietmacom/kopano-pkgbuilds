@@ -52,7 +52,15 @@ pkgver() {
     fi
 }
 
+build() {
+    cd ${srcdir}/${pkgname}
+    make server client
+    # DESTDIR="$(realpath ${pkgdir})/usr/share/webapps/${pkgname}"
+}
+
 package() {
     cd ${srcdir}/${pkgname}
-    make server client DESTDIR="$(realpath ${pkgdir})/usr/share/webapps/${pkgname}"
+
+    mkdir -p ${pkgdir})/usr/share/webapps/${pkgname}
+    cp -RT deploy ${pkgdir})/usr/share/webapps/${pkgname}
 }
