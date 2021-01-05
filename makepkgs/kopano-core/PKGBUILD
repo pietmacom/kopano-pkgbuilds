@@ -28,7 +28,10 @@ source=(
 md5sums=(
     'SKIP'
 	)
-changelog="src/${pkgname}/RELNOTES.txt" # actually the PKGBUILD changelog
+if git log --follow . | grep -v '^Author:.*$' > changelog ;
+then
+    changelog="changelog"
+fi
 
 makedepends=(
     # CORE: https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt

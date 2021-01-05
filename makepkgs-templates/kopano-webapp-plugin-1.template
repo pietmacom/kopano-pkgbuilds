@@ -1,3 +1,7 @@
+# _source=git+https://stash.kopano.io/scm/kc/kopanocore.git
+# _versionPrefix=kopanocore-
+# _versionPrefix=v
+
 pkgrel=1
 group=(
     'kopano'
@@ -19,3 +23,87 @@ manifestXml() {
 pkgdesc="$(manifestXml 'description')"
 url="$(manifestXml 'authorURL')"
 
+_sourceBranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=${_versionPrefix}${pkgver}"; fi)
+source=(
+    "${pkgname}::${_source}${_sourceBranch}"
+	)
+md5sums=(
+    'SKIP'
+	)
+
+depends=(
+    'kopano-webapp'
+	)
+
+# https://wiki.archlinux.org/index.php/VCS_package_guidelines#Git
+pkgver() {
+    cd ${srcdir}/${pkgname}
+    if [[ "${pkgname}" == *-git ]];
+    then
+        git tag -l ${_versionPrefix}* --sort=v:refname | tail -n 1 | sed "s|${_versionPrefix}\(.*\)|\1.r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)|"
+    else
+        echo ${pkgver}
+    fi
+}
+
+build() {
+    cd ${srcdir}/${pkgname}
+    ant deploy -Droot-folder="$(pwd)/../../" -Dtarget-folder="$(pwd)/../../deploy/plugins"
+}
+
+package_plugin() {
+    pluginname=${pkgname//kopano-webapp-/}
+
+    ## override pluginname
+    #if [[ ! -z "$1" ]];
+    #then
+    #    pluginname="$1"
+    #fi
+
+    cd ${srcdir}/kopano-webapp/deploy/plugins/$pluginname/
+
+    groups=('kopano'
+            'kopano-webapp-plugins')
+
+    # /usr/share
+    mkdir -p ${pkgdir}/usr/share/webapps/kopano-webapp/plugins/${pluginname}/
+    cp -R * ${pkgdir}/usr/share/webapps/kopano-webapp/plugins/${pluginname}/
+    rm -f ${pkgdir}/usr/share/webapps/kopano-webapp/plugins/${pluginname}/config.php
+    ${srcdir}/compress-static ${pkgdir}/usr/share/webapps/kopano-webapp/plugins/${pluginname}/
+
+    # /var/lib
+    installdir http:http 0700 0600 ${pkgdir}/var/lib/kopano-webapp/plugins/${pluginname}
+
+    # /etc
+    if [[ -e "config.php" ]];
+    then
+        backup=("etc/webapps/kopano-webapp/plugins/${pluginname}/config.php")
+
+        ## perform settings
+        # convert windows line break to unix: http://stackoverflow.com/questions/11680815/removing-windows-newlines-on-linux-sed-vs-awk
+        sed -i -e $'s/\r//' config.php
+
+        mkdir -p ${pkgdir}/etc/webapps/kopano-webapp/plugins/${pluginname}/
+
+        ## config mains
+        cp config.php ${pkgdir}/etc/webapps/kopano-webapp/plugins/${pluginname}/config.php
+        ln -s /etc/webapps/kopano-webapp/plugins/${pluginname}/config.php ${pkgdir}/usr/share/webapps/kopano-webapp/plugins/${pluginname}/config.php
+
+        ## config examples
+        cp ${pkgdir}/etc/webapps/kopano-webapp/plugins/${pluginname}/config.php ${pkgdir}/etc/webapps/kopano-webapp/plugins/${pluginname}/config.example.php
+    fi
+
+    if [[ -e "${srcdir}/${pkgname}.ini" ]];
+    then
+      ## php
+      mkdir -p ${pkgdir}/etc/php/conf.d
+      cp ${srcdir}/${pkgname}.ini ${pkgdir}/etc/php/conf.d
+    fi
+
+    if [[ -e "${srcdir}/${pkgname}.install" ]];
+    then
+        ${pkgname}.install
+    else
+        install=""
+    fi
+}
