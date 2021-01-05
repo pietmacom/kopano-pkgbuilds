@@ -54,5 +54,5 @@ pkgver() {
 
 package() {
     cd ${srcdir}/${pkgname}
-    make server client DESTDIR="$(realpath ${pkgdir})/usr/share/webapps/${pkgname}/"
+    make server client DESTDIR="$(realpath ${pkgdir})/usr/share/webapps/${pkgname}"
 }
