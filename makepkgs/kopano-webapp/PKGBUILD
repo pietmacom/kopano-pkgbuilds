@@ -61,6 +61,6 @@ build() {
 package() {
     cd ${srcdir}/${pkgname}
 
-    mkdir -p ${pkgdir})/usr/share/webapps/${pkgname}
+    mkdir -p ${pkgdir}/usr/share/webapps/${pkgname}
     cp -RT deploy ${pkgdir})/usr/share/webapps/${pkgname}
 }
