@@ -28,7 +28,7 @@ source=(
 md5sums=(
     'SKIP'
 	)
-
+changelog="src/${pkgname}/RELNOTES.txt" # actually the PKGBUILD changelog
 
 makedepends=(
     # CORE: https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt
@@ -117,7 +117,7 @@ optdepends=(
     # 'libs3'
 	    )
 install='install'
-changelog="/usr/share/docs/${pkgname}/RELNOTES.txt"
+
 
 # https://wiki.archlinux.org/index.php/VCS_package_guidelines#Git
 pkgver() {
