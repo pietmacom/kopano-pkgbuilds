@@ -1,1 +1,21 @@
-# empty
+pkgrel=1
+group=(
+    'kopano'
+	)
+arch=(
+    'any'
+     )
+makedepends+=('libxml2')
+
+manifestXml() {
+    _manifestXmlFile="src/${_module}-${pkgver}/manifest.xml"
+    if [ -e "${_manifestXmlFile}" ];
+    then
+        xmllint --xpath "string(/plugin/info/$1)" ${_manifestXmlFile}
+    else
+	echo
+    fi
+}
+pkgdesc="$(manifestXml 'description')"
+url="$(manifestXml 'authorURL')"
+

@@ -8,6 +8,9 @@ pkgname='kopano-core'
 pkgver='9.0.12'
 pkgrel='1'
 pkgdesc='Foundation for groupware messaging enabling clients'
+groups=(
+    'kopano'
+    )
 arch=(
     'armv7l'
     'aarch64'
@@ -114,6 +117,7 @@ optdepends=(
     # 'libs3'
 	    )
 install='install'
+changelog="/usr/share/docs/${pkgname}/RELNOTES.txt"
 
 # https://wiki.archlinux.org/index.php/VCS_package_guidelines#Git
 pkgver() {
@@ -179,9 +183,14 @@ package() {
 
     make install DESTDIR="$(realpath ${pkgdir})"
 
-    # PREPARE LICENSE 
+    mkdir -p ${pkgdir}/usr/share/docs/${pkgname}
+    cp -R {RELNOTES.txt} \
+	${pkgdir}/usr/share/docs/${pkgname}
+
+
+    # PREPARE LICENSE
     mkdir -p ${pkgdir}/usr/share/licenses/${pkgname}
-    cp -R {RELNOTES.txt,CONTRIBUTING.md,AGPL-3,LICENSE.txt} \
+    cp -R {CONTRIBUTING.md,AGPL-3,LICENSE.txt} \
 	${pkgdir}/usr/share/licenses/${pkgname}
 
     cp -r "${pkgdir}/usr/share/doc/kopano/example-config" \
