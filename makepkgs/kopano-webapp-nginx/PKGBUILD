@@ -46,9 +46,9 @@ package() {
 
     # PHP-FPM
     mkdir -p ${pkgdir}/etc/php/fpm.d
-    cp ${pkgname}.conf ${pkgdir}/etc/php/fpm.d
+    cp kopano-webapp.conf ${pkgdir}/etc/php/fpm.d
 
     # PHP
     mkdir -p ${pkgdir}/etc/php/conf.d
-    cp ${pkgname}.ini ${pkgdir}/etc/php/conf.d
+    cp kopano-webapp.ini ${pkgdir}/etc/php/conf.d
 }
