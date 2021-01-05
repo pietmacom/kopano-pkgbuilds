@@ -2,11 +2,12 @@
 # Contributor: Archist archist@die-optimisten.net
 
 pkgname='kopano-webapp'
+pkgver='4.6.3'
+pkgrel=1
+pkgdesc='Provides all the familiar email, advanced calendaring and contacts features you need to be productive'
 groups=(
     'kopano'
 	)
-pkgver='4.6.3'
-pkgdesc='Provides all the familiar email, advanced calendaring and contacts features you need to be productive'
 arch=(
     'any'
      )
