@@ -38,7 +38,7 @@ out_h1 "PREPARE"
 
 out_h1 "CHECKOUT"
 	git clone https://aur.archlinux.org/libiconv.git makepkgs/libiconv
-	git clone https://aur.archlinux.org/apache-ant-contrib.git makepkgs/ant-contrib
+	git clone https://aur.archlinux.org/apache-ant-contrib.git makepkgs/apache-ant-contrib
 	
 	# ARCHIVE
 	# php
@@ -55,9 +55,6 @@ out_h1 "CHECKOUT"
 	#-git clone ssh://aur@aur.archlinux.org/z-push.git ; cd z-push ; git checkout -b "v2.3.3" 56db7b35459438dc6228b307f0f8855ac7fd9138 ; cd ..
 
 out_h1 "BUILD"
-	# TEST
-	build makepkgs/kopano-webapp-nginx
-	
 	# CORE
 	build makepkgs/libiconv
 	build makepkgs/kopano-libvmime
@@ -65,7 +62,8 @@ out_h1 "BUILD"
 
 	# WEBAPP
 	# OPTIONAL build makepkgs/jdk
-	build makepkgs/ant-contrib
+	build makepkgs/apache-ant-contrib
+	build makepkgs/kopano-webapp-nginx
 	build makepkgs/kopano-webapp
 
 	# DEPENDENCIES - KOPANO-CORE
