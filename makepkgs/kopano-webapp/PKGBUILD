@@ -77,7 +77,7 @@ package() {
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/deploy \
 	${pkgdir}${_binDir}
     sed -i -e 's|\(\"DEBUG_LOADER\", \).*$|\1LOAD_RELEASE);|' \
-	${pkgdir}${_binDir}/debug.example.php
+	${pkgdir}${_binDir}/debug.php.dist
     _compressStatic ${pkgdir}${_binDir}
 
     _install http:http ${_securePermissions} ${pkgdir}${_confDir}
