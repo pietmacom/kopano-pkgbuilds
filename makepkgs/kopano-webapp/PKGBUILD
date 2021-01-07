@@ -123,4 +123,5 @@ _compressStatic() {
             gzip -k -9 "${_staticFile}"
             echo "Created new: ${_staticFile}.gz"
         fi
+    done
 }
