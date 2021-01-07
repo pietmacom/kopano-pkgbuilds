@@ -45,9 +45,7 @@ depends=(
 optdepends=(
     'kopano-webapp-nginx'
 	    )
-install=(
-    'install'
-    )
+install='install'
 
 # https://wiki.archlinux.org/index.php/VCS_package_guidelines#Git
 pkgver() {
