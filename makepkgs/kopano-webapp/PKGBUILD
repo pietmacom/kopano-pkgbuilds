@@ -144,7 +144,7 @@ _compressStatic() {
         _fileExtensions='htm|css|html|js'
     fi
 
-    find ${_dir} -type f -regextype posix-extended -regex '.*\.('${fileExtensions}')' -print0 \
+    find ${_dir} -type f -regextype posix-extended -regex '.*\.('${_fileExtensions}')' -print0 \
         | while read -d $'\0' _staticFile
     do
         if [ -f "${_staticFile}".gz ]
