@@ -25,14 +25,9 @@ md5sums=(
     'SKIP'
 )
 depends=(
-    # WEBAPP
-    # https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
-    # https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/server/includes/core/class.configcheck.php
-    'php' # json, zip (ini), gettext (ini), zlib, iconv (ini) - 'euro-sign support', mapi (ini)
-
-    # CONFIGS
     'nginx'
     'php-fpm'
+    'php'
 	)
 backup=(
     "etc/php/conf.d/${pkgname}.ini"
@@ -52,6 +47,10 @@ package() {
     cp kopano-webapp.conf ${pkgdir}/etc/php/fpm.d
 
     # PHP
+    # https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
+    # https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/server/includes/core/class.configcheck.php
+    #
+    # extensions: json, zip (ini), gettext (ini), zlib, iconv (ini) - 'euro-sign support', mapi (ini)
     mkdir -p ${pkgdir}/etc/php/conf.d
     cp kopano-webapp.ini ${pkgdir}/etc/php/conf.d
 }

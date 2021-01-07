@@ -12,7 +12,7 @@ groups=(
     'kopano'
     )
 arch=(
-    'armv7l'
+    'armv7h'
     'aarch64'
     'i686'
     'x86_64'

@@ -14,9 +14,9 @@ arch=(
 url='http://www.kopano.com/'
 license=('AGPL3')
 
-sourcebranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=v${pkgver}"; fi)
+_sourcebranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=v${pkgver}"; fi)
 source=(
-    "${pkgname}::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${sourcebranch}"
+    "${pkgname}::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${_sourcebranch}"
 	)
 md5sums=(
     'SKIP'
@@ -34,12 +34,19 @@ makedepends=(
 	     )
 depends=(
     # WEBAPP: https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
+    # https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
+    # https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/server/includes/core/class.configcheck.php
+    'php' # extensions: json, zip (ini), gettext (ini), zlib, iconv (ini) - 'euro-sign support', mapi (ini)
     'kopano-core'
-    'php'
+    'libiconv'
+    'gettext'
 	)
 optdepends=(
     'kopano-webapp-nginx'
 	    )
+install=(
+    'install'
+    )
 
 # https://wiki.archlinux.org/index.php/VCS_package_guidelines#Git
 pkgver() {
@@ -52,15 +59,39 @@ pkgver() {
     fi
 }
 
+_binDir=/usr/share/webapps/${pkgname}
+_confDir=/etc/webapps/${pkgname}
+_stateDir=/var/lib/webapps/${pkgname}
+_logDir=/var/log/${pkgname}
+_commonPermissions="u=rwx,g=rx,o=rx u=rw,g=r,o=r"
+_securePermissions="u=rwx,g=rx,o= u=rw,g=r,o="
+
 build() {
     cd ${srcdir}/${pkgname}
     make server client
-    # DESTDIR="$(realpath ${pkgdir})/usr/share/webapps/${pkgname}"
+
+    # Broken in Makefile
+    # DESTDIR=""
 }
 
 package() {
-    cd ${srcdir}/${pkgname}
+    source install
 
-    mkdir -p ${pkgdir}/usr/share/webapps/${pkgname}
-    cp -RT deploy ${pkgdir}/usr/share/webapps/${pkgname}
+    _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/deploy \
+	${pkgdir}${_binDir}
+    sed -i -e 's|\(\"DEBUG_LOADER\", \).*$|\1LOAD_RELEASE);|' \
+	${pkgdir}${_binDir}/debug.example.php
+
+    _install http:http ${_securePermissions} ${pkgdir}${_confDir}
+    ln -s ${confDir}/config.php \
+	${pkgdir}${_confDir}/config.php 
+
+    _install http:http ${_securePermissions} ${pkgdir}${_stateDir}
+    _install http:http ${_securePermissions} ${pkgdir}${_stateDir}/plugins
+
+    _install http:http ${_securePermissions} ${pkgdir}${_logDir}
+    _install http:http ${_securePermissions} debug.txt \
+	${pkgdir}${_logDir}
+    ln -s ${_logDir}/debug.txt \
+	${pkgdir}${_logDir}/debug.txt
 }

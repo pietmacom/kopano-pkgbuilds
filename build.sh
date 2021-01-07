@@ -23,6 +23,10 @@ build() {
 	cd $P
 }
 
+publishToAUR() {
+    makepkg --printsrcinfo > .SRCINFO
+}
+
 out_h1() {
 	echo
 	echo "# $1"
