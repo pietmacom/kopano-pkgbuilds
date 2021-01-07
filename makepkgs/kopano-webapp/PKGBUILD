@@ -74,8 +74,6 @@ build() {
 }
 
 package() {
-    source ./install
-
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/deploy \
 	${pkgdir}${_binDir}
     sed -i -e 's|\(\"DEBUG_LOADER\", \).*$|\1LOAD_RELEASE);|' \
@@ -94,6 +92,47 @@ package() {
 	${pkgdir}${_logDir}
     ln -s ${_logDir}/debug.txt \
 	${pkgdir}${_logDir}/debug.txt
+}
+
+# _install user:group 777 666 [sourceFile|sourceDir] destDir
+# https://www.shellbefehle.de/befehle/chmod/
+_install() {
+    local _chown="$1"
+    local _chmodDir="$2"
+    local _chmodFile="$3"
+
+
+    if [ -z "$5" ];
+    then
+        # create _destDir only
+        local _destDir="$4"
+        mkdir -p "${_destDir}"
+        chown ${_chown} ${_destDir}
+        chmod "${_chmodDir}" ${_destDir}
+    else
+        # copy/create _source*
+        local _destDir="$5"
+        mkdir -p "${_destDir}"
+
+        if [ -d "$4" ];
+        then
+            local _sourceDir="$4"
+            cp -RT ${_sourceDir} ${_destDir}
+            find ${_destDir} -exec chown "${_chown}" {} \;
+            find ${_destDir} -type f -exec chmod "${_chmodFile}" {} \;
+            find ${_destDir} -type d -exec chmod "${_chmodDir}" {} \;
+
+        else
+            local _sourceFile="$4"
+            if [ ! -f "${_sourceFile}" ];
+            then
+                touch ${_destDir}/$(basename ${_sourceFile})
+            fi
+            cp ${_src} ${_destDir}/
+            chown ${_chown} ${_destDir}/$(basename ${_sourceFile})
+            chmod "${_chmodFile}" ${_destDir}/$(basename ${_sourceFile})
+        fi
+    fi
 }
 
 # compressStatic /usr/share/webapps/xxx 'htm|css|html|js'

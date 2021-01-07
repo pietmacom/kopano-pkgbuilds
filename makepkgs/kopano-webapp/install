@@ -1,49 +1,5 @@
 #!/bin/bash
 
-_commonPermissions="u=rwx,g=rx,o=rx u=rw,g=r,o=r"
-_securePermissions="u=rwx,g=rx,o= u=rw,g=r,o="
-
-# _install user:group 777 666 [sourceFile|sourceDir] destDir
-# https://www.shellbefehle.de/befehle/chmod/
-_install() {
-    local _chown="$1"
-    local _chmodDir="$2"
-    local _chmodFile="$3"
-
-
-    if [ -z "$5" ];
-    then
-        # create _destDir only
-        local _destDir="$4"
-        mkdir -p "${_destDir}"
-        chown ${_chown} ${_destDir}
-        chmod "${_chmodDir}" ${_destDir}
-    else
-        # copy/create _source*
-        local _destDir="$5"
-        mkdir -p "${_destDir}"
-
-        if [ -d "$4" ];
-        then
-            local _sourceDir="$4"
-            cp -RT ${_sourceDir} ${_destDir}
-            find ${_destDir} -exec chown "${_chown}" {} \;
-            find ${_destDir} -type f -exec chmod "${_chmodFile}" {} \;
-            find ${_destDir} -type d -exec chmod "${_chmodDir}" {} \;
-
-        else
-            local _sourceFile="$4"
-            if [ ! -f "${_sourceFile}" ];
-            then
-                touch ${_destDir}/$(basename ${_sourceFile})
-            fi
-            cp ${_src} ${_destDir}/
-            chown ${_chown} ${_destDir}/$(basename ${_sourceFile})
-            chmod "${_chmodFile}" ${_destDir}/$(basename ${_sourceFile})
-        fi
-    fi
-}
-
 post_install() {
     _binDir="/usr/share/webapps/kopano-webapp"
     _confDir="/etc/webapps/kopano-webapp"
