@@ -82,7 +82,7 @@ package() {
 
     _install http:http ${_securePermissions} ${pkgdir}${_confDir}
     ln -s ${confDir}/config.php \
-	${pkgdir}${_confDir}/config.php 
+	${pkgdir}${_binDir}/config.php 
 
     _install http:http ${_securePermissions} ${pkgdir}${_stateDir}
     _install http:http ${_securePermissions} ${pkgdir}${_stateDir}/plugins
@@ -91,7 +91,7 @@ package() {
     _install http:http ${_securePermissions} debug.txt \
 	${pkgdir}${_logDir}
     ln -s ${_logDir}/debug.txt \
-	${pkgdir}${_logDir}/debug.txt
+	${pkgdir}${_binDir}/debug.txt
 }
 
 # _install user:group 777 666 [sourceFile|sourceDir] destDir
