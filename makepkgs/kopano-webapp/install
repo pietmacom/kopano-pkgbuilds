@@ -4,6 +4,7 @@ _commonPermissions="u=rwx,g=rx,o=rx u=rw,g=r,o=r"
 _securePermissions="u=rwx,g=rx,o= u=rw,g=r,o="
 
 # _install user:group 777 666 [sourceFile|sourceDir] destDir
+# https://www.shellbefehle.de/befehle/chmod/
 _install() {
     local _chown="$1"
     local _chmodDir="$2"

@@ -31,6 +31,7 @@ makedepends=(
 
     # PKGBUILD
     'git'
+    'gzip'
 	     )
 depends=(
     # WEBAPP: https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
@@ -81,6 +82,7 @@ package() {
 	${pkgdir}${_binDir}
     sed -i -e 's|\(\"DEBUG_LOADER\", \).*$|\1LOAD_RELEASE);|' \
 	${pkgdir}${_binDir}/debug.example.php
+    _compressStatic ${pkgdir}${_binDir}
 
     _install http:http ${_securePermissions} ${pkgdir}${_confDir}
     ln -s ${confDir}/config.php \
@@ -94,4 +96,33 @@ package() {
 	${pkgdir}${_logDir}
     ln -s ${_logDir}/debug.txt \
 	${pkgdir}${_logDir}/debug.txt
+}
+
+# compressStatic /usr/share/webapps/xxx 'htm|css|html|js'
+_compressStatic() {
+    _dir=$1
+    if [ -z "$2" ];
+    then
+        _fileExtensions='htm|css|html|js'
+    fi
+
+    find ${_dir} -type f -regextype posix-extended -regex '.*\.('${fileExtensions}')' -print0 \
+        | while read -d $'\0' _staticFile
+    do
+        if [ -f "${_staticFile}".gz ]
+        then
+            FILE_ORIG=$(stat -c %Y "${_staticFile}")
+            FILE_GZIP=$(stat -c %Y "${_staticFile}".gz)
+            if [ $FILE_ORIG -gt $FILE_GZIP ]
+            then
+                rm "${_staticFile}".gz
+                gzip -k -9 "${_staticFile}"
+                echo "Deleted old .gz and created new one at: ${_staticFile}.gz"
+            else
+                echo "Skipping - Already up to date: ${_staticFile}.gz"
+            fi
+        else
+            gzip -k -9 "${_staticFile}"
+            echo "Created new: ${_staticFile}.gz"
+        fi
 }
