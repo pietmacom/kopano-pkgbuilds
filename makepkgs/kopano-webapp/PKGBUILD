@@ -74,7 +74,7 @@ build() {
 }
 
 package() {
-    source install
+    source ./install
 
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/deploy \
 	${pkgdir}${_binDir}
