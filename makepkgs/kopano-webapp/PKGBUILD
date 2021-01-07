@@ -76,13 +76,16 @@ build() {
 package() {
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/deploy \
 	${pkgdir}${_binDir}
+    _install root:root ${_commonPermissions}/plugins
     sed -i -e 's|\(\"DEBUG_LOADER\", \).*$|\1LOAD_RELEASE);|' \
 	${pkgdir}${_binDir}/debug.php.dist
+    ln -s ${confDir}/config.php \
+	${pkgdir}${_binDir}/config.php 
+    ln -s ${_logDir}/debug.txt \
+	${pkgdir}${_binDir}/debug.txt
     _compressStatic ${pkgdir}${_binDir}
 
     _install http:http ${_securePermissions} ${pkgdir}${_confDir}
-    ln -s ${confDir}/config.php \
-	${pkgdir}${_binDir}/config.php 
 
     _install http:http ${_securePermissions} ${pkgdir}${_stateDir}
     _install http:http ${_securePermissions} ${pkgdir}${_stateDir}/plugins
@@ -90,8 +93,6 @@ package() {
     _install http:http ${_securePermissions} ${pkgdir}${_logDir}
     _install http:http ${_securePermissions} debug.txt \
 	${pkgdir}${_logDir}
-    ln -s ${_logDir}/debug.txt \
-	${pkgdir}${_binDir}/debug.txt
 }
 
 # _install user:group 777 666 [sourceFile|sourceDir] destDir
