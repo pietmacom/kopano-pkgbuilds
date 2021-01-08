@@ -3,7 +3,7 @@
 pkgname='kopano-webapp-nginx'
 pkgver=1
 pkgrel=1
-pkgdesc='NGINX-, PHP-FPM-, PHP-Settings'
+pkgdesc='NGINX-, PHP-FPM-Settings'
 groups=(
     'kopano'
 	)
@@ -15,22 +15,20 @@ source=(
     'nginx-ssl.example.conf'
     'php-fpm.example.conf'
     'kopano-webapp.conf'
-    'kopano-webapp.ini'
     )
 md5sums=(
     'SKIP'
     'SKIP'
     'SKIP'
     'SKIP'
-    'SKIP'
 )
 depends=(
+    'kopano-webapp'
     'nginx'
     'php-fpm'
     'php'
 	)
 backup=(
-    "etc/php/conf.d/${pkgname}.ini"
     "etc/php/fpm.d/${pkgname}.conf"
 )
 
@@ -45,12 +43,4 @@ package() {
     # PHP-FPM
     mkdir -p ${pkgdir}/etc/php/fpm.d
     cp kopano-webapp.conf ${pkgdir}/etc/php/fpm.d
-
-    # PHP
-    # https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
-    # https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/server/includes/core/class.configcheck.php
-    #
-    # extensions: json, zip (ini), gettext (ini), zlib, iconv (ini) - 'euro-sign support', mapi (ini)
-    mkdir -p ${pkgdir}/etc/php/conf.d
-    cp kopano-webapp.ini ${pkgdir}/etc/php/conf.d
 }

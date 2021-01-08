@@ -67,8 +67,9 @@ out_h1 "BUILD"
 	# WEBAPP
 	# OPTIONAL build makepkgs/jdk
 	build makepkgs/apache-ant-contrib
-#	build makepkgs/kopano-webapp-nginx
+
 	build makepkgs/kopano-webapp
+	build makepkgs/kopano-webapp-nginx
 
 	# DEPENDENCIES - KOPANO-CORE
 #	build makepkgs/php-xapian
