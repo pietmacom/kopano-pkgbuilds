@@ -52,17 +52,16 @@ depends+=(
 # template input; name=base-build-webapp
 
 build() {
-    cd ${srcdir}/kopano-webapp
-    find plugins/* -maxdepth 0 -type d -exec rm -rf {} \;
+#    cd ${srcdir}/kopano-webapp
+#    find plugins/* -maxdepth 0 -type d -exec rm -rf {} \;
     
     cp -R ${srcdir}/${pkgname} \
-	plugins/
+	${srcdir}/kopano-webapp/plugins/
 
-    make plugins
-
-    ls -Rl deploy
-
-#    ant deploy -Droot-folder="$(pwd)/../../" -Dtarget-folder="$(pwd)/../../deploy/plugins"
+    (cd ${srcdir}/kopano-webapp/plugins/${pkgname} && ant all)
+    ls -Rl ${srcdir}/kopano-webapp/deploy
+    
+    #-Droot-folder="$(pwd)/../../" 
 }
 
 package() {
