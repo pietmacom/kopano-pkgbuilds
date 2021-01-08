@@ -53,8 +53,8 @@ depends+=(
 
 build() {
     cd ${srcdir}/kopano-webapp
-    rm -Rf plugins/*
-
+    find plugins/* -maxdepth 0 -type d -exec rm -rf {} \;
+    
     cp -RT ${srcdir}/${pkgname} \
 	plugins
 
