@@ -1,3 +1,6 @@
+#_module=
+#pkgver=
+
 # https://wiki.archlinux.org/index.php/Python_package_guidelines
 pkgname=${_module,,}
 pkgrel=1

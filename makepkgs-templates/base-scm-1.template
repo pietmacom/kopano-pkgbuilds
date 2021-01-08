@@ -1,6 +1,5 @@
 #_tagPrefix=""
 
-# Generate Changelog
 _gitLogByDay() {
     local NEXT=$(date +%F)
     local SINCE="1970-01-01"

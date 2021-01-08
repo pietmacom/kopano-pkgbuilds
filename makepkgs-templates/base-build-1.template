@@ -39,7 +39,7 @@ _install() {
             then
                 touch ${_destDir}/$(basename ${_sourceFile})
             else
-                cp -L ${_src} ${_destDir}/
+                cp -L ${_src} ${_destDir}
             fi
             chown ${_chown} ${_destDir}/$(basename ${_sourceFile})
             chmod "${_chmodFile}" ${_destDir}/$(basename ${_sourceFile})
