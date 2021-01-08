@@ -65,6 +65,10 @@ build() {
 #    ant deploy -Droot-folder="$(pwd)/../../" -Dtarget-folder="$(pwd)/../../deploy/plugins"
 }
 
+package() {
+    echo "package"
+}
+
 ppackage() {
     pluginname=${pkgname//kopano-webapp-/}
 
