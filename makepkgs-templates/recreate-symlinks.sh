@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 _dir=$(realpath $(dirname $0))
 
 find ${_dir} -type l -exec rm {} \;

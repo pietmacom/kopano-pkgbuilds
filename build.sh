@@ -34,12 +34,12 @@ out_h1() {
 }
 
 out_h1 "PREPARE"
-	./makepkgs-templates/recreate-symlinks.sh
-	
-	# Work all 'PKGBUILD.template'-Files
+	# Apply Templates
+	_templateDir=$(realpath ./makepkgs-templates)
+	${_templateDir}/recreate-symlinks.sh
 	find makepkgs -name "PKGBUILD.template" -print0 | while read -d $'\0' pkgBuildTemplate
 	do
-	     makepkg-template --template-dir makepkgs-templates --input $pkgBuildTemplate --output $(dirname $pkgBuildTemplate)/PKGBUILD
+	     makepkg-template --template-dir ${_templateDir} --input $pkgBuildTemplate --output $(dirname $pkgBuildTemplate)/PKGBUILD
 	done
 
 out_h1 "CHECKOUT"
