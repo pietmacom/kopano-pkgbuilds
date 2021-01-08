@@ -55,8 +55,8 @@ build() {
     cd ${srcdir}/kopano-webapp
     find plugins/* -maxdepth 0 -type d -exec rm -rf {} \;
     
-    cp -RT ${srcdir}/${pkgname} \
-	plugins
+    cp -R ${srcdir}/${pkgname} \
+	plugins/
 
     make plugins
 
