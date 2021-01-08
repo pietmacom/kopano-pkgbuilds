@@ -73,6 +73,7 @@ out_h1 "BUILD"
 
 	build makepkgs/kopano-webapp
 	build makepkgs/kopano-webapp-nginx
+	build makepkgs/kopano-webapp-files
 
 	# DEPENDENCIES - KOPANO-CORE
 #	build makepkgs/php-xapian

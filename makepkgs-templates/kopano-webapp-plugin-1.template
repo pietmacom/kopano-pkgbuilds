@@ -1,15 +1,14 @@
 # _source=
-# _versionPrefix=kopanocore-
+# _tagPrefix=kopanocore-
 
 pkgrel=1
-group=(
+groups=(
     'kopano'
 	)
 arch=(
     'any'
      )
 
-makedepends+=('libxml2')
 manifestXml() {
     _manifestXmlFile="src/${_module}-${pkgver}/manifest.xml"
     if [ -e "${_manifestXmlFile}" ];
@@ -23,38 +22,50 @@ pkgdesc="$(manifestXml 'description')"
 url="$(manifestXml 'authorURL')"
 
 # template input; name=base-scm
-_kopanoWebappSourceBranch='#branch=master'
-source=(
-    "kopano-webapp::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${_kopanoWebappSourceBranch}"
+source+=(
+    "kopano-webapp::git+https://stash.kopano.io/scm/kw/kopano-webapp.git#branch=master"
     "${pkgname}::${_source}${_sourceBranch}"
 	)
-md5sums=(
+md5sums+=(
     'SKIP'
 	)
+	
 _phpIni="${pkgname}.ini"
-if [ -e "" ];
+if [ -e "${_phpIni}" ];
 then
-    source+="${_phpIni}"
-    md5sums+=("$(md5sum ${_phpIni})")
+    source+=(
+	"${_phpIni}"
+	    )
+    md5sums+=(
+	"$(md5sum ${_phpIni})"
+	     )
 fi
 
 depends+=(
     'kopano-webapp'
+
+    # PKGBUILD
+    'libxml2'
+    'git'
 	)
 
-# template input; name=base-build-webapp
+# template input; name=base-buils-webapp
 
 build() {
     cd ${srcdir}/kopano-webapp
-
     rm -Rf plugins/*
-    cp -R ${srcdir}/${pkgname}
 
+    cp -RT ${srcdir}/${pkgname} \
+	plugins
+
+    make plugins
+
+    ls -Rl deploy
 
 #    ant deploy -Droot-folder="$(pwd)/../../" -Dtarget-folder="$(pwd)/../../deploy/plugins"
 }
 
-package() {
+ppackage() {
     pluginname=${pkgname//kopano-webapp-/}
 
     ## override pluginname

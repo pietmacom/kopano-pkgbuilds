@@ -1,10 +1,12 @@
+pkgname='kopano-webapp-files'
+pkgver='4.0.1'
+
 _source='git+https://stash.kopano.io/scm/kwa/files.git'
-_pkgver='4.0.1'
-_versionPrefix='v'
+_tagPrefix='v'
 
 depends=(
     'php-memcache'
-    # 'memcached' ?
+    'memcached'
 	)
 
 # template input; name=kopano-webapp-plugin
