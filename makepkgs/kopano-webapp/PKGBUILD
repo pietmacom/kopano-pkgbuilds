@@ -17,8 +17,10 @@ license=('AGPL3')
 _sourcebranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=v${pkgver}"; fi)
 source=(
     "${pkgname}::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${_sourcebranch}"
+    "${pkgname}.ini"
 	)
 md5sums=(
+    'SKIP'
     'SKIP'
 	)
 
@@ -59,40 +61,57 @@ pkgver() {
 }
 
 _binDir=/usr/share/webapps/${pkgname}
+_docDir=/usr/share/doc/${pkgname}
 _confDir=/etc/webapps/${pkgname}
-_stateDir=/var/lib/webapps/${pkgname}
+_stateDir=/var/lib/${pkgname}
 _logDir=/var/log/${pkgname}
 _commonPermissions="u=rwx,g=rx,o=rx u=rw,g=r,o=r"
 _securePermissions="u=rwx,g=rx,o= u=rw,g=r,o="
 
 build() {
     cd ${srcdir}/${pkgname}
-    make server client
+
+    # The Only Way To Execute PHP With Right Settings Before Installation
+    (cat /etc/php/php.ini ; echo ; cat php-conf.d.ini) > make-php.ini
+    make server client \
+	PHP="$(which php) -c $(realpath make-php.ini)"
 
     # Broken in Makefile
     # DESTDIR=""
 }
 
 package() {
+     # BIN
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/deploy \
 	${pkgdir}${_binDir}
-    _install root:root ${_commonPermissions}/plugins
+    _install root:root ${_commonPermissions} ${pkgdir}${_binDir}/plugins
     sed -i -e 's|\(\"DEBUG_LOADER\", \).*$|\1LOAD_RELEASE);|' \
 	${pkgdir}${_binDir}/debug.php.dist
     ln -s ${confDir}/config.php \
-	${pkgdir}${_binDir}/config.php 
+	${pkgdir}${_binDir}/config.php
     ln -s ${_logDir}/debug.txt \
 	${pkgdir}${_binDir}/debug.txt
     _compressStatic ${pkgdir}${_binDir}
 
+    # DOC
+    _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
+	${srcdir}/${docDir}
+
+    # CONF
     _install http:http ${_securePermissions} ${pkgdir}${_confDir}
 
+    # STATE
     _install http:http ${_securePermissions} ${pkgdir}${_stateDir}
     _install http:http ${_securePermissions} ${pkgdir}${_stateDir}/plugins
 
+    # LOG
     _install http:http ${_securePermissions} ${pkgdir}${_logDir}
     _install http:http ${_securePermissions} debug.txt \
 	${pkgdir}${_logDir}
+
+    # OTHER: PHP
+    _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
+	${pkgdir}/etc/php/conf.d
 }
 
 # _install user:group 777 666 [sourceFile|sourceDir] destDir
