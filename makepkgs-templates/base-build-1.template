@@ -1,4 +1,4 @@
-#_binDir=/usr/share/${pkgname}
+#_binDir=
 _docDir=/usr/share/doc/${pkgname}
 _confDir=/etc/webapps/${pkgname}
 _stateDir=/var/lib/${pkgname}

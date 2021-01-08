@@ -34,13 +34,14 @@ out_h1() {
 }
 
 out_h1 "PREPARE"
-	# Apply Templates
 	_templateDir=$(realpath ./makepkgs-templates)
 	${_templateDir}/recreate-symlinks.sh
-	find makepkgs -name "PKGBUILD.template" -print0 | while read -d $'\0' pkgBuildTemplate
+	grep  -R -l "# template " makepkgs | while read _file
 	do
-	     makepkg-template --template-dir ${_templateDir} --input $pkgBuildTemplate --output $(dirname $pkgBuildTemplate)/PKGBUILD
+	    echo "Replacing Template Markers: ${_file}"
+	    makepkg-template --template-dir ${_templateDir} --input ${_file}
 	done
+
 
 out_h1 "CHECKOUT"
 	git clone https://aur.archlinux.org/libiconv.git makepkgs/libiconv

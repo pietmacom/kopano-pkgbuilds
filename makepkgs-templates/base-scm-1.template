@@ -33,5 +33,4 @@ pkgver() {
     fi
 }
 
-
 _sourceBranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=${_tagPrefix}${pkgver}"; fi)

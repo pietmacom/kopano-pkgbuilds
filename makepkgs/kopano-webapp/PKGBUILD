@@ -16,7 +16,6 @@ license=('AGPL3')
 
 _tagPrefix="v"
 # template input; name=base-scm
-
 source=(
     "${pkgname}::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${_sourceBranch}"
     "${pkgname}.ini"

@@ -24,7 +24,6 @@ license=(
 
 _tagPrefix="kopanocore-"
 # template input; name=base-scm
-
 source=(
     "${pkgname}::git+https://stash.kopano.io/scm/kc/kopanocore.git${_sourceBranch}"
 	)
@@ -119,8 +118,6 @@ optdepends=(
     # 'libs3'
 	    )
 install='install'
-
-# template input; name=base-build-bin
 
 prepare() {
     cd ${srcdir}/${pkgname}
