@@ -1,0 +1,33 @@
+_binDir=/usr/share/webapps/${pkgname}
+# template input; name=base-build
+
+# compressStatic /usr/share/webapps/xxx 'htm|css|html|js'
+_compressStatic() {
+    _dir=$1
+    if [ -z "$2" ];
+    then
+        _fileExtensions='htm|css|html|js'
+    fi
+
+    find ${_dir} -type f -regextype posix-extended -regex '.*\.('${_fileExtensions}')' -print0 \
+        | while read -d $'\0' _staticFile
+    do
+        if [ -f "${_staticFile}".gz ]
+        then
+            FILE_ORIG=$(stat -c %Y "${_staticFile}")
+            FILE_GZIP=$(stat -c %Y "${_staticFile}".gz)
+            if [ $FILE_ORIG -gt $FILE_GZIP ]
+            then
+                rm "${_staticFile}".gz
+                gzip -k -9 "${_staticFile}"
+                echo "Deleted old .gz and created new one at: ${_staticFile}.gz"
+            else
+                echo "Skipping - Already up to date: ${_staticFile}.gz"
+            fi
+        else
+            gzip -k -9 "${_staticFile}"
+            echo "Created new: ${_staticFile}.gz"
+        fi
+    done
+}
+

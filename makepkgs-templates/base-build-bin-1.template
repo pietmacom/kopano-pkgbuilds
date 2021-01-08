@@ -1,0 +1,2 @@
+_binDir=/usr/share/${pkgname}
+# template input; name=base-build

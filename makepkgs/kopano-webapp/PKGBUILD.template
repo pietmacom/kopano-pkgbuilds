@@ -1,0 +1,101 @@
+# Maintainer: MartiMcFly <martimcfly [at] autorisation.de>
+# Contributor: Archist archist@die-optimisten.net
+
+pkgname='kopano-webapp'
+pkgver='4.6.3'
+pkgrel=1
+pkgdesc='Provides all the familiar email, advanced calendaring and contacts features you need to be productive'
+groups=(
+    'kopano'
+	)
+arch=(
+    'any'
+     )
+url='http://www.kopano.com/'
+license=('AGPL3')
+
+_tagPrefix="v"
+# template input; name=base-scm
+
+source=(
+    "${pkgname}::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${_sourceBranch}"
+    "${pkgname}.ini"
+	)
+md5sums=(
+    'SKIP'
+    'SKIP'
+	)
+
+makedepends=(
+    # WEBAPP: https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
+    'apache-ant'
+    'apache-ant-contrib'
+    'gettext'
+    'libxml2'
+
+    # PKGBUILD
+    'git'
+    'gzip'
+	     )
+depends=(
+    # WEBAPP: https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
+    # https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
+    # https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/server/includes/core/class.configcheck.php
+    'php' # extensions: json, zip (ini), gettext (ini), zlib, iconv (ini) - 'euro-sign support', mapi (ini)
+    'kopano-core'
+    'libiconv'
+    'gettext'
+	)
+optdepends=(
+    'kopano-webapp-nginx'
+	    )
+install='install'
+
+# template input; name=base-build-webapp
+
+build() {
+    cd ${srcdir}/${pkgname}
+
+    # The Only Way To Execute PHP With Right Settings Before Installation
+    (cat /etc/php/php.ini ; echo ; cat ${srcdir}/${pkgname}.ini) > make-php.ini
+    make server client \
+	PHP="$(which php) -c $(realpath make-php.ini)"
+
+    # Broken in Makefile
+    # DESTDIR=""
+}
+
+package() {
+     # BIN
+    _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/deploy \
+	${pkgdir}${_binDir}
+
+    _install root:root ${_commonPermissions} ${pkgdir}${_binDir}/plugins
+    sed -i -e 's|\(\"DEBUG_LOADER\", \).*$|\1LOAD_RELEASE);|' \
+	${pkgdir}${_binDir}/debug.php.dist
+    ln -s ${confDir}/config.php \
+	${pkgdir}${_binDir}/config.php
+    ln -s ${_logDir}/debug.txt \
+	${pkgdir}${_binDir}/debug.txt
+    _compressStatic ${pkgdir}${_binDir}
+
+    # DOC
+    _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
+	${pkgdir}${_docDir}
+
+    # CONF
+    _install http:http ${_securePermissions} ${pkgdir}${_confDir}
+
+    # STATE
+    _install http:http ${_securePermissions} ${pkgdir}${_stateDir}
+    _install http:http ${_securePermissions} ${pkgdir}${_stateDir}/plugins
+
+    # LOG
+    _install http:http ${_securePermissions} ${pkgdir}${_logDir}
+    _install http:http ${_securePermissions} debug.txt \
+	${pkgdir}${_logDir}
+
+    # OTHER: PHP
+    _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
+	${pkgdir}/etc/php/conf.d
+}

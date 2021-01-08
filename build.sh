@@ -34,6 +34,7 @@ out_h1() {
 }
 
 out_h1 "PREPARE"
+	./makepkgs-templates/recreate-symlinks.sh
 	# Work all 'PKGBUILD.template'-Files
 	find makepkgs -name "PKGBUILD.template" -print0 | while read -d $'\0' pkgBuildTemplate
 	do

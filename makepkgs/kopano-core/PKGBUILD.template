@@ -21,17 +21,16 @@ url='https://www.kopano.com/'
 license=(
     'AGPL3'
 	)
-sourcebranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=kopanocore-${pkgver}"; fi)
+
+_tagPrefix="kopanocore-"
+# template input name=base-scm
+
 source=(
-    "${pkgname}::git+https://stash.kopano.io/scm/kc/kopanocore.git${sourcebranch}"
+    "${pkgname}::git+https://stash.kopano.io/scm/kc/kopanocore.git${_sourceBranch}"
 	)
 md5sums=(
     'SKIP'
 	)
-if git log --follow . | grep -v '^Author:.*$' > changelog ;
-then
-    changelog="changelog"
-fi
 
 makedepends=(
     # CORE: https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt
@@ -121,17 +120,7 @@ optdepends=(
 	    )
 install='install'
 
-
-# https://wiki.archlinux.org/index.php/VCS_package_guidelines#Git
-pkgver() {
-    cd ${srcdir}/${pkgname}
-    if [[ "${pkgname}" == *-git ]];
-    then
-	git tag -l kopanocore-* --sort=v:refname | tail -n 1 | sed "s|kopanocore-\(.*\)|\1.r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)|"
-    else
-	echo ${pkgver}
-    fi
-}
+# template input name=base-build-bin
 
 prepare() {
     cd ${srcdir}/${pkgname}
@@ -179,20 +168,19 @@ build() {
 package() {
     cd ${srcdir}/${pkgname}
 
+    # BASE
     # => multithreaded build breaks everything
     export MAKEFLAGS="-j1"
-
     make install DESTDIR="$(realpath ${pkgdir})"
 
-    mkdir -p ${pkgdir}/usr/share/doc/${pkgname}
-    cp RELNOTES.txt \
-	${pkgdir}/usr/share/doc/${pkgname}/
-
-
-    # PREPARE LICENSE
+    # LICENSE
     mkdir -p ${pkgdir}/usr/share/licenses/${pkgname}
     cp CONTRIBUTING.md AGPL-3 LICENSE.txt \
 	${pkgdir}/usr/share/licenses/${pkgname}/
+
+    # DOC
+    cp RELNOTES.txt \
+	"${pkgdir}/usr/share/doc/kopano"
 
     cp -r "${pkgdir}/usr/share/doc/kopano/example-config" \
 	"${pkgdir}/usr/share/doc/kopano/installed-config"
