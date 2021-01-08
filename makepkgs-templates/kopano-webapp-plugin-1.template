@@ -49,7 +49,7 @@ depends+=(
     'git'
 	)
 
-# template input; name=base-buils-webapp
+# template input; name=base-build-webapp
 
 build() {
     cd ${srcdir}/kopano-webapp
