@@ -1,6 +1,8 @@
 # _source=
 # _tagPrefix=kopanocore-
 
+_kopanoWebappSourceBranch='3.4.12'
+_pluginName=${f//kopano-webapp-/}
 pkgrel=1
 groups=(
     'kopano'
@@ -23,7 +25,7 @@ url="$(manifestXml 'authorURL')"
 
 # template input; name=base-scm
 source+=(
-    "kopano-webapp::git+https://stash.kopano.io/scm/kw/kopano-webapp.git#branch=master"
+    "kopano-webapp::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${_kopanoWebappSourceBranch}"
     "${pkgname}::${_source}${_sourceBranch}"
 	)
 md5sums+=(
@@ -41,31 +43,35 @@ then
 	     )
 fi
 
-depends+=(
-    'kopano-webapp'
+makedepends+=(
+    # WEBAPP: https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
+    'apache-ant'
+    'apache-ant-contrib'
+    'gettext'
+    'libxml2'
 
     # PKGBUILD
-    'libxml2'
     'git'
+    'gzip'
+             )
+depends+=(
+    'kopano-webapp'
 	)
 
 # template input; name=base-build-webapp
 
 build() {
-#    cd ${srcdir}/kopano-webapp
-#    find plugins/* -maxdepth 0 -type d -exec rm -rf {} \;
-    
-    cp -R ${srcdir}/${pkgname} \
-	${srcdir}/kopano-webapp/plugins/
+    cd ${srcdir}
+    find kopano-webapp/plugins/* -maxdepth 0 -type d -exec rm -rf {} \;
+    cp -R ${pkgname} \
+	kopano-webapp/plugins/${_pluginName}
 
-    (cd ${srcdir}/kopano-webapp/plugins/${pkgname} && ant deploy -Droot-folder="$(pwd)/../../" -Dtarget-folder="$(pwd)/../../deploy/plugins")
-    ls -Rl ${srcdir}/kopano-webapp/deploy
-    
-    #-Droot-folder="$(pwd)/../../" 
+    cd kopano-webapp/plugins/${_pluginName}
+    ant deploy -Droot-folder="$(pwd)/../../" -Dtarget-folder="$(pwd)/../../deploy/plugins"
 }
 
 package() {
-    echo "package"
+    ls -Rl ${srcdir}/kopano-webapp/deploy
 }
 
 ppackage() {

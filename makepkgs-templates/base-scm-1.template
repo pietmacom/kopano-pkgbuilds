@@ -1,4 +1,5 @@
 #_tagPrefix=""
+#_tagSuffix=""
 
 _gitLogByDay() {
     local NEXT=$(date +%F)
@@ -26,10 +27,10 @@ pkgver() {
     cd ${srcdir}/${pkgname}
     if [[ "${pkgname}" == *-git ]];
     then
-        git tag -l "${_tagPrefix}*" --sort=v:refname | tail -n 1 | sed "s|${_tagPrefix}\(.*\)|\1.r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)|"
+        git tag -l "${_tagPrefix}*" --sort=v:refname | tail -n 1 | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1.r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)|"
     else
         echo ${pkgver}
     fi
 }
 
-_sourceBranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=${_tagPrefix}${pkgver}"; fi)
+_sourceBranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=${_tagPrefix}${pkgver}${_tagSuffix}"; fi)
