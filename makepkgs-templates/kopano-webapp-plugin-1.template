@@ -1,7 +1,7 @@
 # _source=
 # _tagPrefix=kopanocore-
 
-_kopanoWebappSourceBranch='3.4.12'
+_kopanoWebappSourceBranch='#tag=v3.4.12'
 _pluginName=${f//kopano-webapp-/}
 pkgrel=1
 groups=(
