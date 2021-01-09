@@ -58,7 +58,7 @@ build() {
     cp -R ${srcdir}/${pkgname} \
 	${srcdir}/kopano-webapp/plugins/
 
-    (cd ${srcdir}/kopano-webapp/plugins/${pkgname} && ant all)
+    (cd ${srcdir}/kopano-webapp/plugins/${pkgname} && ant deploy -Droot-folder="$(pwd)/../../" -Dtarget-folder="$(pwd)/../../deploy/plugins")
     ls -Rl ${srcdir}/kopano-webapp/deploy
     
     #-Droot-folder="$(pwd)/../../" 
