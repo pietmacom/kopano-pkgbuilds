@@ -75,7 +75,7 @@ out_h1 "BUILD"
 	build makepkgs/kopano-webapp-files-smb-backend
 	build makepkgs/kopano-webapp-filepreview
 	build makepkgs/kopano-webapp-desktopnotifications
-	build makepkgs/kopano-webapp-htmleditor-jodit
+#	build makepkgs/kopano-webapp-htmleditor-jodit
 	build makepkgs/kopano-webapp-minimaltiny
 	build makepkgs/kopano-webapp-intranet
 	build makepkgs/kopano-webapp-smime
@@ -90,6 +90,8 @@ out_h1 "BUILD"
 	build makepkgs/kopano-webapp-spellchecker-languagepack-italian-it
 	build makepkgs/kopano-webapp-spellchecker-languagepack-nl
 	build makepkgs/kopano-webapp-spellchecker-languagepack-pl-pl
+	build makepkgs/kopano-webapp-passwd
+	build makepkgs/kopano-webapp-fetchmail
 
 	# DEPENDENCIES - KOPANO-CORE
 #	build makepkgs/php-xapian
