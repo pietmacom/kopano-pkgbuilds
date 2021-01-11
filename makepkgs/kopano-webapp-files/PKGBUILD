@@ -14,6 +14,6 @@ depends=(
 
 prepare() {
     cd ${srcdir}/${pkgname}
-    sed -i -e "s|\(PLUGIN_FILESBROWSER_LOGLEVEL', \)\(.*\)\();$\)|\1'ERROR'\3|" config.php
-    sed -i -e "s|\(PLUGIN_FILES_CACHE_DIR', \)\(.*\)\();$\)|\1'/var/lib/kopano-webapp/plugins/files'\3|" config.php
+    _setConfig "PLUGIN_FILESBROWSER_LOGLEVEL" "'ERROR'" config.php
+    _setConfig "PLUGIN_FILES_CACHE_DIR" "'${_stateDir}'" config.php
 }

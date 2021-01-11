@@ -86,7 +86,7 @@ package() {
     _install http:http ${_securePermissions} ${pkgdir}/${_confDir}
     _install http:http ${_securePermissions} ${pkgdir}/${_binDir}/config.php \
 	${pkgdir}/${_confDir}
-    ln -sf ${confDir}/config.php \
+    ln -sf ${_confDir}/config.php \
 	${pkgdir}/${_binDir}/config.php
 
     # DOC
@@ -100,7 +100,6 @@ package() {
 
     # STATE
     _install http:http ${_securePermissions} ${pkgdir}/${_stateDir}
-    _install http:http ${_securePermissions} ${pkgdir}/${_stateDir}/plugins
 
     # LOG
     ln -s ${_logDir}/debug.txt \

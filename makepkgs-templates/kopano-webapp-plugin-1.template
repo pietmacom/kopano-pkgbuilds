@@ -111,7 +111,7 @@ package() {
 	_install http:http ${_securePermissions} ${pkgdir}/${_confDir}
 	_install http:http ${_securePermissions} ${pkgdir}/${_binDir}/config.php \
 	    ${pkgdir}/${_confDir}
-        ln -sf ${confDir}/config.php \
+        ln -sf ${_confDir}/config.php \
 	    ${pkgdir}/${_binDir}/config.php
     fi
 
@@ -142,4 +142,12 @@ package() {
 	_install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
 	    ${pkgdir}/etc/php/conf.d
     fi
+}
+
+# _setConfig PLUGIN_MDM_USER_DEFAULT_ENABLE_MDM true config.php
+_setConfig() {
+    local _configAttribute="$1"
+    local _configValue="$2"
+    local _configFile="$(echo $3 | sed 's|\"|\\"|g')"
+    sed -i -e "s|\(${_configAttribute}', \)\(.*\)\();$\)|\1${_configValue}\3|" ${_configFile}
 }
