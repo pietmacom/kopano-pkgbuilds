@@ -2,7 +2,7 @@
 # _tagPrefix=kopanocore-
 
 _kopanoWebappSourceBranch='#tag=v3.4.12'
-_pluginName=${f//kopano-webapp-/}
+_pluginName=${pkgname//kopano-webapp-/}
 pkgrel=1
 groups=(
     'kopano'
@@ -62,13 +62,13 @@ build() {
     cd ${srcdir}/kopano-webapp/tools/src/jsconcat
     ant
     cp jsconcat.jar ../../lib/
-    
+
     cd ${srcdir}
     cp -R ${pkgname} \
 	kopano-webapp/plugins/${_pluginName}
-    
+
     cd kopano-webapp/plugins/${_pluginName}
-    ant -lib ../../tools/lib deploy 
+    ant -lib ../../tools/lib deploy
 }
 
 package() {
