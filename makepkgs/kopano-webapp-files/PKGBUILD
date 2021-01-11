@@ -1,5 +1,5 @@
 pkgname='kopano-webapp-files'
-pkgver='2.1.2'
+pkgver='4.0.1'
 
 _source='git+https://stash.kopano.io/scm/kwa/files.git'
 _tagPrefix='v'
@@ -14,7 +14,6 @@ depends=(
 
 prepare() {
     cd ${srcdir}/${pkgname}
-
     sed -i -e "s|\(PLUGIN_FILESBROWSER_LOGLEVEL', \)\(.*\)\();$\)|\1'ERROR'\3|" config.php
     sed -i -e "s|\(PLUGIN_FILES_CACHE_DIR', \)\(.*\)\();$\)|\1'/var/lib/kopano-webapp/plugins/files'\3|" config.php
 }
