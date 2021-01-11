@@ -45,7 +45,7 @@ out_h1 "PREPARE"
 
 out_h1 "CHECKOUT"
 	git clone https://aur.archlinux.org/libiconv.git makepkgs/libiconv
-	git clone https://aur.archlinux.org/apache-ant-contrib.git makepkgs/apache-ant-contrib
+#	git clone https://aur.archlinux.org/apache-ant-contrib.git makepkgs/apache-ant-contrib
 	
 	# ARCHIVE
 	# php
@@ -69,7 +69,7 @@ out_h1 "BUILD"
 
 	# WEBAPP
 	# OPTIONAL build makepkgs/jdk
-	build makepkgs/apache-ant-contrib
+#	build makepkgs/apache-ant-contrib
 
 	build makepkgs/kopano-webapp
 	build makepkgs/kopano-webapp-nginx

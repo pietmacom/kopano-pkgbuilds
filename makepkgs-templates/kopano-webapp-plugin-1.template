@@ -46,8 +46,6 @@ fi
 makedepends+=(
     # WEBAPP: https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
     'apache-ant'
-    'apache-ant-contrib'
-    'gettext'
     'libxml2'
 
     # PKGBUILD
@@ -61,17 +59,16 @@ depends+=(
 # template input; name=base-build-webapp
 
 build() {
-    cd ${srcdir}/kopano-webapp
-    ant deploy
-    ant deploy-plugins
-
+    cd ${srcdir}/kopano-webapp/tools/src/jsconcat
+    ant
+    cp jsconcat.jar ../../lib/
+    
     cd ${srcdir}
-#    find kopano-webapp/plugins/* -maxdepth 0 -type d -exec rm -rf {} \;
     cp -R ${pkgname} \
 	kopano-webapp/plugins/${_pluginName}
-
+    
     cd kopano-webapp/plugins/${_pluginName}
-    ant deploy -Droot-folder="$(pwd)/../../" -Dtarget-folder="$(pwd)/../../deploy/plugins"
+    ant -lib ../../tools/lib deploy 
 }
 
 package() {

@@ -28,10 +28,9 @@ md5sums=(
 makedepends=(
     # WEBAPP: https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
     'apache-ant'
-    'apache-ant-contrib'
-    'gettext'
     'libxml2'
-
+    'npm'
+    
     # PKGBUILD
     'git'
     'gzip'
