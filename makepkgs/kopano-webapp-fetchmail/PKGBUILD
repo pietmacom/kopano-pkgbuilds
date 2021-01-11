@@ -9,6 +9,9 @@ _tagSuffix=''
 
 prepare() {
     cd ${srcdir}/${pkgname}
+
+    sed -i 's|example.config.php|config.php|g' build.xml
     mv example.config.php config.php
-    sed 's|example.config.php|config.php|g' build.xml
+
+    sed -i 's|<arg value="${tools-folder}"/>|<arg value="${root-folder}/server"/>|' build.xml
 }
