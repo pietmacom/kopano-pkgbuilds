@@ -81,9 +81,8 @@ then
 fi
 
 build() {
-    cd ${srcdir}/kopano-webapp/tools/src/jsconcat
-    ant
-    cp jsconcat.jar ../../lib/
+    cd ${srcdir}/kopano-webapp
+    ant tools
 
     cd ${srcdir}
     cp -R ${pkgname} \
@@ -95,7 +94,7 @@ build() {
 	make deploy \
 	    DESTDIR="../../deploy/plugins/${_pluginName}"
     else
-	ant -lib ../../tools/lib deploy
+	ant deploy
     fi
 }
 
