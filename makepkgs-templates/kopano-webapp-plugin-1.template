@@ -1,11 +1,12 @@
 # _source=
 # _tagPrefix=kopanocore-
 
-_kopanoWebappSourceBranch='#tag=v3.4.12'
+_kopanoWebappSourceBranch='#tag=v4.6.3'
 _pluginName=${pkgname//kopano-webapp-/}
 pkgrel=1
 groups=(
     'kopano'
+    'kopano-webapp-addons'
 	)
 arch=(
     'any'
@@ -31,7 +32,7 @@ source+=(
 md5sums+=(
     'SKIP'
 	)
-	
+
 _phpIni="${pkgname}.ini"
 if [ -e "${_phpIni}" ];
 then
@@ -56,6 +57,11 @@ depends+=(
     'kopano-webapp'
 	)
 
+if [ -f 'install' ];
+then
+    install='install'
+fi
+
 # template input; name=base-build-webapp
 
 build() {
@@ -69,10 +75,36 @@ build() {
 
     cd kopano-webapp/plugins/${_pluginName}
     ant -lib ../../tools/lib deploy
+    mv config.php config.php.dist
 }
 
 package() {
-    ls -Rl ${srcdir}/kopano-webapp/deploy
+    # BIN
+    _binDir=/usr/share/webapps/kopano-webapp/plugins/${_pluginName}
+    _confDir=/etc/webapps/kopano-webapp/plugins/${_pluginName}
+    _stateDir=/var/lib/kopano-webapp/plugins/${_pluginName}
+    _docDir=/usr/share/doc/kopano-webapp/plugins/${_pluginName}
+
+    cd ${srcdir}/${pkgname}/deploy/plugins/${_pluginName}
+    _install root:root ${_commonPermissions} . \
+        ${pkgdir}${_binDir}
+    ln -s ${confDir}/config.php \
+        ${pkgdir}${_binDir}/config.php
+    _compressStatic ${pkgdir}${_binDir}
+
+    # DOC
+    _install root:root ${_commonPermissions} config.php.dist \
+        ${pkgdir}${_docDir}
+
+    # CONF
+    _install http:http ${_securePermissions} ${pkgdir}${_confDir}
+
+    # STATE
+    _install http:http ${_securePermissions} ${pkgdir}${_stateDir}
+
+    # LICENSE
+    _install http:http ${_commonPermissions} AGPL-3 ${pkgdir}${_licenseDir}
+    _install http:http ${_commonPermissions} LICENSE.txt ${pkgdir}${_licenseDir}
 }
 
 ppackage() {

@@ -1,8 +1,10 @@
 #_binDir=
+#_confDir=
 _docDir=/usr/share/doc/${pkgname}
-_confDir=/etc/webapps/${pkgname}
 _stateDir=/var/lib/${pkgname}
 _logDir=/var/log/${pkgname}
+_licenseDir=/usr/share/licenses/${pkgname}
+
 _commonPermissions="u=rwx,g=rx,o=rx u=rw,g=r,o=r"
 _securePermissions="u=rwx,g=rx,o= u=rw,g=r,o="
 
