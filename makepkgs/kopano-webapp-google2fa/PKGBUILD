@@ -1,0 +1,13 @@
+pkgname='kopano-webapp-google2fa'
+pkgver='0.6.0-git'
+
+_source='git+https://bitbucket.org/normanth/google2fa.git'
+_tagPrefix='v'
+_tagSuffix=''
+
+# template input; name=kopano-webapp-plugin
+
+prepare() {
+    cd ${srcdir}/${pkgname}
+    mv config_default.php config.php
+}

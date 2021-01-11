@@ -27,7 +27,14 @@ pkgver() {
     cd ${srcdir}/${pkgname}
     if [[ "${pkgname}" == *-git ]];
     then
-        git tag -l "${_tagPrefix}*" --sort=v:refname | tail -n 1 | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1.r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)|"
+	_lastTag=$(git tag -l "${_tagPrefix}*" --sort=v:refname | tail -n 1)
+	_revision="r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"
+	if [ ! -z "${_lastTag}" ];
+	then
+	    echo "${_lastTag}" | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1.r${_revision}|"
+	else
+	    echo "${pkgver}" | sed "s|\(.*\)-git|1.r${_revision}|"
+	fi
     else
         echo ${pkgver}
     fi

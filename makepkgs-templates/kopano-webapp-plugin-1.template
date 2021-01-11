@@ -6,7 +6,7 @@ _pluginName=${pkgname//kopano-webapp-/}
 pkgrel=1
 groups=(
     'kopano'
-    'kopano-webapp-addons'
+    'kopano-webapp-plugins'
 	)
 arch=(
     'any'
@@ -92,7 +92,8 @@ build() {
     cd kopano-webapp/plugins/${_pluginName}
     if [ -f 'Makefile' ];
     then
-	make deploy
+	make deploy \
+	    DESTDIR="../../deploy/plugins/${_pluginName}"
     else
 	ant -lib ../../tools/lib deploy
     fi
