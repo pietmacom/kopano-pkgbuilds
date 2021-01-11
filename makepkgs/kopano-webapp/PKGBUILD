@@ -81,6 +81,10 @@ package() {
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
 	${pkgdir}${_docDir}
 
+    # LICENSE
+    _install http:http ${_commonPermissions} AGPL-3 ${pkgdir}${_licenseDir}
+    _install http:http ${_commonPermissions} LICENSE.txt ${pkgdir}${_licenseDir}
+
     # CONF
     _install http:http ${_securePermissions} ${pkgdir}${_confDir}
 

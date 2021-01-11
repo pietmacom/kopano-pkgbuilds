@@ -75,7 +75,7 @@ build() {
 
     cd kopano-webapp/plugins/${_pluginName}
     ant -lib ../../tools/lib deploy
-    mv config.php config.php.dist
+
 }
 
 package() {
@@ -86,6 +86,8 @@ package() {
     _docDir=/usr/share/doc/kopano-webapp/plugins/${_pluginName}
 
     cd ${srcdir}/${pkgname}/deploy/plugins/${_pluginName}
+    mv ${pkgdir}${_binDir}/config.php ${pkgdir}${_binDir}/config.php.dist
+
     _install root:root ${_commonPermissions} . \
         ${pkgdir}${_binDir}
     ln -s ${confDir}/config.php \
@@ -96,15 +98,15 @@ package() {
     _install root:root ${_commonPermissions} config.php.dist \
         ${pkgdir}${_docDir}
 
+    # LICENSE
+    _install http:http ${_commonPermissions} AGPL-3 ${pkgdir}${_licenseDir}
+    _install http:http ${_commonPermissions} LICENSE.txt ${pkgdir}${_licenseDir}
+
     # CONF
     _install http:http ${_securePermissions} ${pkgdir}${_confDir}
 
     # STATE
     _install http:http ${_securePermissions} ${pkgdir}${_stateDir}
-
-    # LICENSE
-    _install http:http ${_commonPermissions} AGPL-3 ${pkgdir}${_licenseDir}
-    _install http:http ${_commonPermissions} LICENSE.txt ${pkgdir}${_licenseDir}
 }
 
 ppackage() {
