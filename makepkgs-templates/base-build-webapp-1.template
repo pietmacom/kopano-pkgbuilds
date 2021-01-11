@@ -1,5 +1,6 @@
-_binDir=/usr/share/webapps/${pkgname}
-_confDir=/etc/webapps/${pkgname}
+# https://wiki.archlinux.org/index.php/Web_application_package_guidelines
+_binDir=usr/share/webapps/${pkgname}
+_confDir=etc/webapps/${pkgname}
 # template input; name=base-build
 
 # compressStatic /usr/share/webapps/xxx 'htm|css|html|js'

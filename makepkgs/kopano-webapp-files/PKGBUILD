@@ -3,7 +3,7 @@ pkgver='4.0.1'
 
 _source='git+https://stash.kopano.io/scm/kwa/files.git'
 _tagPrefix='v'
-_tagSuffix='-final'
+_tagSuffix=''
 
 depends=(
     'php-memcache'

@@ -24,6 +24,14 @@ manifestXml() {
 pkgdesc="$(manifestXml 'description')"
 url="$(manifestXml 'authorURL')"
 
+for _licenseFile in AGPL-3
+do
+    if [ -e "src/${pkgname}/${_licenseFile}" ];
+    then
+	license+=('AGPL-3')
+    fi
+done
+
 # template input; name=base-scm
 source+=(
     "kopano-webapp::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${_kopanoWebappSourceBranch}"
@@ -62,14 +70,16 @@ then
     install='install'
 fi
 
+
+# template input; name=base-build-webapp
+_binDir=usr/share/webapps/kopano-webapp/plugins/${_pluginName}
+
 if [ -f "src/${pkgname}/config.php" ];
 then
     backup=(
-	"etc/webapps/kopano-webapp/plugins/${_pluginName}/config.php"
+	"${_confDir}/config.php"
 	   )
 fi
-
-# template input; name=base-build-webapp
 
 build() {
     cd ${srcdir}/kopano-webapp/tools/src/jsconcat
@@ -86,32 +96,29 @@ build() {
 
 package() {
     # BIN
-    _binDir=/usr/share/webapps/kopano-webapp/plugins/${_pluginName}
-    _confDir=/etc/webapps/kopano-webapp/plugins/${_pluginName}
-    _stateDir=/var/lib/kopano-webapp/plugins/${_pluginName}
-    _docDir=/usr/share/doc/kopano-webapp/plugins/${_pluginName}
-
-    # BIN
     cd ${srcdir}/kopano-webapp/deploy/plugins/${_pluginName}
     _install root:root ${_commonPermissions} . \
-        ${pkgdir}${_binDir}
-    if [ -e "${pkgdir}${_binDir}/config.php" ];
+        ${pkgdir}/${_binDir}
+    _compressStatic ${pkgdir}/${_binDir}
+
+    # CONF
+    if [ -e "${pkgdir}/${_binDir}/config.php" ];
     then
-	# CONF
-	_install http:http ${_securePermissions} ${pkgdir}${_binDir}/config.php \
-	    ${pkgdir}${_confDir}
-        mv ${pkgdir}${_binDir}/config.php \
-	    ${pkgdir}${_binDir}/config.php.dist
-        ln -s ${confDir}/config.php \
-	    ${pkgdir}${_binDir}/config.php
+        cp ${pkgdir}/${_binDir}/config.php \
+	    ${pkgdir}/${_binDir}/config.php.dist
+	_install http:http ${_securePermissions} ${pkgdir}/${_confDir}
+	_install http:http ${_securePermissions} ${pkgdir}/${_binDir}/config.php \
+	    ${pkgdir}/${_confDir}
+        ln -sf ${confDir}/config.php \
+	    ${pkgdir}/${_binDir}/config.php
     fi
-    _compressStatic ${pkgdir}${_binDir}
 
     # DOC
     if [ -e "${srcdir}/${pkgname}.ini" ];
     then
+	_install root:root ${_commonPermissions} ${pkgdir}/${_docDir}
 	_install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
-	    ${pkgdir}${_docDir}
+	    ${pkgdir}/${_docDir}
     fi
 
     # LICENSE
@@ -119,15 +126,13 @@ package() {
     do
 	if [ -e "${pkgdir}/${_binDir}/${_licenseFile}" ];
 	then
-	    _install root:root ${_commonPermissions} ${pkgdir}/${_binDir}/${_licenseFile} ${pkgdir}${_licenseDir}
+	    _install root:root ${_commonPermissions} ${pkgdir}/${_licenseDir}
+	    _install root:root ${_commonPermissions} ${pkgdir}/${_binDir}/${_licenseFile} ${pkgdir}/${_licenseDir}
 	fi
     done
 
-    # CONF
-    # _install http:http ${_securePermissions}${pkgdir}${_confDir}
-
     # STATE
-    _install http:http ${_securePermissions} ${pkgdir}${_stateDir}
+    _install http:http ${_securePermissions} ${pkgdir}/${_stateDir}
 
     # OTHER: PHP
     if [ -e '${srcdir}/${pkgname}.ini' ];

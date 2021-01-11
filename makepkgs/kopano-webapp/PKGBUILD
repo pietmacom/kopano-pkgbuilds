@@ -50,6 +50,16 @@ optdepends=(
 install='install'
 
 # template input; name=base-build-webapp
+backup=(
+    "${_confDir}/config.php"
+    "${_confDir}/debug.php"
+       )
+
+prepare() {
+    cd ${srcdir}/${pkgname}
+    sed -i -e 's|\(\"DEBUG_LOADER\", \).*$|\1LOAD_RELEASE);|' \
+	debug.php.dist
+}
 
 build() {
     cd ${srcdir}/${pkgname}
@@ -66,36 +76,38 @@ build() {
 package() {
      # BIN
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/deploy \
-	${pkgdir}${_binDir}
-
-    _install root:root ${_commonPermissions} ${pkgdir}${_binDir}/plugins
-    sed -i -e 's|\(\"DEBUG_LOADER\", \).*$|\1LOAD_RELEASE);|' \
-	${pkgdir}${_binDir}/debug.php.dist
-    ln -s ${confDir}/config.php \
-	${pkgdir}${_binDir}/config.php
-    ln -s ${_logDir}/debug.txt \
-	${pkgdir}${_binDir}/debug.txt
-    _compressStatic ${pkgdir}${_binDir}
+	${pkgdir}/${_binDir}
+    _install root:root ${_commonPermissions} ${pkgdir}/${_binDir}/plugins
+    _compressStatic ${pkgdir}/${_binDir}
+    
+    # CONF
+    cp ${pkgdir}/${_binDir}/config.php.dist \
+	${pkgdir}/${_binDir}/config.php
+    _install http:http ${_securePermissions} ${pkgdir}/${_confDir}
+    _install http:http ${_securePermissions} ${pkgdir}/${_binDir}/config.php \
+	${pkgdir}/${_confDir}
+    ln -sf ${confDir}/config.php \
+	${pkgdir}/${_binDir}/config.php
 
     # DOC
+    _install root:root ${_commonPermissions} ${pkgdir}/${_docDir}
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
-	${pkgdir}${_docDir}
+	${pkgdir}/${_docDir}
 
     # LICENSE
-    _install http:http ${_commonPermissions} AGPL-3 ${pkgdir}${_licenseDir}
-    _install http:http ${_commonPermissions} LICENSE.txt ${pkgdir}${_licenseDir}
-
-    # CONF
-    _install http:http ${_securePermissions} ${pkgdir}${_confDir}
+    _install http:http ${_commonPermissions} AGPL-3 ${pkgdir}/${_licenseDir}
+    _install http:http ${_commonPermissions} LICENSE.txt ${pkgdir}/${_licenseDir}
 
     # STATE
-    _install http:http ${_securePermissions} ${pkgdir}${_stateDir}
-    _install http:http ${_securePermissions} ${pkgdir}${_stateDir}/plugins
+    _install http:http ${_securePermissions} ${pkgdir}/${_stateDir}
+    _install http:http ${_securePermissions} ${pkgdir}/${_stateDir}/plugins
 
     # LOG
-    _install http:http ${_securePermissions} ${pkgdir}${_logDir}
+    ln -s ${_logDir}/debug.txt \
+	${pkgdir}/${_binDir}/debug.txt
+    _install http:http ${_securePermissions} ${pkgdir}/${_logDir}
     _install http:http ${_securePermissions} debug.txt \
-	${pkgdir}${_logDir}
+	${pkgdir}/${_logDir}
 
     # OTHER: PHP
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
