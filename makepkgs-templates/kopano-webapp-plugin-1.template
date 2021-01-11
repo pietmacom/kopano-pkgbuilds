@@ -82,6 +82,7 @@ fi
 
 build() {
     cd ${srcdir}/kopano-webapp
+    find plugins -maxdepth 1 -mindepth 1 -type d -exec rm -rf {} \;
     ant tools
 
     cd ${srcdir}
@@ -92,7 +93,8 @@ build() {
     if [ -f 'Makefile' ];
     then
 	make deploy \
-	    DESTDIR="../../deploy/plugins/${_pluginName}"
+	    DESTDIR="../../deploy/plugins/${_pluginName}" \
+	    DEPLOY="../../deploy/plugins/${_pluginName}"
     else
 	ant deploy
     fi

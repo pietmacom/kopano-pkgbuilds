@@ -69,6 +69,9 @@ out_h1 "BUILD"
 	# WEBAPP
 	# OPTIONAL build makepkgs/jdk
 	build makepkgs/kopano-webapp
+	build makepkgs/kopano-webapp-gmaps
+	build makepkgs/kopano-webapp-contactfax
+	build makepkgs/kopano-webapp-pimfolder
 	build makepkgs/kopano-webapp-nginx
 	build makepkgs/kopano-webapp-files
 	build makepkgs/kopano-webapp-files-owncloud-backend
