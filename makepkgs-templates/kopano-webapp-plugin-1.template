@@ -13,7 +13,7 @@ arch=(
      )
 
 manifestXml() {
-    _manifestXmlFile="src/${_module}-${pkgver}/manifest.xml"
+    _manifestXmlFile="src/${pkgname}/manifest.xml"
     if [ -e "${_manifestXmlFile}" ];
     then
         xmllint --xpath "string(/plugin/info/$1)" ${_manifestXmlFile}
@@ -55,11 +55,18 @@ makedepends+=(
              )
 depends+=(
     'kopano-webapp'
-	)
+	 )
 
 if [ -f 'install' ];
 then
     install='install'
+fi
+
+if [ -f "src/${pkgname}/config.php" ];
+then
+    backup=(
+	"etc/webapps/kopano-webapp/plugins/${_pluginName}/config.php"
+	   )
 fi
 
 # template input; name=base-build-webapp
@@ -75,7 +82,6 @@ build() {
 
     cd kopano-webapp/plugins/${_pluginName}
     ant -lib ../../tools/lib deploy
-
 }
 
 package() {
@@ -85,83 +91,48 @@ package() {
     _stateDir=/var/lib/kopano-webapp/plugins/${_pluginName}
     _docDir=/usr/share/doc/kopano-webapp/plugins/${_pluginName}
 
-    cd ${srcdir}/${pkgname}/deploy/plugins/${_pluginName}
-    mv ${pkgdir}${_binDir}/config.php ${pkgdir}${_binDir}/config.php.dist
-
+    # BIN
+    cd ${srcdir}/kopano-webapp/deploy/plugins/${_pluginName}
     _install root:root ${_commonPermissions} . \
         ${pkgdir}${_binDir}
-    ln -s ${confDir}/config.php \
-        ${pkgdir}${_binDir}/config.php
+    if [ -e "${pkgdir}${_binDir}/config.php" ];
+    then
+	# CONF
+	_install http:http ${_securePermissions} ${pkgdir}${_binDir}/config.php \
+	    ${pkgdir}${_confDir}
+        mv ${pkgdir}${_binDir}/config.php \
+	    ${pkgdir}${_binDir}/config.php.dist
+        ln -s ${confDir}/config.php \
+	    ${pkgdir}${_binDir}/config.php
+    fi
     _compressStatic ${pkgdir}${_binDir}
 
     # DOC
-    _install root:root ${_commonPermissions} config.php.dist \
-        ${pkgdir}${_docDir}
+    if [ -e "${srcdir}/${pkgname}.ini" ];
+    then
+	_install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
+	    ${pkgdir}${_docDir}
+    fi
 
     # LICENSE
-    _install http:http ${_commonPermissions} AGPL-3 ${pkgdir}${_licenseDir}
-    _install http:http ${_commonPermissions} LICENSE.txt ${pkgdir}${_licenseDir}
+    for _licenseFile in LICENSE.txt AGPL-3
+    do
+	if [ -e "${pkgdir}/${_binDir}/${_licenseFile}" ];
+	then
+	    _install root:root ${_commonPermissions} ${pkgdir}/${_binDir}/${_licenseFile} ${pkgdir}${_licenseDir}
+	fi
+    done
 
     # CONF
-    _install http:http ${_securePermissions} ${pkgdir}${_confDir}
+    # _install http:http ${_securePermissions}${pkgdir}${_confDir}
 
     # STATE
     _install http:http ${_securePermissions} ${pkgdir}${_stateDir}
-}
 
-ppackage() {
-    pluginname=${pkgname//kopano-webapp-/}
-
-    ## override pluginname
-    #if [[ ! -z "$1" ]];
-    #then
-    #    pluginname="$1"
-    #fi
-
-    cd ${srcdir}/kopano-webapp/deploy/plugins/$pluginname/
-
-    groups=('kopano'
-            'kopano-webapp-plugins')
-
-    # /usr/share
-    mkdir -p ${pkgdir}/usr/share/webapps/kopano-webapp/plugins/${pluginname}/
-    cp -R * ${pkgdir}/usr/share/webapps/kopano-webapp/plugins/${pluginname}/
-    rm -f ${pkgdir}/usr/share/webapps/kopano-webapp/plugins/${pluginname}/config.php
-    ${srcdir}/compress-static ${pkgdir}/usr/share/webapps/kopano-webapp/plugins/${pluginname}/
-
-    # /var/lib
-    installdir http:http 0700 0600 ${pkgdir}/var/lib/kopano-webapp/plugins/${pluginname}
-
-    # /etc
-    if [[ -e "config.php" ]];
+    # OTHER: PHP
+    if [ -e '${srcdir}/${pkgname}.ini' ];
     then
-        backup=("etc/webapps/kopano-webapp/plugins/${pluginname}/config.php")
-
-        ## perform settings
-        # convert windows line break to unix: http://stackoverflow.com/questions/11680815/removing-windows-newlines-on-linux-sed-vs-awk
-        sed -i -e $'s/\r//' config.php
-
-        mkdir -p ${pkgdir}/etc/webapps/kopano-webapp/plugins/${pluginname}/
-
-        ## config mains
-        cp config.php ${pkgdir}/etc/webapps/kopano-webapp/plugins/${pluginname}/config.php
-        ln -s /etc/webapps/kopano-webapp/plugins/${pluginname}/config.php ${pkgdir}/usr/share/webapps/kopano-webapp/plugins/${pluginname}/config.php
-
-        ## config examples
-        cp ${pkgdir}/etc/webapps/kopano-webapp/plugins/${pluginname}/config.php ${pkgdir}/etc/webapps/kopano-webapp/plugins/${pluginname}/config.example.php
-    fi
-
-    if [[ -e "${srcdir}/${pkgname}.ini" ]];
-    then
-      ## php
-      mkdir -p ${pkgdir}/etc/php/conf.d
-      cp ${srcdir}/${pkgname}.ini ${pkgdir}/etc/php/conf.d
-    fi
-
-    if [[ -e "${srcdir}/${pkgname}.install" ]];
-    then
-        ${pkgname}.install
-    else
-        install=""
+	_install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
+	    ${pkgdir}/etc/php/conf.d
     fi
 }
