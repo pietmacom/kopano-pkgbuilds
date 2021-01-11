@@ -90,7 +90,12 @@ build() {
 	kopano-webapp/plugins/${_pluginName}
 
     cd kopano-webapp/plugins/${_pluginName}
-    ant -lib ../../tools/lib deploy
+    if [ -f 'Makefile' ];
+    then
+	make deploy
+    else
+	ant -lib ../../tools/lib deploy
+    fi
 }
 
 package() {

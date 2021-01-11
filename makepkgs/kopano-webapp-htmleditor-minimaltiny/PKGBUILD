@@ -8,11 +8,10 @@ makedepends=(
     'npm'
 	    )
 
+# template input; name=kopano-webapp-plugin
+
 prepare() {
     cd ${srcdir}/${pkgname}
     npm install
     npm build
 }
-
-# template input; name=kopano-webapp-plugin
-

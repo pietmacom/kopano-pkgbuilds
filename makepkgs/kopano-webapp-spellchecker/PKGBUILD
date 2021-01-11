@@ -1,0 +1,11 @@
+pkgname='kopano-webapp-spellchecker'
+pkgver='2.0.1'
+
+_source='git+https://stash.kopano.io/scm/kwa/spellchecker.git'
+_tagPrefix='v'
+
+depends=(
+	'php-enchant'
+	)
+
+# template input; name=kopano-webapp-plugin

@@ -71,11 +71,25 @@ out_h1 "BUILD"
 	build makepkgs/kopano-webapp
 	build makepkgs/kopano-webapp-nginx
 	build makepkgs/kopano-webapp-files
+	build makepkgs/kopano-webapp-files-owncloud-backend
+	build makepkgs/kopano-webapp-files-smb-backend
 	build makepkgs/kopano-webapp-filepreview
 	build makepkgs/kopano-webapp-desktopnotifications
 	build makepkgs/kopano-webapp-htmleditor-jodit
 	build makepkgs/kopano-webapp-minimaltiny
 	build makepkgs/kopano-webapp-intranet
+	build makepkgs/kopano-webapp-smime
+	build makepkgs/kopano-webapp-spellchecker
+	build makepkgs/kopano-webapp-spellchecker-languagepack-de-at
+	build makepkgs/kopano-webapp-spellchecker-languagepack-de-ch
+	build makepkgs/kopano-webapp-spellchecker-languagepack-de-de
+	build makepkgs/kopano-webapp-spellchecker-languagepack-en-gb
+	build makepkgs/kopano-webapp-spellchecker-languagepack-en-us
+	build makepkgs/kopano-webapp-spellchecker-languagepack-es-es
+	build makepkgs/kopano-webapp-spellchecker-languagepack-fr-fr
+	build makepkgs/kopano-webapp-spellchecker-languagepack-italian-it
+	build makepkgs/kopano-webapp-spellchecker-languagepack-nl
+	build makepkgs/kopano-webapp-spellchecker-languagepack-pl-pl
 
 	# DEPENDENCIES - KOPANO-CORE
 #	build makepkgs/php-xapian
