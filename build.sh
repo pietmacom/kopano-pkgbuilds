@@ -76,7 +76,7 @@ out_h1 "BUILD"
 	build makepkgs/kopano-webapp-filepreview
 	build makepkgs/kopano-webapp-desktopnotifications
 #	build makepkgs/kopano-webapp-htmleditor-jodit
-	build makepkgs/kopano-webapp-minimaltiny
+	build makepkgs/kopano-webapp-htmleditor-minimaltiny
 	build makepkgs/kopano-webapp-intranet
 	build makepkgs/kopano-webapp-smime
 	build makepkgs/kopano-webapp-spellchecker
