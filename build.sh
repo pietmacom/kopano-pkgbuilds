@@ -69,9 +69,9 @@ out_h1 "BUILD"
 	# WEBAPP
 	# OPTIONAL build makepkgs/jdk
 	build makepkgs/kopano-webapp
-	build makepkgs/kopano-webapp-gmaps
-	build makepkgs/kopano-webapp-contactfax
-	build makepkgs/kopano-webapp-pimfolder
+#	build makepkgs/kopano-webapp-gmaps
+#	build makepkgs/kopano-webapp-contactfax
+#	build makepkgs/kopano-webapp-pimfolder
 	build makepkgs/kopano-webapp-nginx
 	build makepkgs/kopano-webapp-files
 	build makepkgs/kopano-webapp-files-owncloud-backend
@@ -93,8 +93,13 @@ out_h1 "BUILD"
 	build makepkgs/kopano-webapp-spellchecker-languagepack-italian-it
 	build makepkgs/kopano-webapp-spellchecker-languagepack-nl
 	build makepkgs/kopano-webapp-spellchecker-languagepack-pl-pl
+	build makepkgs/kopano-webapp-mdm
+	build makepkgs/kopano-webapp-mattermost
+	build makepkgs/kopano-webapp-meet
+	build makepkgs/kopano-webapp-webmeetings
 	build makepkgs/kopano-webapp-passwd
 	build makepkgs/kopano-webapp-fetchmail
+#	build makepkgs/kopano-webapp-google2fa
 
 	# DEPENDENCIES - KOPANO-CORE
 #	build makepkgs/php-xapian

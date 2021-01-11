@@ -1,0 +1,14 @@
+pkgname='kopano-webapp-mdm'
+pkgver='3.3.0'
+
+_source='git+https://stash.kopano.io/scm/kwa/mobile-device-management.git'
+_tagPrefix='v'
+
+# template input; name=kopano-webapp-plugin
+
+prepare() {
+    cd ${srcdir}/${pkgname}
+   _setConfig "PLUGIN_MDM_USER_DEFAULT_ENABLE_MDM" "true" config.php
+   _setConfig "PLUGIN_MDM_SERVER" "'127.0.0.1:81'" config.php
+   _setConfig "PLUGIN_MDM_SERVER_SSL" "false" config.php
+}

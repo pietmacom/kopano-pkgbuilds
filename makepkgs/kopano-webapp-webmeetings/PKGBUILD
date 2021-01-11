@@ -1,0 +1,13 @@
+pkgname='kopano-webapp-webmeetings'
+pkgver='3.0.6'
+
+_source='git+https://stash.kopano.io/scm/kwa/web-meetings.git'
+_tagPrefix='v'
+
+# template input; name=kopano-webapp-plugin
+
+prepare() {
+    cd ${srcdir}/${pkgname}
+    mv webapp/plugins/spreedwebrtc/* ./
+    mv config.php.dist config.php
+}
