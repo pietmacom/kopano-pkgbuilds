@@ -72,7 +72,6 @@ fi
 
 
 # template input; name=base-build-webapp
-_binDir=usr/share/webapps/kopano-webapp/plugins/${_pluginName}
 
 if [ -f "src/${pkgname}/config.php" ];
 then
@@ -95,6 +94,9 @@ build() {
 }
 
 package() {
+    # Override
+    _binDir=usr/share/webapps/kopano-webapp/plugins/${_pluginName}
+
     # BIN
     cd ${srcdir}/kopano-webapp/deploy/plugins/${_pluginName}
     _install root:root ${_commonPermissions} . \
