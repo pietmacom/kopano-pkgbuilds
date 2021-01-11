@@ -1,0 +1,18 @@
+pkgname='kopano-webapp-htmleditor-minimaltiny'
+pkgver='2.0'
+
+_source='git+https://stash.kopano.io/scm/kwa/htmleditor-minimaltiny.git'
+_tagPrefix='v'
+
+makedepends=(
+    'npm'
+	    )
+
+prepare() {
+    cd ${srcdir}/${pkgname}
+    npm install
+    npm build
+}
+
+# template input; name=kopano-webapp-plugin
+

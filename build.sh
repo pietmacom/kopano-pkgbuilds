@@ -45,7 +45,6 @@ out_h1 "PREPARE"
 
 out_h1 "CHECKOUT"
 	git clone https://aur.archlinux.org/libiconv.git makepkgs/libiconv
-#	git clone https://aur.archlinux.org/apache-ant-contrib.git makepkgs/apache-ant-contrib
 	
 	# ARCHIVE
 	# php
@@ -69,11 +68,14 @@ out_h1 "BUILD"
 
 	# WEBAPP
 	# OPTIONAL build makepkgs/jdk
-#	build makepkgs/apache-ant-contrib
-
 	build makepkgs/kopano-webapp
 	build makepkgs/kopano-webapp-nginx
 	build makepkgs/kopano-webapp-files
+	build makepkgs/kopano-webapp-filepreview
+	build makepkgs/kopano-webapp-desktopnotifications
+	build makepkgs/kopano-webapp-htmleditor-jodit
+	build makepkgs/kopano-webapp-minimaltiny
+	build makepkgs/kopano-webapp-intranet
 
 	# DEPENDENCIES - KOPANO-CORE
 #	build makepkgs/php-xapian

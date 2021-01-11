@@ -1,0 +1,7 @@
+pkgname='kopano-webapp-filepreview'
+pkgver='2.2.0'
+
+_source='git+https://stash.kopano.io/scm/kwa/filepreviewer.git'
+_tagPrefix='v'
+
+# template input; name=kopano-webapp-plugin
