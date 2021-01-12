@@ -10,9 +10,10 @@ prepare() {
     cd ${srcdir}/${pkgname}
     sed -i 's|config.php.dist|config.php|g' Makefile
     mv config.php.dist config.php
-    
+
     # DESTDIR
-    sed -i 's|${PACKAGE_NAME}-${VERSION}|meet|g' Makefile
-    sed -i 's|cd dist|../../deploy|g' Makefile
-    sed -i 's|dist/|../../deploy/|g' Makefile
+    sed -i 's|../deploy/plugins/meet|../../deploy/plugins/meet|g' Makefile
+    #sed -i 's|${PACKAGE_NAME}-${VERSION}|meet|g' Makefile
+    #sed -i 's|cd dist|../../deploy|g' Makefile
+    #sed -i 's|dist/|../../deploy/|g' Makefile
 }

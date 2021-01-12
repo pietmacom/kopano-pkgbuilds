@@ -95,8 +95,14 @@ build() {
 	make deploy \
 	    DESTDIR="../../deploy/plugins/${_pluginName}" \
 	    DEPLOY="../../deploy/plugins/${_pluginName}"
-    else
+
+    elif [ -f "build.xml" ];
+    then
 	ant deploy
+
+    else
+	echo "Nothing to build."
+
     fi
 }
 
