@@ -1,5 +1,5 @@
-pkgname='kopano-webapp-google2fa'
-pkgver='0.6.0-git'
+pkgname='kopano-webapp-google2fa-git'
+pkgver='0.6.0'
 
 _source='git+https://bitbucket.org/normanth/google2fa.git'
 _tagPrefix='v'
