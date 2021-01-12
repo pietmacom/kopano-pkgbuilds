@@ -2,6 +2,8 @@
 # _tagPrefix=kopanocore-
 
 _pluginName=${pkgname//kopano-webapp-/}
+_pluginName=${pkgname//-git/}
+
 pkgrel=1
 groups=(
     'kopano'
