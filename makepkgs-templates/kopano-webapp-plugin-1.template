@@ -85,12 +85,15 @@ build() {
 #    find plugins -maxdepth 1 -mindepth 1 -type d -exec rm -rf {} \;
 #    ant tools
 
-    _kopanoWebappDir="${srcdir}/kopano-webapp"
-    mkdir -p ${_kopanoWebappDir}
-    mkdir ${_kopanoWebappDir}/plugins
-    mkdir ${_kopanoWebappDir}/deploy
-    cp -RT /usr/share/webapps/kopano-webapp ${_kopanoWebappDir}
-    cp -R /usr/doc/kopano-webapp/tools ${_kopanoWebappDir}
+    _kopanoWebappBinDir="/usr/share/webapps/kopano-webapp"
+    _kopanoWebappDocDir="/usr/share/doc/kopano-webapp"
+
+    mkdir -p ${srcdir}/kopano-webapp
+    cd ${srcdir}/kopano-webapp
+    cp -RT ${_kopanoWebappBinDir} ./
+    cp -R ${_kopanoWebappDocDir}/tools ./
+    mkdir plugins
+    mkdir deploy
 
     cd ${srcdir}
     cp -R ${pkgname} \
