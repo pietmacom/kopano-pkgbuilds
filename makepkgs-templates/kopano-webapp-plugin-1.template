@@ -34,7 +34,7 @@ done
 
 # template input; name=base-scm
 source+=(
-    "kopano-webapp::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${_kopanoWebappSourceBranch}"
+#    "kopano-webapp::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${_kopanoWebappSourceBranch}"
     "${pkgname}::${_source}${_sourceBranch}"
 	)
 md5sums+=(
@@ -81,9 +81,16 @@ then
 fi
 
 build() {
-    cd ${srcdir}/kopano-webapp
-    find plugins -maxdepth 1 -mindepth 1 -type d -exec rm -rf {} \;
-    ant tools
+#    cd ${srcdir}/kopano-webapp
+#    find plugins -maxdepth 1 -mindepth 1 -type d -exec rm -rf {} \;
+#    ant tools
+
+    _kopanoWebappDir="${srcdir}/kopano-webapp"
+    mkdir -p ${_kopanoWebappDir}
+    mkdir ${_kopanoWebappDir}/plugins
+    mkdir ${_kopanoWebappDir}/deploy
+    cp -RT /usr/share/webapps/kopano-webapp ${_kopanoWebappDir}
+    cp -R /usr/doc/kopano-webapp/tools ${_kopanoWebappDir}
 
     cd ${srcdir}
     cp -R ${pkgname} \

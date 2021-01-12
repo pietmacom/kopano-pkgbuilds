@@ -79,7 +79,7 @@ package() {
 	${pkgdir}/${_binDir}
     _install root:root ${_commonPermissions} ${pkgdir}/${_binDir}/plugins
     _compressStatic ${pkgdir}/${_binDir}
-    
+
     # CONF
     cp ${pkgdir}/${_binDir}/config.php.dist \
 	${pkgdir}/${_binDir}/config.php
@@ -93,7 +93,7 @@ package() {
     _install root:root ${_commonPermissions} ${pkgdir}/${_docDir}
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
 	${pkgdir}/${_docDir}
-#    _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/tools ${pkgdir}/${_docDir}
+    _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/tools ${pkgdir}/${_docDir}
 
     # LICENSE
     _install http:http ${_commonPermissions} AGPL-3 ${pkgdir}/${_licenseDir}
