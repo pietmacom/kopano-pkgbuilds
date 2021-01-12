@@ -8,12 +8,9 @@ _tagPrefix='v'
 
 prepare() {
     cd ${srcdir}/${pkgname}
-    sed -i 's|config.php.dist|config.php|g' Makefile
+    sed -i 's|config.php.dist|config.php|g' Makefile package.json
     mv config.php.dist config.php
 
-    # DESTDIR
-    sed -i 's|../deploy/plugins/meet|../../deploy/plugins/meet|g' Makefile
-    #sed -i 's|${PACKAGE_NAME}-${VERSION}|meet|g' Makefile
-    #sed -i 's|cd dist|../../deploy|g' Makefile
-    #sed -i 's|dist/|../../deploy/|g' Makefile
+    sed -i 's|cp -avR dist ../deploy/plugins/meet|cp -avRT dist/${PACKAGE_NAME}-${VERSION} ../../deploy/plugins/meet|g' Makefile
+    mkdir -p ${srcdir}/kopano-webapp/deploy/plugins/meet
 }
