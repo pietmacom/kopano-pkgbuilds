@@ -92,8 +92,8 @@ build() {
     cd ${srcdir}/kopano-webapp
     cp -RT ${_kopanoWebappBinDir} ./
     cp -R ${_kopanoWebappDocDir}/tools ./
-    mkdir plugins
-    mkdir deploy
+    mkdir -p plugins
+    mkdir -p deploy
 
     cd ${srcdir}
     cp -R ${pkgname} \
