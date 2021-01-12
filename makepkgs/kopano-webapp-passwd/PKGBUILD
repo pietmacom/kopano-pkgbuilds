@@ -9,5 +9,5 @@ _tagSuffix=''
 
 prepare() {
     cd ${srcdir}/${pkgname}
-    sed 's|Name|name|g' manifest.xml
+    sed -i 's|Name|name|g' manifest.xml
 }
