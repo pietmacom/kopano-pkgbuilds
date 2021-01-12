@@ -1,7 +1,6 @@
 # _source=
 # _tagPrefix=kopanocore-
 
-_kopanoWebappSourceBranch='#tag=v4.6.3'
 _pluginName=${pkgname//kopano-webapp-/}
 pkgrel=1
 groups=(
@@ -34,7 +33,6 @@ done
 
 # template input; name=base-scm
 source+=(
-#    "kopano-webapp::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${_kopanoWebappSourceBranch}"
     "${pkgname}::${_source}${_sourceBranch}"
 	)
 md5sums+=(
@@ -102,13 +100,18 @@ build() {
     cd kopano-webapp/plugins/${_pluginName}
     if [ -f 'Makefile' ];
     then
+	# htmleditor-quill, htmleditor-jodit, htmleditor-minimaltiny is using DESTDIR ?= deploy
+	# SMIME is using DEPLOY instead of standard variable DESTDIR
 	make deploy \
 	    DESTDIR="../../deploy/plugins/${_pluginName}" \
 	    DEPLOY="../../deploy/plugins/${_pluginName}"
 
     elif [ -f "build.xml" ];
     then
-	ant deploy
+	# Fetchmail is using different root-, target-folder
+	ant deploy \
+	    -Droot-folder="$(pwd)/../../" \
+	    -Dtarget-folder="$(pwd)/../../deploy/plugins"
 
     else
 	echo "Nothing to build."
