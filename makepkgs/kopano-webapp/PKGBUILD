@@ -93,7 +93,8 @@ package() {
     _install root:root ${_commonPermissions} ${pkgdir}/${_docDir}
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
 	${pkgdir}/${_docDir}
-    _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/tools ${pkgdir}/${_docDir}
+    _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/tools \
+	${pkgdir}/${_docDir}/tools
 
     # LICENSE
     _install http:http ${_commonPermissions} AGPL-3 ${pkgdir}/${_licenseDir}
