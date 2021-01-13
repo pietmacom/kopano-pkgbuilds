@@ -117,11 +117,15 @@ optdepends=(
     # Unsupported
     # 'libs3'
 	    )
+
+_confDir="etc/kopano"
+_licenseDir="usr/share/licenses/${pkgname}"
+_docDir="usr/share/doc/kopano"
+
 install='install'
 for _configFile in src/${pkgname}/installer/linux/*.cfg; do
-    backup+=("etc/kopano/$(basename ${_configFile})")
+    backup+=("${_confDir}/$(basename ${_configFile})")
 done
-
 
 prepare() {
     cd ${srcdir}/${pkgname}
@@ -175,24 +179,24 @@ package() {
     make install DESTDIR="$(realpath ${pkgdir})"
 
     # LICENSE
-    mkdir -p ${pkgdir}/usr/share/licenses/${pkgname}
+    mkdir -p ${pkgdir}/${_licenseDir}
     cp CONTRIBUTING.md AGPL-3 LICENSE.txt \
-	${pkgdir}/usr/share/licenses/${pkgname}/
+	${pkgdir}/${_licenseDir}/
 
     # DOC
     cp RELNOTES.txt \
-	"${pkgdir}/usr/share/doc/kopano"
+	"${pkgdir}/${_docDir}"
 
-    cp -r "${pkgdir}/usr/share/doc/kopano/example-config" \
-	"${pkgdir}/usr/share/doc/kopano/installed-config"
-    prepare_configs "${pkgdir}/usr/share/doc/kopano/installed-config"
+    cp -r "${pkgdir}/${_docDir}/example-config" \
+	"${pkgdir}/${_docDir}/installed-config"
+    prepare_configs "${pkgdir}/${_docDir}/installed-config"
 
     # CONF
-    for _configFile in ${pkgdir}/usr/share/doc/kopano/installed-config/*.cfg; do
-	_installedConfigFile="/etc/kopano/$(basename ${_configFile})"
-	cp ${_configFile} ${_installedConfigFile}
-	chown kopano:kopano ${_installedConfigFile}
-	chmod 0600 ${_installedConfigFile}
+    for _configFile in ${pkgdir}/${_docDir}/installed-config/*.cfg; do
+	_pkgConfigFile="${pkgdir}/${_confDir}/$(basename ${_configFile})"
+	cp ${_configFile} ${_pkgConfigFile}
+	chown kopano:kopano ${_pkgConfigFile}
+	chmod 0600 ${_pkgConfigFile}
     done
 }
 
