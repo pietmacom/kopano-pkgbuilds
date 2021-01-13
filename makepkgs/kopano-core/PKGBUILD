@@ -118,6 +118,10 @@ optdepends=(
     # 'libs3'
 	    )
 install='install'
+for _configFile in src/${pkgname}/installer/linux/*.cfg; do
+    backup+=("etc/kopano/$(basename ${_configFile})")
+done
+
 
 prepare() {
     cd ${srcdir}/${pkgname}
@@ -182,6 +186,14 @@ package() {
     cp -r "${pkgdir}/usr/share/doc/kopano/example-config" \
 	"${pkgdir}/usr/share/doc/kopano/installed-config"
     prepare_configs "${pkgdir}/usr/share/doc/kopano/installed-config"
+
+    # CONF
+    for _configFile in ${pkgdir}/usr/share/doc/kopano/installed-config/*.cfg; do
+	_installedConfigFile="/etc/kopano/$(basename ${_configFile})"
+	cp ${_configFile} ${_installedConfigFile}
+	chown kopano:kopano ${_installedConfigFile}
+	chmod 0600 ${_installedConfigFile}
+    done
 }
 
 # User-Scripts
