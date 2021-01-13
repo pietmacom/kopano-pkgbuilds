@@ -131,7 +131,7 @@ package() {
 	    ${pkgdir}/${_binDir}/config.php.dist
 	_install http:http ${_securePermissions} ${pkgdir}/${_confDir}
 	_install http:http ${_securePermissions} ${pkgdir}/${_binDir}/config.php \
-	    ${pkgdir}/${_confDir}
+	    ${pkgdir}/${_confDir}/
         ln -sf ${_confDir}/config.php \
 	    ${pkgdir}/${_binDir}/config.php
     fi
@@ -141,7 +141,7 @@ package() {
     then
 	_install root:root ${_commonPermissions} ${pkgdir}/${_docDir}
 	_install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
-	    ${pkgdir}/${_docDir}
+	    ${pkgdir}/${_docDir}/
     fi
 
     # LICENSE
@@ -150,7 +150,8 @@ package() {
 	if [ -e "${pkgdir}/${_binDir}/${_licenseFile}" ];
 	then
 	    _install root:root ${_commonPermissions} ${pkgdir}/${_licenseDir}
-	    _install root:root ${_commonPermissions} ${pkgdir}/${_binDir}/${_licenseFile} ${pkgdir}/${_licenseDir}
+	    _install root:root ${_commonPermissions} ${pkgdir}/${_binDir}/${_licenseFile} \
+		${pkgdir}/${_licenseDir}/
 	fi
     done
 
@@ -161,7 +162,7 @@ package() {
     if [ -e '${srcdir}/${pkgname}.ini' ];
     then
 	_install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
-	    ${pkgdir}/etc/php/conf.d
+	    ${pkgdir}/etc/php/conf.d/
     fi
 }
 

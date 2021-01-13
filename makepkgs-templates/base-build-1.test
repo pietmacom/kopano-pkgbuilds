@@ -1,0 +1,18 @@
+#!/bin/sh
+
+source ./base-build-1.template
+
+rm -rf test.old
+rm -rf test.new
+rm -rf test.new1
+
+_install root:root ${_commonPermissions} ./test.new
+_install root:root ${_commonPermissions} newFile ./test.new/
+_install root:root ${_commonPermissions} base-build-1.template ./test.new/
+_install root:root ${_commonPermissions} base-build-1.template ./test.new/base-build-1.template.newname
+
+mv test.new test.old
+_install root:root ${_commonPermissions} ./test.old ./test.new1
+_install root:root ${_commonPermissions} ./test.old ./test.new1/
+
+

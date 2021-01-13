@@ -47,7 +47,6 @@ depends=(
 optdepends=(
     'kopano-webapp-nginx'
 	    )
-install='install'
 
 # template input; name=base-build-webapp
 backup=(
@@ -83,29 +82,25 @@ package() {
     _compressStatic ${pkgdir}/${_binDir}
 
     # CONF
-    cp ${pkgdir}/${_binDir}/config.php.dist \
-	${pkgdir}/${_binDir}/config.php
     _install http:http ${_securePermissions} ${pkgdir}/${_confDir}
-    _install http:http ${_securePermissions} ${pkgdir}/${_binDir}/config.php \
-	${pkgdir}/${_confDir}
+    _install http:http ${_securePermissions} ${pkgdir}/${_binDir}/config.php.dist \
+	${pkgdir}/${_confDir}/config.php
     ln -sf ${_confDir}/config.php \
 	${pkgdir}/${_binDir}/config.php
 
     # DOC
     _install root:root ${_commonPermissions} ${pkgdir}/${_docDir}
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
-	${pkgdir}/${_docDir}
-
-    _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/buildenv
+	${pkgdir}/${_docDir}/
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/tools \
-	${pkgdir}/${_docDir}/tools
+	${pkgdir}/${_docDir}/
     rm -rf ${pkgdir}/${_docDir}/tools/src
     rm -rf ${pkgdir}/${_docDir}/tools/build
     rm ${pkgdir}/${_docDir}/tools/build.xml
 
     # LICENSE
-    _install http:http ${_commonPermissions} AGPL-3 ${pkgdir}/${_licenseDir}
-    _install http:http ${_commonPermissions} LICENSE.txt ${pkgdir}/${_licenseDir}
+    _install http:http ${_commonPermissions} AGPL-3 ${pkgdir}/${_licenseDir}/
+    _install http:http ${_commonPermissions} LICENSE.txt ${pkgdir}/${_licenseDir}/
 
     # STATE
     _install http:http ${_securePermissions} ${pkgdir}/${_stateDir}
@@ -115,9 +110,9 @@ package() {
 	${pkgdir}/${_binDir}/debug.txt
     _install http:http ${_securePermissions} ${pkgdir}/${_logDir}
     _install http:http ${_securePermissions} debug.txt \
-	${pkgdir}/${_logDir}
+	${pkgdir}/${_logDir}/
 
     # OTHER: PHP
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
-	${pkgdir}/etc/php/conf.d
+	${pkgdir}/etc/php/conf.d/
 }
