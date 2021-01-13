@@ -81,24 +81,17 @@ then
 fi
 
 build() {
-#    cd ${srcdir}/kopano-webapp
-#    find plugins -maxdepth 1 -mindepth 1 -type d -exec rm -rf {} \;
-#    ant tools
+    # Build-Environment
+    _kopanoWebappDir="${srcdir}/kopano-webapp"
+    cp -R /usr/share/webapps/kopano-webapp \
+	${_kopanoWebappDir}
+    cp -R /usr/share/doc/kopano-webapp/tools \
+	${_kopanoWebappDir}/
+    mkdir -p ${_kopanoWebappDir}/plugins
+    mkdir -p ${_kopanoWebappDir}/deploy
 
-    _kopanoWebappBinDir="/usr/share/webapps/kopano-webapp"
-    _kopanoWebappDocDir="/usr/share/doc/kopano-webapp"
-
-    mkdir -p ${srcdir}/kopano-webapp
-    cd ${srcdir}/kopano-webapp
-    cp -RT ${_kopanoWebappBinDir} ./
-    cp -R ${_kopanoWebappDocDir}/tools ./
-    mkdir -p plugins
-    mkdir -p deploy
-
-    cd ${srcdir}
-    cp -R ${pkgname} \
+    cp -R ${srcdir}/${pkgname} \
 	kopano-webapp/plugins/${_pluginName}
-
     cd kopano-webapp/plugins/${_pluginName}
     if [ -f 'Makefile' ];
     then
