@@ -100,6 +100,8 @@ package() {
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/tools \
 	${pkgdir}/${_docDir}/tools
     rm -rf ${pkgdir}/${_docDir}/tools/src
+    rm -rf ${pkgdir}/${_docDir}/tools/build
+    rm ${pkgdir}/${_docDir}/tools/build.xml
 
     # LICENSE
     _install http:http ${_commonPermissions} AGPL-3 ${pkgdir}/${_licenseDir}
