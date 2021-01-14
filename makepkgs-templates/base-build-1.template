@@ -69,9 +69,8 @@ _install() {
 	then
 	    # (5) Copy Source-Directory Into Destination-Directory
 	    _dest="${_dest}$(basename ${_source})"
-#	    mkdir -p ${_dest}
-	    _mkdirLeaf "${_dest}"
 	fi
+	_mkdirLeaf "${_dest}"
 	
 	# (5),(6) Copy Content of Source-Directory Into Destination-Directory
 	cp -fRT ${_source} ${_dest}
