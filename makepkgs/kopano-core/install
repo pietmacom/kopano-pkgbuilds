@@ -1,7 +1,25 @@
 #!/bin/bash
 
 post_install() {
-    post_install_always
+    # create tempdirs and users from /usr/lib/*.d
+    systemd-sysusers
+    systemd-tmpfiles --create
+
+    chown -R kopano:kopano /etc/kopano
+
+    installdir kopano:kopano 0700 0600 /var/log/kopano
+    installdir kopano:kopano 0700 0600 /var/lib/kopano
+    installdir kopano:kopano 0700 0600 /var/lib/kopano/search
+
+    # due to a bug/exception it's impossible to execute phps mapi modul without browsable dir
+    installdir kopano:kopano 0755 0600 /etc/kopano
+
+    # fix missing python symlink for presence
+    if [[ ! -e "/usr/bin/python" ]];
+    then
+	ln -s /usr/bin/python2 /usr/bin/python
+    fi
+
     return 0
 }
 
@@ -28,25 +46,6 @@ pre_remove() {
 }
 
 # User Scripts
-
-post_install_always() {
-    # create tempdirs and users from /usr/lib/*.d
-    systemd-sysusers
-    systemd-tmpfiles --create
-
-    installdir kopano:kopano 0700 0600 /var/log/kopano
-    installdir kopano:kopano 0700 0600 /var/lib/kopano
-    installdir kopano:kopano 0700 0600 /var/lib/kopano/search
-
-    # due to a bug/exception it's impossible to execute phps mapi modul without browsable dir
-    installdir kopano:kopano 0755 0600 /etc/kopano
-
-    # fix missing python symlink for presence
-    if [[ ! -e "/usr/bin/python" ]];
-    then
-	ln -s /usr/bin/python2 /usr/bin/python
-    fi
-}
 
 # care about existing files
 installdir() {

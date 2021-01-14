@@ -195,7 +195,7 @@ package() {
     for _configFile in ${pkgdir}/${_docDir}/installed-config/*.cfg; do
 	_pkgConfigFile="${pkgdir}/${_confDir}/$(basename ${_configFile})"
 	cp ${_configFile} ${_pkgConfigFile}
-	chown kopano:kopano ${_pkgConfigFile}
+#	chown kopano:kopano ${_pkgConfigFile}
 	chmod 0600 ${_pkgConfigFile}
     done
 }
