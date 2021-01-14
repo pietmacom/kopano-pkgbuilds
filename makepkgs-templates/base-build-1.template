@@ -13,7 +13,9 @@ _securePermissions='u=rwx,g=rx,o= u=rw,g=r,o='
 # Strictly Formatted Installation
 #
 ### Files
-# For clean documentation directories are not created automaticaly.
+# Known system -parent- directories are created automaticaly. Apart from
+# that only leaf directories are created. Rights are applied to the leaf
+# directory only.
 #
 # (1) _install user:group ${_commonPermissions} newFile destDir/
 #     * Create Empty File In Destination-Directory
@@ -67,6 +69,7 @@ _install() {
 	then
 	    # (5) Copy Source-Directory Into Destination-Directory
 	    _dest="${_dest}$(basename ${_source})"
+#	    mkdir -p ${_dest}
 	    _mkdirLeaf "${_dest}"
 	fi
 	
@@ -99,14 +102,42 @@ _install() {
 
 _mkdirLeaf() {
     local _dest=$1
-    if [ ! -e "$(dirname ${_dest})" ];
+    local _destParent="$(dirname ${_dest})"
+    if [ ! -e "${_destParent}" ];
     then
-        echo "Parent Directory not found $(dirname ${_dest})"
-        exit 1
+	_systemDirectories=(
+	    'usr/'
+	    'usr/share'
+	    'usr/share/webapps'
+	    'usr/share/doc'
+	    'usr/lib'
+	    'usr/bin'
+	    'opt'
+	    'etc'
+	    'etc/webapps'
+			   )
+	for _systemDirectory in "${_systemDirectories[@]}"
+	do
+	    if [[ ${_destParent} == *${_systemDirectory} ]];
+	    then
+		mkdir -p ${_destParent}
+		break
+	    fi
+	done
+
+	if [ ! -e "${_destParent}" ];
+	then
+	    echo "Parent not found (${_destParent}). Maybe its a not known System-Directory:"
+	    for _systemDirectory in "${_systemDirectories[@]}"
+	    do
+		echo "   ${_systemDirectory}"
+	    done
+	    exit 1
+	fi
     fi
+
     if [ ! -e "${_dest}" ];
     then
         mkdir "${_dest}"
     fi
 }
-

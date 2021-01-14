@@ -2,6 +2,9 @@
 
 source ./base-build-1.template
 
+_mkdirLeaf ./etc/webapps/test.new
+_mkdirLeaf ./etc/unknown/test.new || true
+
 rm -rf test.old
 rm -rf test.new
 rm -rf test.new1
