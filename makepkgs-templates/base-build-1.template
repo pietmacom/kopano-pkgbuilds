@@ -109,6 +109,7 @@ _mkdirLeaf() {
 	    'usr/share'
 	    'usr/share/webapps'
 	    'usr/share/doc'
+	    'usr/share/licenses'
 	    'usr/lib'
 	    'usr/bin'
 	    'opt'
