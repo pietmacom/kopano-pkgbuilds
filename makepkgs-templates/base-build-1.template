@@ -104,22 +104,22 @@ _mkdirLeaf() {
     local _destParent="$(dirname ${_dest})"
     if [ ! -e "${_destParent}" ];
     then
-	_forbiddenSystemDirectories=(
-	    'bin'
-	    'lib'
-	    'sbin'
-	    'usr/sbin'
-	    'var/run'
-				    )
-	for _forbiddenSystemDirectory in "${_forbiddenSystemDirectories[@]}"
-	do
-	    if [[ ${_destParent} == *${_forbiddenSystemDirectory} ]];
-	    then
-		# INSERT LINK TO WIKI
-		echo "Parent directory is a symlink/disallowed Destination (${_destParent})."
-		exit 1
-	    fi
-	done
+#	_forbiddenSystemDirectories=(
+#	    'bin'
+#	    'lib'
+#	    'sbin'
+#	    'usr/sbin'
+#	    'var/run'
+#				    )
+#	for _forbiddenSystemDirectory in "${_forbiddenSystemDirectories[@]}"
+#	do
+#	    if [[ ${_destParent} == *${_forbiddenSystemDirectory} ]];
+#	    then
+#		# INSERT LINK TO WIKI
+#		echo "Parent directory is a symlink/disallowed Destination (${_destParent})."
+#		exit 1
+#	    fi
+#	done
 	
 	_systemDirectories=(
 	    'usr/share'
