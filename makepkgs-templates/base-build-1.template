@@ -105,7 +105,6 @@ _mkdirLeaf() {
     if [ ! -e "${_destParent}" ];
     then
 	_systemDirectories=(
-	    'usr/'
 	    'usr/share'
 	    'usr/share/webapps'
 	    'usr/share/doc'
@@ -115,6 +114,7 @@ _mkdirLeaf() {
 	    'opt'
 	    'etc'
 	    'etc/webapps'
+	    'var/lib'
 			   )
 	for _systemDirectory in "${_systemDirectories[@]}"
 	do
