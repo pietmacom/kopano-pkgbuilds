@@ -12,10 +12,10 @@ _securePermissions='u=rwx,g=rx,o= u=rw,g=r,o='
 
 # Strictly Formatted Installation
 #
+# Known system -parent- directories are created and rights are
+# copied from local system.
+#
 ### Files
-# Known system -parent- directories are created automaticaly. Apart from
-# that only leaf directories are created. Rights are applied to the leaf
-# directory only.
 #
 # (1) _install user:group ${_commonPermissions} newFile destDir/
 #     * Create Empty File In Destination-Directory
@@ -30,7 +30,7 @@ _securePermissions='u=rwx,g=rx,o= u=rw,g=r,o='
 #     => destDir/destFileName
 #
 ### Directories
-# For clean documentation parent directories are not created automaticaly.
+# Leaf directory are created and rights are applied.
 #
 # (4) _install user:group ${_commonPermissions} destDir/newDir
 #     * Create New Directory
@@ -74,14 +74,14 @@ _install() {
 	    # (5) Copy Source-Directory Into Destination-Directory
 	    _dest="${_dest}$(basename ${_source})"
 	fi
-	
+
 	_mkParentDir "${_dest}"
+
+	# (5),(6) Copy Content of Source-Directory Into Destination-Directory
 	if [ ! -e "${_dest}" ];
 	then
 	    mkdir "${_dest}"
 	fi
-	
-	# (5),(6) Copy Content of Source-Directory Into Destination-Directory
 	cp -fRT ${_source} ${_dest}
 	find ${_dest} -exec chown "${_chown}" {} \;
 	find ${_dest} -type f -exec chmod "${_chmodFile}" {} \;
@@ -109,53 +109,54 @@ _install() {
     chmod "${_chmodFile}" ${_dest}
 }
 
-# Creates And Sets Permissions To Parent Directories
-# When Known To System.
+# Creates known System -parent- directories and copies
+# permissions.
 _mkParentDir() {
-    local _dest=$1
-    local _destParent="$(dirname ${_dest})"
+    local _destParent="$(dirname $1)"
+    if [ -e "${_destParent}" ];
+    then
+	return 0
+    fi
+
+    # Check System Directory
+    find / -maxdepth 1 -mindepth 1 -type d -print0 | while read -d $'\0' _rootDir
+    do
+        if [[ "${_destParent}" == *${_rootDir}* ]];
+        then
+	    _destSystemPath=$(echo ${_destParent} | grep -o "${_rootDir}.*")
+	    if [ -d "${_destSystemPath}" ];
+	    then
+		mkdir -p ${_destParent}
+		chmod --reference=${_destSystemPath} ${_destParent}
+		chown --reference=${_destSystemPath} ${_destParent}
+		break;
+	    fi
+	fi
+    done
+
     if [ ! -e "${_destParent}" ];
     then
-	# Check System Directory
-	find / -maxdepth 1 -mindepth 1 -type d -print0 | while read -d $'\0' _rootDir
+	_knownSystemDirectories=(
+	    'usr/share/webapps'
+	    'etc/webapps'
+				)
+	for _knownSystemDirectory in "${_knownSystemDirectories[@]}"
 	do
-	    if [[ "${_destParent}" == *${_rootDir}* ]];
+	    if [[ ${_destParent} == *${_knownSystemDirectory} ]];
 	    then
-		_destSystemPath=$(echo ${_destParent} | sed "s|.*\(${_rootDir}\)|\1|")
-		if [ -d "${_destSystemPath}" ];
-		then
-		    mkdir -p ${_destParent}
-		    chmod --reference=${_destSystemPath} ${_destParent}
-		    chown --reference=${_destSystemPath} ${_destParent}
-		    break;
-		fi
+		mkdir -p ${_destParent}
+		break;
 	    fi
 	done
-	
-	if [ ! -e "${_destParent}" ];
-	then
-	    _knownSystemDirectories=(
-		'usr/share/webapps'
-		'etc/webapps'
-				     )
-	    for _knownSystemDirectory in "${_knownSystemDirectories[@]}"
-	    do
-		if [[ ${_destParent} == *${_knownSystemDirectory} ]];
-		then
-		    mkdir -p ${_destParent}
-		    break;
-		fi
-	    done
-	fi
-	
-	if [ ! -e "${_destParent}" ];
-	then
-	    echo "Parent not found (${_destParent}). Maybe its a not known System-Directory:"
-	    for _systemDirectory in "${_systemDirectories[@]}"
-	    do
-		echo "   ${_systemDirectory}"
-	    done
-	    exit 1
-	fi
+    fi
+
+    if [ ! -e "${_destParent}" ];
+    then
+	echo "Parent not found (${_destParent}). Maybe its a not known System-Directory:"
+	for _systemDirectory in "${_systemDirectories[@]}"
+	do
+	    echo "   ${_systemDirectory}"
+	done
+	exit 1
     fi
 }
