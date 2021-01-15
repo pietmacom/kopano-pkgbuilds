@@ -114,8 +114,8 @@ package() {
 	${pkgdir}/${_logDir}/
 
     # OTHER: PHP
-    _install root:root ${_commonPermissions} ${srcdir}/etc/php
-    _install root:root ${_commonPermissions} ${srcdir}/etc/php/conf.d
+    _install root:root ${_commonPermissions} ${pkgdir}/etc/php
+    _install root:root ${_commonPermissions} ${pkgdir}/etc/php/conf.d
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
 	${pkgdir}/etc/php/conf.d/
 }
