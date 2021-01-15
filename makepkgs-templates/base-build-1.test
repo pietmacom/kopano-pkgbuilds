@@ -1,9 +1,11 @@
 #!/bin/sh
-
 source ./base-build-1.template
 
-_mkdirLeaf ./etc/webapps/test.new
-_mkdirLeaf ./etc/unknown/test.new || true
+_mkParentDir ./etc/webapps/test.new
+_mkParentDir ./etc/audisp/test.new
+_mkParentDir ./etc/unknown/test.new || true
+
+exit
 
 rm -rf test.old
 rm -rf test.new

@@ -55,7 +55,11 @@ _install() {
     if [ -z "$5" ];
     then
 	local _dest="$4"
-	_mkdirLeaf "${_dest}"
+	_mkParentDir "${_dest}"
+	if [ ! -e "${_dest}" ];
+	then
+	    mkdir "${_dest}"
+	fi
 	chown ${_chown} ${_dest}
 	chmod "${_chmodDir}" ${_dest}
 	return 0
@@ -70,7 +74,12 @@ _install() {
 	    # (5) Copy Source-Directory Into Destination-Directory
 	    _dest="${_dest}$(basename ${_source})"
 	fi
-	_mkdirLeaf "${_dest}"
+	
+	_mkParentDir "${_dest}"
+	if [ ! -e "${_dest}" ];
+	then
+	    mkdir "${_dest}"
+	fi
 	
 	# (5),(6) Copy Content of Source-Directory Into Destination-Directory
 	cp -fRT ${_source} ${_dest}
@@ -87,6 +96,7 @@ _install() {
 	_dest=${_dest}$(basename ${_source})
     fi
 
+    _mkParentDir "${_dest}"
     if [ ! -f "${_source}" ];
     then
 	# (1) Create Empty File In Destination-Directory
@@ -99,50 +109,45 @@ _install() {
     chmod "${_chmodFile}" ${_dest}
 }
 
-_mkdirLeaf() {
+# Creates And Sets Permissions To Parent Directories
+# When Known To System.
+_mkParentDir() {
     local _dest=$1
     local _destParent="$(dirname ${_dest})"
     if [ ! -e "${_destParent}" ];
     then
-#	_forbiddenSystemDirectories=(
-#	    'bin'
-#	    'lib'
-#	    'sbin'
-#	    'usr/sbin'
-#	    'var/run'
-#				    )
-#	for _forbiddenSystemDirectory in "${_forbiddenSystemDirectories[@]}"
-#	do
-#	    if [[ ${_destParent} == *${_forbiddenSystemDirectory} ]];
-#	    then
-#		# INSERT LINK TO WIKI
-#		echo "Parent directory is a symlink/disallowed Destination (${_destParent})."
-#		exit 1
-#	    fi
-#	done
-	
-	_systemDirectories=(
-	    'usr/share'
-	    'usr/share/webapps'
-	    'usr/share/doc'
-	    'usr/share/licenses'
-	    'usr/lib'
-	    'usr/bin'
-	    'opt'
-	    'etc'
-	    'etc/webapps'
-	    'var/lib'
-	    'var/log'
-			   )
-	for _systemDirectory in "${_systemDirectories[@]}"
+	# Check System Directory
+	find / -maxdepth 1 -mindepth 1 -type d -print0 | while read -d $'\0' _rootDir
 	do
-	    if [[ ${_destParent} == *${_systemDirectory} ]];
+	    if [[ "${_destParent}" == *${_rootDir}* ]];
 	    then
-		mkdir -p ${_destParent}
-		break
+		_destSystemPath=$(echo ${_destParent} | sed "s|.*\(${_rootDir}\)|\1|")
+		if [ -d "${_destSystemPath}" ];
+		then
+		    mkdir -p ${_destParent}
+		    chmod --reference=${_destSystemPath} ${_destParent}
+		    chown --reference=${_destSystemPath} ${_destParent}
+		    break;
+		fi
 	    fi
 	done
-
+	
+	if [ ! -e "${_destParent}" ];
+	then
+	    _knownSystemDirectories=(
+		'usr/share/webapps'
+		'etc/webapps'
+				     )
+	    for _knownSystemDirectory in "${_knownSystemDirectories[@]}"
+	    do
+		if [[ ${_destParent} == *${_knownSystemDirectory} ]];
+		then
+		    mkdir -p ${_destParent}
+		    break;
+		fi
+	    done
+	fi
+	
 	if [ ! -e "${_destParent}" ];
 	then
 	    echo "Parent not found (${_destParent}). Maybe its a not known System-Directory:"
@@ -152,10 +157,5 @@ _mkdirLeaf() {
 	    done
 	    exit 1
 	fi
-    fi
-
-    if [ ! -e "${_dest}" ];
-    then
-        mkdir "${_dest}"
     fi
 }
