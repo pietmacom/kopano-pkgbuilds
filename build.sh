@@ -31,8 +31,9 @@ _pkgBuild() {
 
 _pkgSync() {
     _pwd=$(pwd)
-
-    cd $1
+    _makepkg=$(realpath ${1})
+    
+    cd ${_makepkg}
     makepkg --printsrcinfo > .SRCINFO
     eval local $(grep -o -m 1 '^\s*pkgname\s*=\s*.*' PKGBUILD)
 
@@ -46,7 +47,7 @@ _pkgSync() {
 
     cd ${_syncPath}
     find  ./ -maxdepth 1 -mindepth 1 -not -name ".git*" -exec rm -rf {} \;
-    cp -RT ${1} .
+    cp -RT ${_makepkg} .
     git add -A
     git commit -a -m "next iteration"
 
