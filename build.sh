@@ -64,6 +64,12 @@ _pkgConvertToGitPackage() {
     sed -i "s|${_pkgnameDeclaration}|pkgname='${pkgname}-git'|" ${1}/PKGBUILD
 }
 
+_pkgPush() {
+    
+}
+
+
+### STARR
 
 _build() {
     _outH1 "CHECKOUT"
@@ -185,9 +191,6 @@ makepkgs=(
     'kopano-webapp-google2fa'
 )
 
-
-### START
-
 _outH1 "PREPARE"
 	_templateDir=$(realpath ./makepkgs-templates)
 	${_templateDir}/recreate-symlinks.sh
@@ -197,17 +200,18 @@ _outH1 "PREPARE"
 	    makepkg-template --template-dir ${_templateDir} --input ${_file}
 	done
 
-
 for _task in "$@"
 do
     case "${_task}" in
 	"convertToGitPackage")
+	    _outH1 "CONVERT TO GIT PACKAGE"
 	    for makepkg in "${makepkgs[@]}"
 	    do
 		_pkgConvertToGitPackage makepkgs/${makepkg}
 	    done
 	;;
 	"sync")
+	    _outH1 "SYNC WITH AUR"
 	    for makepkg in "${makepkgs[@]}"
 	    do
 		_pkgSync makepkgs/${makepkg}
@@ -215,7 +219,11 @@ do
 	    cp -R makepkgs-sync /build-target/
 	;;
 	"push")
-	    echo "push"
+	    _outH1 "PUSH TO AUR"
+	    for pkg in $(ls makepkgs/); 
+	    do
+		echo $pkg
+	    done;
 	;;
 	"build")
 	;&
