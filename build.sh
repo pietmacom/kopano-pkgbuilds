@@ -234,7 +234,9 @@ do
 	    _outH1 "PUSH TO AUR"
 	    for pkg in $(ls makepkgs-sync/); 
 	    do
-		echo $pkg
+		cd $pkg
+		git remote set-url origin ssh://aur@aur.archlinux.org/$(basename $pkg).git
+		git push
 	    done;
 	;;
 	"build")
