@@ -30,7 +30,7 @@ _pkgBuild() {
 }
 
 _pkgSync() {
-    P=$(pwd)
+    _pwd=$(pwd)
 
     _pkgBaseName="$(basename $1)"
     _syncPath="sync/${_pkgBaseName}"
@@ -46,6 +46,8 @@ _pkgSync() {
 
     cd ${_syncPath}
     makepkg --printsrcinfo > .SRCINFO
+
+    cd ${_pwd}
 }
 
 _pkgPush() {
