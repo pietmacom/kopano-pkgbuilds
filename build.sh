@@ -217,6 +217,13 @@ do
 	;;
 	"sync")
 	    _outH1 "SYNC WITH AUR"
+	    if [ -z "$(git config --global user.email)" ]
+		|| [ -z "$(git config --global user.name)" ];
+	    then
+		git config --global user.email "you@example.com"
+		git config --global user.name "Your Name"
+	    fi
+
 	    for makepkg in "${makepkgs[@]}"
 	    do
 		_pkgSync makepkgs/${makepkg}
