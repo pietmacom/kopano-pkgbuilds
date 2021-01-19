@@ -32,9 +32,13 @@ _pkgBuild() {
 _pkgSync() {
     _pwd=$(pwd)
 
-    _pkgBaseName="$(basename $1)"
-    _syncPath="sync/${_pkgBaseName}"
+    cd $1
+    makepkg --printsrcinfo > .SRCINFO
 
+    _pkgBaseName="$(basename $1)"
+    _syncPath="makepkg-sync/${_pkgBaseName}"
+
+    cd ${_pwd}
     if ! git clone http://aur.archlinux.org/${_pkgBaseName}.git ${_syncPath} ;
     then
 	echo "Clone failed ${_pkgBaseName}"
@@ -43,11 +47,6 @@ _pkgSync() {
 
     find  ${_syncPath}/ -maxdepth 1 -mindepth 1 -not -name ".git*" -exec rm -rf {} \;
     cp -RT ${1} ${_syncPath}
-
-    cd ${_syncPath}
-    makepkg --printsrcinfo > .SRCINFO
-
-    cd ${_pwd}
 }
 
 _pkgPush() {
