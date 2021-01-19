@@ -238,7 +238,7 @@ do
 		_pwd=$(pwd)
 		cd makepkgs-sync/$pkg
 		git remote set-url origin ssh://aur@aur.archlinux.org/$(basename $pkg).git
-		git push
+		git push || true
 		cd ${_pwd}
 	    done;
 	;;
