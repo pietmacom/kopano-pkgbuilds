@@ -191,10 +191,11 @@ _outH1 "PREPARE"
 
 
 case "$1" in
-    "sync"
+    "sync")
 	_sync
     ;;
     "push")
+	_push
     ;;
     "build")
     *)
