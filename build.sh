@@ -34,19 +34,23 @@ _pkgSync() {
 
     cd $1
     makepkg --printsrcinfo > .SRCINFO
-
     eval local $(grep -o -m 1 '^\s*pkgname\s*=\s*.*' PKGBUILD)
-    _syncPath="makepkgs-sync/${pkgname}"
 
     cd ${_pwd}
+    _syncPath="makepkgs-sync/${pkgname}"
     if ! git clone http://aur.archlinux.org/${pkgname}.git ${_syncPath} ;
     then
 	echo "Clone failed ${pkgname}"
 	return $?
     fi
 
-    find  ${_syncPath}/ -maxdepth 1 -mindepth 1 -not -name ".git*" -exec rm -rf {} \;
-    cp -RT ${1} ${_syncPath}
+    cd ${_syncPath}
+    find  ./ -maxdepth 1 -mindepth 1 -not -name ".git*" -exec rm -rf {} \;
+    cp -RT ${1} .
+    git add -A
+    git commit -a -m "next iteration"
+
+    cd ${_pwd}
 }
 
 #_pkgPush() {
@@ -220,7 +224,7 @@ do
 	;;
 	"push")
 	    _outH1 "PUSH TO AUR"
-	    for pkg in $(ls makepkgs/); 
+	    for pkg in $(ls makepkgs-sync/); 
 	    do
 		echo $pkg
 	    done;
