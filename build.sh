@@ -7,7 +7,7 @@ _outH1() {
 }
 
 _pkgBuild() {
-    P=$(pwd)
+    _pwd=$(pwd)
     cd $1
 
     # Install compiled make dependencies
@@ -26,7 +26,7 @@ _pkgBuild() {
     # on the end makepkg tries to install all packages with the last version number
     sudo pacman --noconfirm -U *.pkg.*
 
-    cd $P
+    cd ${_pwd}
 }
 
 _pkgSync() {
@@ -35,13 +35,13 @@ _pkgSync() {
     cd $1
     makepkg --printsrcinfo > .SRCINFO
 
-    _pkgBaseName="$(basename $1)"
-    _syncPath="makepkg-sync/${_pkgBaseName}"
+    eval local $(grep -o -m 1 '^\s*pkgname\s*=\s*.*' PKGBUILD)
+    _syncPath="makepkg-sync/${pkgname}"
 
     cd ${_pwd}
-    if ! git clone http://aur.archlinux.org/${_pkgBaseName}.git ${_syncPath} ;
+    if ! git clone http://aur.archlinux.org/${pkgname}.git ${_syncPath} ;
     then
-	echo "Clone failed ${_pkgBaseName}"
+	echo "Clone failed ${pkgname}"
 	return $?
     fi
 
@@ -50,9 +50,20 @@ _pkgSync() {
 }
 
 _pkgPush() {
-    makepkg --printsrcinfo > .SRCINFO
 #    if ! git clone ssh://aur@aur.archlinux.org/${_pkgBaseName}.git ${_syncPath} ;
 }
+
+_pkgConvertToGitPackage() {
+    _pkgnameDeclaration="$(grep -o -m 1 '^\s*pkgname\s*=\s*.*$' ${1}/PKGBUILD)"
+    eval ${_pkgnameDeclaration}
+    if [[ "${pkgname}" == "*-git" ]];
+    then
+	echo "Is already Git-Package ${1} => ${pkgname}"
+	return 0
+    fi
+    sed -i "s|${_pkgnameDeclaration}|pkgname='${pkgname}-git'|" ${1}/PKGBUILD
+}
+
 
 _build() {
     _outH1 "CHECKOUT"
@@ -137,44 +148,42 @@ _build() {
     _outH1 "FINISHED"
 }
 
-_sync() {
-	    _pkgSync makepkgs/kopano-libvmime
-	    _pkgSync makepkgs/kopano-core
-
-	    # WEBAPP
-	    _pkgSync makepkgs/kopano-webapp
-#	    _pkgSync makepkgs/kopano-webapp-gmaps
-#	    _pkgSync makepkgs/kopano-webapp-contactfax
-#	    _pkgSync makepkgs/kopano-webapp-pimfolder
-	    _pkgSync makepkgs/kopano-webapp-nginx
-	    _pkgSync makepkgs/kopano-webapp-files
-	    _pkgSync makepkgs/kopano-webapp-files-owncloud-backend
-	    _pkgSync makepkgs/kopano-webapp-files-smb-backend
-	    _pkgSync makepkgs/kopano-webapp-filepreview
-	    _pkgSync makepkgs/kopano-webapp-desktopnotifications
-#	    _pkgSync makepkgs/kopano-webapp-htmleditor-jodit
-	    _pkgSync makepkgs/kopano-webapp-htmleditor-minimaltiny
-	    _pkgSync makepkgs/kopano-webapp-intranet
-	    _pkgSync makepkgs/kopano-webapp-smime
-	    _pkgSync makepkgs/kopano-webapp-spellchecker
-	    _pkgSync makepkgs/kopano-webapp-spellchecker-languagepack-de-at
-	    _pkgSync makepkgs/kopano-webapp-spellchecker-languagepack-de-ch
-	    _pkgSync makepkgs/kopano-webapp-spellchecker-languagepack-de-de
-	    _pkgSync makepkgs/kopano-webapp-spellchecker-languagepack-en-gb
-	    _pkgSync makepkgs/kopano-webapp-spellchecker-languagepack-en-us
-	    _pkgSync makepkgs/kopano-webapp-spellchecker-languagepack-es-es
-	    _pkgSync makepkgs/kopano-webapp-spellchecker-languagepack-fr-fr
-	    _pkgSync makepkgs/kopano-webapp-spellchecker-languagepack-italian-it
-	    _pkgSync makepkgs/kopano-webapp-spellchecker-languagepack-nl
-	    _pkgSync makepkgs/kopano-webapp-spellchecker-languagepack-pl-pl
-	    _pkgSync makepkgs/kopano-webapp-mdm
-	    _pkgSync makepkgs/kopano-webapp-mattermost
-	    _pkgSync makepkgs/kopano-webapp-meet
-	    _pkgSync makepkgs/kopano-webapp-webmeetings
-	    _pkgSync makepkgs/kopano-webapp-passwd
-	    _pkgSync makepkgs/kopano-webapp-fetchmail
-	    _pkgSync makepkgs/kopano-webapp-google2fa
-}
+makepkgs=(
+    'kopano-libvmime'
+    'kopano-core'
+    'kopano-webapp'
+#    'kopano-webapp-gmaps'
+#    'kopano-webapp-contactfax'
+#    'kopano-webapp-pimfolder'
+    'kopano-webapp-nginx'
+    'kopano-webapp-files'
+    'kopano-webapp-files-owncloud-backend'
+    'kopano-webapp-files-smb-backend'
+    'kopano-webapp-filepreview'
+    'kopano-webapp-desktopnotifications'
+#    'kopano-webapp-htmleditor-jodit'
+    'kopano-webapp-htmleditor-minimaltiny'
+    'kopano-webapp-intranet'
+    'kopano-webapp-smime'
+    'kopano-webapp-spellchecker'
+    'kopano-webapp-spellchecker-languagepack-de-at'
+    'kopano-webapp-spellchecker-languagepack-de-ch'
+    'kopano-webapp-spellchecker-languagepack-de-de'
+    'kopano-webapp-spellchecker-languagepack-en-gb'
+    'kopano-webapp-spellchecker-languagepack-en-us'
+    'kopano-webapp-spellchecker-languagepack-es-es'
+    'kopano-webapp-spellchecker-languagepack-fr-fr'
+    'kopano-webapp-spellchecker-languagepack-italian-it'
+    'kopano-webapp-spellchecker-languagepack-nl'
+    'kopano-webapp-spellchecker-languagepack-pl-pl'
+    'kopano-webapp-mdm'
+    'kopano-webapp-mattermost'
+    'kopano-webapp-meet'
+    'kopano-webapp-webmeetings'
+    'kopano-webapp-passwd'
+    'kopano-webapp-fetchmail'
+    'kopano-webapp-google2fa'
+)
 
 
 ### START
@@ -190,11 +199,20 @@ _outH1 "PREPARE"
 
 
 case "$1" in
+    "convertToGitPackage")
+	for makepkg in "${makepkgs[@]}"
+	do
+	    _pkgConvertToGitPackage makepkgs/${makepkg}
+	done
+    ;;
     "sync")
-	_sync
+	for makepkg in "${makepkgs[@]}"
+	do
+	    _pkgSync makepkgs/${makepkg}
+	done
     ;;
     "push")
-	_push
+	echo "push"
     ;;
     "build")
     ;&
