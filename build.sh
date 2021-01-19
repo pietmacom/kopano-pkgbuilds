@@ -198,6 +198,7 @@ case "$1" in
 	_push
     ;;
     "build")
+    ;&
     *)
 	_build
     ;;
