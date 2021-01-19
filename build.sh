@@ -66,7 +66,9 @@ _pkgConvertToGitPackage() {
 	echo "Is already Git-Package ${1} (${pkgname})"
 	return 0
     fi
-    sed -i "s|${_pkgnameDeclaration}|pkgname='${pkgname}-git'|" ${1}/PKGBUILD
+    
+    # Only first occurence
+    sed -i "0,/${_pkgnameDeclaration}/s//pkgname='${pkgname}-git'/" ${1}/PKGBUILD
 }
 
 _pkgPush() {
