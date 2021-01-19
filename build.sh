@@ -35,7 +35,7 @@ _pkgSync() {
     _pkgBaseName="$(basename $1)"
     _syncPath="sync/${_pkgBaseName}"
 
-    if ! git clone ssh://aur@aur.archlinux.org/${_pkgBaseName}.git ${_syncPath} ;
+    if ! git clone http://aur.archlinux.org/${_pkgBaseName}.git ${_syncPath} ;
     then
 	echo "Clone failed ${_pkgBaseName}"
 	return $?
@@ -50,6 +50,7 @@ _pkgSync() {
 
 _pkgPush() {
     makepkg --printsrcinfo > .SRCINFO
+#    if ! git clone ssh://aur@aur.archlinux.org/${_pkgBaseName}.git ${_syncPath} ;
 }
 
 _build() {
