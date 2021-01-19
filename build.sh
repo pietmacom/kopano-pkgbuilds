@@ -65,7 +65,7 @@ _pkgConvertToGitPackage() {
 }
 
 _pkgPush() {
-    
+    echo ""
 }
 
 
