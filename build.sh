@@ -212,7 +212,7 @@ do
 	    do
 		_pkgSync makepkgs/${makepkg}
 	    done
-	    cp -RT makepkgs-sync /build-target
+	    cp -R makepkgs-sync /build-target/
 	;;
 	"push")
 	    echo "push"
