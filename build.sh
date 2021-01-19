@@ -48,8 +48,8 @@ _pkgSync() {
     cd ${_syncPath}
     find  ./ -maxdepth 1 -mindepth 1 -not -name ".git*" -exec rm -rf {} \;
     cp -RT ${_makepkg} .
-    git add -A
-    git commit -a -m "next iteration"
+    git add -A || true
+    git commit -a -m "next iteration" || true
 
     cd ${_pwd}
 }
@@ -238,7 +238,7 @@ do
 		_pwd=$(pwd)
 		cd makepkgs-sync/$pkg
 		git remote set-url origin ssh://aur@aur.archlinux.org/$(basename $pkg).git
-		git push || true
+		git push
 		cd ${_pwd}
 	    done;
 	;;
