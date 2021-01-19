@@ -41,7 +41,7 @@ _pkgSync() {
 	return $?
     fi
 
-    find  ${_syncPath} -maxdepth 1 -mindepth 1 -not -name ".git*" --exec rm -rf {} \;
+    find  ${_syncPath}/ -maxdepth 1 -mindepth 1 -not -name ".git*" -exec rm -rf {} \;
     cp -RT ${1} ${_syncPath}
 
     cd ${_syncPath}
