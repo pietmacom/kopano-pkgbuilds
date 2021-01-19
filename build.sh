@@ -56,7 +56,7 @@ _pkgSync() {
 _pkgConvertToGitPackage() {
     _pkgnameDeclaration="$(grep -o -m 1 '^\s*pkgname\s*=\s*.*$' ${1}/PKGBUILD)"
     eval ${_pkgnameDeclaration}
-    if [[ "${pkgname}" == "*-git" ]];
+    if [[ "${pkgname}" == *-git ]];
     then
 	echo "Is already Git-Package ${1} => ${pkgname}"
 	return 0
