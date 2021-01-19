@@ -49,9 +49,9 @@ _pkgSync() {
     cp -RT ${1} ${_syncPath}
 }
 
-_pkgPush() {
+#_pkgPush() {
 #    if ! git clone ssh://aur@aur.archlinux.org/${_pkgBaseName}.git ${_syncPath} ;
-}
+#}
 
 _pkgConvertToGitPackage() {
     _pkgnameDeclaration="$(grep -o -m 1 '^\s*pkgname\s*=\s*.*$' ${1}/PKGBUILD)"
