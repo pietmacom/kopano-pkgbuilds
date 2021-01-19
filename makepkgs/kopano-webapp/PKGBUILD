@@ -16,9 +16,10 @@ license=('AGPL3')
 
 _tagPrefix="v"
 # template input; name=base-scm
+_phpIni="${pkgname//-git/}.ini"
 source=(
     "${pkgname}::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${_sourceBranch}"
-    "${pkgname}.ini"
+    "${_phpIni}"
 	)
 md5sums=(
     'SKIP'
@@ -64,7 +65,7 @@ build() {
     cd ${srcdir}/${pkgname}
 
     # The Only Way To Execute PHP With Right Settings Before Installation
-    (cat /etc/php/php.ini ; echo ; cat ${srcdir}/${pkgname}.ini) > make-php.ini
+    (cat /etc/php/php.ini ; echo ; cat ${srcdir}/${_phpIni}) > make-php.ini
     make server client \
 	PHP="$(which php) -c $(realpath make-php.ini)"
 
@@ -92,7 +93,7 @@ package() {
 
     # DOC
     _install root:root ${_commonPermissions} ${pkgdir}/${_docDir}
-    _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
+    _install root:root ${_commonPermissions} ${srcdir}/${_phpIni} \
 	${pkgdir}/${_docDir}/
     _install root:root ${_commonPermissions} ${srcdir}/${pkgname}/tools \
 	${pkgdir}/${_docDir}/
@@ -114,6 +115,6 @@ package() {
 	${pkgdir}/${_logDir}/
 
     # OTHER: PHP
-    _install root:root ${_commonPermissions} ${srcdir}/${pkgname}.ini \
+    _install root:root ${_commonPermissions} ${srcdir}/${_phpIni} \
 	${pkgdir}/etc/php/conf.d/
 }
