@@ -81,7 +81,7 @@ _build() {
 	    _pkgBuild makepkgs/kopano-core
 
 	    # WEBAPP
-	    # OPTIONAL build makepkgs/jdk
+	    # OPTIONAL _pkgBuild makepkgs/jdk
 	    _pkgBuild makepkgs/kopano-webapp
 #	    _pkgBuild makepkgs/kopano-webapp-gmaps
 #	    _pkgBuild makepkgs/kopano-webapp-contactfax
@@ -143,7 +143,6 @@ _sync() {
 	    _pkgSync makepkgs/kopano-core
 
 	    # WEBAPP
-	    # OPTIONAL build makepkgs/jdk
 	    _pkgSync makepkgs/kopano-webapp
 #	    _pkgSync makepkgs/kopano-webapp-gmaps
 #	    _pkgSync makepkgs/kopano-webapp-contactfax
