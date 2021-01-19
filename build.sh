@@ -58,7 +58,7 @@ _pkgConvertToGitPackage() {
     eval ${_pkgnameDeclaration}
     if [[ "${pkgname}" == *-git ]];
     then
-	echo "Is already Git-Package ${1} => ${pkgname}"
+	echo "Is already Git-Package ${1} (${pkgname})"
 	return 0
     fi
     sed -i "s|${_pkgnameDeclaration}|pkgname='${pkgname}-git'|" ${1}/PKGBUILD
@@ -198,25 +198,28 @@ _outH1 "PREPARE"
 	done
 
 
-case "$1" in
-    "convertToGitPackage")
-	for makepkg in "${makepkgs[@]}"
-	do
-	    _pkgConvertToGitPackage makepkgs/${makepkg}
-	done
-    ;;
-    "sync")
-	for makepkg in "${makepkgs[@]}"
-	do
-	    _pkgSync makepkgs/${makepkg}
-	done
-    ;;
-    "push")
-	echo "push"
-    ;;
-    "build")
-    ;&
-    *)
-	_build
-    ;;
-esac
+for _task in "$@"
+do
+    case "${_task}" in
+	"convertToGitPackage")
+	    for makepkg in "${makepkgs[@]}"
+	    do
+		_pkgConvertToGitPackage makepkgs/${makepkg}
+	    done
+	;;
+	"sync")
+	    for makepkg in "${makepkgs[@]}"
+	    do
+		_pkgSync makepkgs/${makepkg}
+	    done
+	;;
+	"push")
+	    echo "push"
+	;;
+	"build")
+	;&
+	*)
+	    _build
+	;;
+    esac
+done
