@@ -138,7 +138,6 @@ _build() {
 
 _sync() {
 	    _pkgSync makepkgs/kopano-libvmime
-	    exit
 	    _pkgSync makepkgs/kopano-core
 
 	    # WEBAPP
@@ -175,7 +174,6 @@ _sync() {
 	    _pkgSync makepkgs/kopano-webapp-passwd
 	    _pkgSync makepkgs/kopano-webapp-fetchmail
 	    _pkgSync makepkgs/kopano-webapp-google2fa
-
 }
 
 
