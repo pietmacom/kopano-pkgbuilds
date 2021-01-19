@@ -36,7 +36,7 @@ _pkgSync() {
     makepkg --printsrcinfo > .SRCINFO
 
     eval local $(grep -o -m 1 '^\s*pkgname\s*=\s*.*' PKGBUILD)
-    _syncPath="makepkg-sync/${pkgname}"
+    _syncPath="makepkgs-sync/${pkgname}"
 
     cd ${_pwd}
     if ! git clone http://aur.archlinux.org/${pkgname}.git ${_syncPath} ;
