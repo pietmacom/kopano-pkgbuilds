@@ -6,7 +6,7 @@ _basePkgName="${pkgname//-git/}"
 if [[ "${pkgname}" == *-git ]];
 then
     # Version can't be set before pkgver has run
-    provides+=("${pkgname//-git/}")
+    provides+=("${pkgname//-git/}=${pkgver}")
 fi
 
 _gitLogByDay() {
