@@ -42,22 +42,19 @@ depends=(
     'gnutls'
 	)
 
-prepare() {
-    mkdir ${pkgname}/build
-}
-
 build() {
-    cd ${pkgname}/build
-    
-    cmake ../vmime \
+    mkdir build
+    cd build
+
+    cmake ../${pkgname} \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DLIB_INSTALL_DIR=/usr/lib/ \
     -DCMAKE_BUILD_TYPE=Release
-    
+
     make
 }
 
 package() {
-    cd ${pkgname}/build
+    cd build
     make DESTDIR="$pkgdir" install
 }
