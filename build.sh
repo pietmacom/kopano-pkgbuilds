@@ -136,7 +136,7 @@ _build() {
 	    _pkgBuild makepkgs/kopano-webapp-webmeetings
 	    _pkgBuild makepkgs/kopano-webapp-passwd
 	    _pkgBuild makepkgs/kopano-webapp-fetchmail
-	    _pkgBuild makepkgs/kopano-webapp-google2fa
+#	    _pkgBuild makepkgs/kopano-webapp-google2fa
 
 	    # DEPENDENCIES - KOPANO-CORE
 #	    _pkgBuild makepkgs/php-xapian
