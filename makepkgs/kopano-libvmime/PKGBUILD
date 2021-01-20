@@ -1,4 +1,4 @@
-pkgname=kopano-libvmime
+pkgname='kopano-libvmime'
 provides=(
     'libvmime'
 	 )
@@ -15,18 +15,18 @@ url='http://www.vmime.org/'
 license=(
     'GPL'
 	)
+	
+_tagPrefix="v"
+# template input; name=base-scm
 conflicts=(
-    'libvmime'
-    'libvmime-git'
     'zarafa-libvmime'
 	  )
 source=(
-    "git+https://github.com/Kopano-dev/vmime.git#tag=v${pkgver}"
+    "${pkgname}::git+https://github.com/Kopano-dev/vmime.git${_sourceBranch}"
 	)
 md5sums=(
     'SKIP'
 	)
-
 
 makedepends=(
     'cmake'
@@ -43,11 +43,11 @@ depends=(
 	)
 
 prepare() {
-    mkdir build
+    mkdir ${pkgname}/build
 }
 
 build() {
-    cd build
+    cd ${pkgname}/build
     
     cmake ../vmime \
     -DCMAKE_INSTALL_PREFIX=/usr \
@@ -58,6 +58,6 @@ build() {
 }
 
 package() {
-    cd build
+    cd ${pkgname}/build
     make DESTDIR="$pkgdir" install
 }
