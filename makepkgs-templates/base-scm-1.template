@@ -36,7 +36,7 @@ pkgver() {
     if [[ "${pkgname}" == *-git ]];
     then
 	_lastTag=$(git tag -l "${_tagPrefix}*" --sort=v:refname | tail -n 1)
-	_revision="r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"
+	_revision="$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"
 	if [ ! -z "${_lastTag}" ];
 	then
 	    echo "${_lastTag}" | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1.r${_revision}|"
