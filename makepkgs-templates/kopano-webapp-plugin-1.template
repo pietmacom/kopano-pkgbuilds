@@ -1,8 +1,7 @@
 # _source=
 # _tagPrefix=kopanocore-
 
-_pluginName=${pkgname//kopano-webapp-/}
-_pluginName=${_pluginName//-git/}
+_pluginName=${_basePkgName//kopano-webapp-/}
 
 pkgrel=1
 groups=(
@@ -41,7 +40,7 @@ md5sums+=(
     'SKIP'
 	)
 
-_phpIni="${pkgname//-git/}.ini"
+_phpIni="${_basePkgName}.ini"
 if [ -e "${_phpIni}" ];
 then
     source+=(

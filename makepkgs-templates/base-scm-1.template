@@ -1,6 +1,14 @@
 #_tagPrefix=""
 #_tagSuffix=""
 
+_basePkgName="${pkgname//-git/}"
+
+if [[ "${pkgname}" == *-git ]];
+then
+    # Version can't be set before pkgver has run
+    provides+=("${pkgname//-git/}")
+fi
+
 _gitLogByDay() {
     local NEXT=$(date +%F)
     local SINCE="1970-01-01"

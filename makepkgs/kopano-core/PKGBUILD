@@ -118,8 +118,9 @@ optdepends=(
     # 'libs3'
 	    )
 
+# TODO _licenseDir is supposed to be the pkgname. For unification changed here.
 _confDir="etc/kopano"
-_licenseDir="usr/share/licenses/${pkgname}"
+_licenseDir="usr/share/licenses/kopano"
 _docDir="usr/share/doc/kopano"
 
 install='install'
