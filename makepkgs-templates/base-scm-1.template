@@ -24,7 +24,8 @@ _gitLogByDay() {
 	fi
     done
 }
-if git rev-parse ;
+if [ ! -e "changelog" ] \
+    || git rev-parse ;
 then
     _gitLogByDay > changelog
     changelog="changelog"
