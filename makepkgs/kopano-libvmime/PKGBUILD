@@ -1,6 +1,9 @@
 pkgname='kopano-libvmime'
 pkgver=0.9.2k4
 pkgrel=1
+provides=(
+    'libvmime=${pkgver}'
+	 )
 pkgdesc='A C++ class library for working with MIME messages'
 arch=(
     'armv7l'
@@ -15,9 +18,7 @@ license=(
 	
 _tagPrefix="v"
 # template input; name=base-scm
-provides=(
-    'libvmime=$(pkgver)'
-	 )
+
 conflicts=(
     'zarafa-libvmime'
 	  )

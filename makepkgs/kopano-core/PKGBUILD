@@ -135,8 +135,8 @@ prepare() {
 
 # When using official VMIME
 _officialVmimeParameter() {
-    if pacman -Qi libvmime > /dev/null 2> /dev/null \
-	|| pacman -Qi libvmime-git > /dev/null 2> /dev/null;
+    if ! pacman -Qi kopano-libvmime > /dev/null 2> /dev/null \
+	&& ! pacman -Qi kopano-libvmime-git > /dev/null 2> /dev/null;
     then
 	echo -n "VMIME_CFLAGS='$(pkg-config vmime --cflags)' VMIME_LIBS='$(pkg-config vmime --libs)'"
     fi
