@@ -147,7 +147,7 @@ build() {
     cd ${srcdir}/${pkgname}
 
     ./configure \
-# `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt#68` \
+`# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt#68` \
     $(_officialVmimeParameter) \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile` \
     TCMALLOC_CFLAGS=' ' \
