@@ -32,7 +32,7 @@ _pkgBuild() {
 _pkgSync() {
     _pwd=$(pwd)
     _makepkg=$(realpath ${1})
-    
+
     cd ${_makepkg}
     makepkg --printsrcinfo > .SRCINFO
     eval local $(grep -o -m 1 '^\s*pkgname\s*=\s*.*' PKGBUILD)
@@ -54,9 +54,15 @@ _pkgSync() {
     cd ${_pwd}
 }
 
-#_pkgPush() {
-#    if ! git clone ssh://aur@aur.archlinux.org/${_pkgBaseName}.git ${_syncPath} ;
-#}
+_pkgPush() {
+    _pwd=$(pwd)
+    _makepkg_sync=$(realpath ${1})
+
+    cd ${_makepkg_sync}
+    git remote set-url origin ssh://aur@aur.archlinux.org/$(basename ${_makepkg_sync}).git
+    git push
+    cd ${_pwd}
+}
 
 _pkgConvertToGitPackage() {
     _pkgnameDeclaration="$(grep -o -m 1 '^\s*pkgname\s*=\s*.*$' ${1}/PKGBUILD)"
@@ -71,12 +77,54 @@ _pkgConvertToGitPackage() {
     sed -i "0,/${_pkgnameDeclaration}/s//pkgname='${pkgname}-git'/" ${1}/PKGBUILD
 }
 
-_pkgPush() {
-    echo ""
-}
-
-
 ### STARR
+
+clone=(
+    'https://aur.archlinux.org/libiconv.git'
+    'https://aur.archlinux.org/libvmime-git.git'
+	)
+
+build=(
+    # CORE
+    'libiconv'
+    'kopano-libvmime'
+    'kopano-core'
+    
+    # WEBAPP
+    # OPTIONAL 'jdk'
+    'kopano-webapp'
+#    'kopano-webapp-gmaps'
+#    'kopano-webapp-contactfax'
+#    'kopano-webapp-pimfolder'
+    'kopano-webapp-nginx'
+    'kopano-webapp-files'
+    'kopano-webapp-files-owncloud-backend'
+    'kopano-webapp-files-smb-backend'
+    'kopano-webapp-filepreview'
+    'kopano-webapp-desktopnotifications'
+#    'kopano-webapp-htmleditor-jodit'
+    'kopano-webapp-htmleditor-minimaltiny'
+    'kopano-webapp-intranet'
+    'kopano-webapp-smime'
+    'kopano-webapp-spellchecker'
+    'kopano-webapp-spellchecker-languagepack-de-at'
+    'kopano-webapp-spellchecker-languagepack-de-ch'
+    'kopano-webapp-spellchecker-languagepack-de-de'
+    'kopano-webapp-spellchecker-languagepack-en-gb'
+    'kopano-webapp-spellchecker-languagepack-en-us'
+    'kopano-webapp-spellchecker-languagepack-es-es'
+    'kopano-webapp-spellchecker-languagepack-fr-fr'
+    'kopano-webapp-spellchecker-languagepack-italian-it'
+    'kopano-webapp-spellchecker-languagepack-nl'
+    'kopano-webapp-spellchecker-languagepack-pl-pl'
+    'kopano-webapp-mdm'
+    'kopano-webapp-mattermost'
+    'kopano-webapp-meet'
+    'kopano-webapp-webmeetings'
+    'kopano-webapp-passwd'
+    'kopano-webapp-fetchmail'
+#    'kopano-webapp-google2fa'
+      )
 
 _build() {
     _outH1 "CHECKOUT"
@@ -219,7 +267,6 @@ do
 	    done
 	;;
 	"sync")
-	    _outH1 "SYNC WITH AUR"
 	    if [ -z "$(git config --global user.email)" ] \
 		|| [ -z "$(git config --global user.name)" ];
 	    then
@@ -229,21 +276,16 @@ do
 
 	    for makepkg in "${makepkgs[@]}"
 	    do
-		_outH1 "SYNC ${makepkg}"
+		_outH1 "SYNCING ${makepkg}"
 		_pkgSync makepkgs/${makepkg}
 	    done
 	    cp -R makepkgs-sync /build-target/
 	;;
 	"push")
-	    _outH1 "PUSH TO AUR"
 	    for pkg in $(ls makepkgs-sync/);
 	    do
-		_outH1 "PUSH $pkg"
-		_pwd=$(pwd)
-		cd makepkgs-sync/$pkg
-		git remote set-url origin ssh://aur@aur.archlinux.org/$(basename $pkg).git
-		git push
-		cd ${_pwd}
+		_outH1 "PUSHING ${pkg}"
+		_pkgPush makepkgs-sync/${pkg}
 	    done;
 	;;
 	"build")
