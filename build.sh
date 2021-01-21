@@ -229,7 +229,7 @@ do
 
 	    for makepkg in "${makepkgs[@]}"
 	    do
-		_outH1 "SYNC $pkg"
+		_outH1 "SYNC ${makepkg}"
 		_pkgSync makepkgs/${makepkg}
 	    done
 	    cp -R makepkgs-sync /build-target/
