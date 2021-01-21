@@ -207,6 +207,7 @@ _outH1 "PREPARE"
 	    makepkg-template --template-dir ${_templateDir} --input ${_file}
 	done
 
+
 for _task in "$@"
 do
     case "${_task}" in
@@ -246,9 +247,10 @@ do
 	    done;
 	;;
 	"build")
+	    _outH1 "BUILD"
+	    _build
 	;;
 	*)
-	    _build
 	;;
     esac
 done
