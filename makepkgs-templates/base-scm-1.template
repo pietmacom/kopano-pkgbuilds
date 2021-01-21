@@ -1,6 +1,13 @@
 #_tagPrefix=""
 #_tagSuffix=""
 
+_basePkgName="${pkgname//-git/}"
+if [[ "${pkgname}" == *-git ]];
+then
+    # Version can't be set before pkgver has run
+    provides+=("${_basePkgName}=${pkgver}")
+fi
+
 _gitLogByDay() {
     local NEXT=$(date +%F)
     local SINCE="1970-01-01"
@@ -40,12 +47,5 @@ pkgver() {
         echo ${pkgver}
     fi
 }
-
-_basePkgName="${pkgname//-git/}"
-if [[ "${pkgname}" == *-git ]];
-then
-    # Version can't be set before pkgver has run
-    provides+=("${_basePkgName}=$(pkgver)")
-fi
 
 _sourceBranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=${_tagPrefix}${pkgver}${_tagSuffix}"; fi)
