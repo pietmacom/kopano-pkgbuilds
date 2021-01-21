@@ -66,7 +66,7 @@ _pkgConvertToGitPackage() {
 	echo "Is already Git-Package ${1} (${pkgname})"
 	return 0
     fi
-    
+
     # Only first occurence
     sed -i "0,/${_pkgnameDeclaration}/s//pkgname='${pkgname}-git'/" ${1}/PKGBUILD
 }
@@ -228,15 +228,16 @@ do
 
 	    for makepkg in "${makepkgs[@]}"
 	    do
+		_outH1 "SYNC $pkg"
 		_pkgSync makepkgs/${makepkg}
 	    done
 	    cp -R makepkgs-sync /build-target/
 	;;
 	"push")
 	    _outH1 "PUSH TO AUR"
-	    for pkg in $(ls makepkgs-sync/); 
+	    for pkg in $(ls makepkgs-sync/);
 	    do
-		echo "Pushing $pkg"
+		_outH1 "PUSH $pkg"
 		_pwd=$(pwd)
 		cd makepkgs-sync/$pkg
 		git remote set-url origin ssh://aur@aur.archlinux.org/$(basename $pkg).git
@@ -245,7 +246,7 @@ do
 	    done;
 	;;
 	"build")
-	;&
+	;;
 	*)
 	    _build
 	;;
