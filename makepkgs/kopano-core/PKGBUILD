@@ -138,7 +138,7 @@ _officialVmimeParameter() {
     if ! pacman -Qi kopano-libvmime > /dev/null 2> /dev/null \
 	&& ! pacman -Qi kopano-libvmime-git > /dev/null 2> /dev/null;
     then
-	echo -n "VMIME_CFLAGS='\$(pkg-config vmime --cflags)' VMIME_LIBS='\$(pkg-config vmime --libs)'"
+	echo -n "VMIME_CFLAGS=$(pkg-config vmime --cflags) VMIME_LIBS=$(pkg-config vmime --libs)"
     fi
 }
 
@@ -148,7 +148,7 @@ build() {
 
     ./configure \
 # `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt#68` \
-    "$(_officialVmimeParameter)" \
+    $(_officialVmimeParameter) \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile` \
     TCMALLOC_CFLAGS=' ' \
     TCMALLOC_LIBS='-ltcmalloc_minimal' \
