@@ -87,6 +87,7 @@ clone=(
 build=(
     # CORE
     'libiconv'
+    'libvmime'
     'kopano-libvmime'
     'kopano-core'
     
@@ -148,7 +149,8 @@ _build() {
     _outH1 "BUILD"
 	    # CORE
 	    _pkgBuild makepkgs/libiconv
-	    _pkgBuild makepkgs/kopano-libvmime
+	    _pkgBuild makepkgs/libvmime
+#	    _pkgBuild makepkgs/kopano-libvmime
 	    _pkgBuild makepkgs/kopano-core
 
 	    # WEBAPP

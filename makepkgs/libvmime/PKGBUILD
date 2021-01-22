@@ -1,0 +1,54 @@
+pkgname='libvmime'
+pkgver=0.9.2
+pkgrel=1
+pkgdesc='A C++ class library for working with MIME messages'
+arch=(
+    'armv7l'
+    'aarch64'
+    'i686'
+    'x86_64'
+     )
+url='http://www.vmime.org/'
+license=(
+    'GPL'
+	)
+	
+_tagPrefix="v"
+# template input; name=base-scm
+source=(
+    "${pkgname}::git+https://github.com/kisli/vmime.git${_sourceBranch}"
+	)
+md5sums=(
+    'SKIP'
+	)
+
+makedepends=(
+    'cmake'
+    'postfix'
+    'doxygen'
+    'xdot'
+    
+    # PKGBUILD dependencies
+    'git'
+	    )
+depends=(
+    'gsasl' 
+    'gnutls'
+	)
+
+build() {
+    mkdir build
+    cd build
+
+    cmake ../${pkgname} \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DLIB_INSTALL_DIR=/usr/lib/ \
+    -DCMAKE_BUILD_TYPE=Release
+
+    make
+}
+
+package() {
+    cd build
+    make DESTDIR="$pkgdir" install
+}
