@@ -212,6 +212,7 @@ _build() {
 }
 
 makepkgs=(
+    'libvmime'
     'kopano-libvmime'
     'kopano-core'
     'kopano-webapp'
