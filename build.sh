@@ -130,7 +130,7 @@ build=(
 _build() {
     _outH1 "CHECKOUT"
 	    git clone https://aur.archlinux.org/libiconv.git makepkgs/libiconv
-	    git clone https://aur.archlinux.org/libvmime-git.git makepkgs/libvmime
+#	    git clone https://aur.archlinux.org/libvmime-git.git makepkgs/libvmime
 
 	    # ARCHIVE
 	    # php
