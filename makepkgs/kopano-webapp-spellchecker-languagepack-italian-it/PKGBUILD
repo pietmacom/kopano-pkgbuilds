@@ -1,0 +1,11 @@
+pkgname='kopano-webapp-spellchecker-languagepack-italian-it'
+pkgver='1.0.0'
+
+_source='git+https://stash.kopano.io/scm/kwa/spellchecker-languagepack-italian-it.git'
+_tagPrefix='v'
+
+depends=(
+	'kopano-webapp-spellchecker'
+	)
+
+# template input; name=kopano-webapp-plugin

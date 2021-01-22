@@ -1,0 +1,14 @@
+pkgname='kopano-webapp-contactfax'
+pkgver='4.6.3'
+
+_source='git+https://stash.kopano.io/scm/kw/kopano-webapp.git'
+_tagPrefix='v'
+
+# template input; name=kopano-webapp-plugin
+
+prepare() {
+    cd ${srcdir}/${pkgname}
+    find . -maxdepth 1 -mindepth 1 -not -path "*/plugins" -not -path '*/.git' -exec rm -rf {} \;
+    mv plugins/${_pluginName}/* ./
+    rm -rf plugins
+}

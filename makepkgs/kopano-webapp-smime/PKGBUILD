@@ -1,0 +1,12 @@
+pkgname='kopano-webapp-smime'
+pkgver='2.2.4'
+
+_source='git+https://stash.kopano.io/scm/kwa/smime.git'
+_tagPrefix='v'
+
+# template input; name=kopano-webapp-plugin
+
+prepare() {
+    cd ${srcdir}/${pkgname}
+    _setConfig "PLUGIN_SMIME_CIPHER" "OPENSSL_CIPHER_AES_256_CBC" config.php
+}

@@ -1,0 +1,7 @@
+pkgname='kopano-webapp-htmleditor-jodit'
+pkgver='0.2.0'
+
+_source='git+https://stash.kopano.io/scm/kwa/htmleditor-jodit.git'
+_tagPrefix='v'
+
+# template input; name=kopano-webapp-plugin

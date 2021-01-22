@@ -1,0 +1,167 @@
+# https://wiki.archlinux.org/index.php/Arch_package_guidelines
+#_binDir=
+#_confDir=
+
+if [ -z "${_basePkgName}" ];
+then
+    _basePkgName="${pkgname}"
+fi
+_docDir=usr/share/doc/${_basePkgName}
+_stateDir=var/lib/${_basePkgName}
+_logDir=var/log/${_basePkgName}
+_licenseDir=usr/share/licenses/${_basePkgName}
+
+_commonPermissions='u=rwx,g=rx,o=rx u=rw,g=r,o=r'
+_securePermissions='u=rwx,g=rx,o= u=rw,g=r,o='
+
+
+# Strictly Formatted Installation
+#
+# Known system -parent- directories are created and rights are
+# copied from local system.
+#
+### Files
+#
+# (1) _install user:group ${_commonPermissions} newFile destDir/
+#     * Create Empty File In Destination-Directory
+#     => destDir/newFile
+#
+# (2) _install user:group ${_commonPermissions} sourceFile destDir/
+#     * Copy Source-File Into Destination-Directory
+#     => destDir/sourcFileName
+#
+# (3) _install user:group ${_commonPermissions} sourceFile destDir/destFileName
+#     * Copy Source-File Into Destinatin-Directory With New Name
+#     => destDir/destFileName
+#
+### Directories
+# Leaf directory are created and rights are applied.
+#
+# (4) _install user:group ${_commonPermissions} destDir/newDir
+#     * Create New Directory
+#     => destDir/newDir
+#
+# (5) _install user:group ${_commonPermissions} sourceDir destDir/
+#     * Copy Source-Directory Into Destination-Directory
+#     => destDir/sourceDirName
+#
+# (6) _install user:group ${_commonPermissions} sourceDir destDir
+#     * Copy Content of Source-Directory Into Destination-Directory
+#     => destDir/sourceDirContent
+#
+# https://www.shellbefehle.de/befehle/chmod/
+_install() {
+    local _chown="$1"
+    local _chmodDir="$2"
+    local _chmodFile="$3"
+
+    ### Directories
+    # (4) Create New Directory
+    if [ -z "$5" ];
+    then
+	local _dest="$4"
+	_mkParentDir "${_dest}"
+	if [ ! -e "${_dest}" ];
+	then
+	    mkdir "${_dest}"
+	fi
+	chown ${_chown} ${_dest}
+	chmod "${_chmodDir}" ${_dest}
+	return 0
+    fi
+
+    local _source=$4
+    local _dest=$5
+    if [ -d "${_source}" ];
+    then
+	if [[ ${_dest} == */ ]];
+	then
+	    # (5) Copy Source-Directory Into Destination-Directory
+	    _dest="${_dest}$(basename ${_source})"
+	fi
+
+	_mkParentDir "${_dest}"
+
+	# (5),(6) Copy Content of Source-Directory Into Destination-Directory
+	if [ ! -e "${_dest}" ];
+	then
+	    mkdir "${_dest}"
+	fi
+	cp -fRT ${_source} ${_dest}
+	find ${_dest} -exec chown "${_chown}" {} \;
+	find ${_dest} -type f -exec chmod "${_chmodFile}" {} \;
+	find ${_dest} -type d -exec chmod "${_chmodDir}" {} \;
+	return 0
+    fi
+
+    ### Files
+    if [[ ${_dest} == */ ]];
+    then
+	# (2) Copy Source-File Into Destination-Directory
+	_dest=${_dest}$(basename ${_source})
+    fi
+
+    _mkParentDir "${_dest}"
+    if [ ! -f "${_source}" ];
+    then
+	# (1) Create Empty File In Destination-Directory
+	touch ${_dest}
+    else
+	# (1),(3) Copy Source-File Into Destinatin-Directory With New Name
+	cp -fL ${_source} ${_dest}
+    fi
+    chown ${_chown} ${_dest}
+    chmod "${_chmodFile}" ${_dest}
+}
+
+# Creates known System -parent- directories and copies
+# permissions.
+_mkParentDir() {
+    local _destParent="$(dirname $1)"
+    if [ -e "${_destParent}" ];
+    then
+	return 0
+    fi
+
+    # Check System Directory
+    find / -maxdepth 1 -mindepth 1 -type d -print0 | while read -d $'\0' _rootDir
+    do
+        if [[ "${_destParent}" == *${_rootDir}* ]];
+        then
+	    _destSystemPath=$(echo ${_destParent} | grep -o "${_rootDir}.*")
+	    if [ -d "${_destSystemPath}" ];
+	    then
+		mkdir -p ${_destParent}
+		chmod --reference=${_destSystemPath} ${_destParent}
+		chown --reference=${_destSystemPath} ${_destParent}
+		break;
+	    fi
+	fi
+    done
+
+    if [ ! -e "${_destParent}" ];
+    then
+	_knownSystemDirectories=(
+	    'usr/share/webapps'
+	    'etc/webapps'
+				)
+	for _knownSystemDirectory in "${_knownSystemDirectories[@]}"
+	do
+	    if [[ ${_destParent} == *${_knownSystemDirectory} ]];
+	    then
+		mkdir -p ${_destParent}
+		break;
+	    fi
+	done
+    fi
+
+    if [ ! -e "${_destParent}" ];
+    then
+	echo "Parent not found (${_destParent}). Maybe its a not known System-Directory:"
+	for _systemDirectory in "${_systemDirectories[@]}"
+	do
+	    echo "   ${_systemDirectory}"
+	done
+	exit 1
+    fi
+}

@@ -1,0 +1,11 @@
+pkgname='kopano-webapp-files-smb-backend'
+pkgver='4.0.0'
+
+_source='git+https://stash.kopano.io/scm/kwa/files-smb-backend.git'
+_tagPrefix='v'
+
+depends=(
+    'kopano-webapp-files'
+	)
+
+# template input; name=kopano-webapp-plugin

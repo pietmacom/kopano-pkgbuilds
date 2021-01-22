@@ -1,0 +1,174 @@
+# _source=
+# _tagPrefix=kopanocore-
+
+_pluginName=${_basePkgName//kopano-webapp-/}
+
+pkgrel=1
+groups=(
+    'kopano'
+    'kopano-webapp-plugins'
+	)
+arch=(
+    'any'
+     )
+
+manifestXml() {
+    _manifestXmlFile="src/${pkgname}/manifest.xml"
+    if [ -e "${_manifestXmlFile}" ];
+    then
+        xmllint --xpath "string(/plugin/info/$1)" ${_manifestXmlFile}
+    else
+	echo
+    fi
+}
+pkgdesc="$(manifestXml 'description')"
+url="$(manifestXml 'authorURL')"
+
+for _licenseFile in AGPL-3
+do
+    if [ -e "src/${pkgname}/${_licenseFile}" ];
+    then
+	license+=('AGPL-3')
+    fi
+done
+
+# template input; name=base-scm
+source+=(
+    "${pkgname}::${_source}${_sourceBranch}"
+	)
+md5sums+=(
+    'SKIP'
+	)
+
+_phpIni="${_basePkgName}.ini"
+if [ -e "${_phpIni}" ];
+then
+    source+=(
+	"${_phpIni}"
+	    )
+    md5sums+=(
+	"$(md5sum ${_phpIni})"
+	     )
+fi
+
+makedepends+=(
+    # WEBAPP: https://stash.kopano.io/projects/KW/repos/kopano-webapp/browse/README.md
+    'apache-ant'
+    'libxml2'
+
+    # PKGBUILD
+    'git'
+    'gzip'
+             )
+depends+=(
+    'kopano-webapp'
+	 )
+
+if [ -f 'install' ];
+then
+    install='install'
+fi
+
+
+# template input; name=base-build-webapp
+
+if [ -f "src/${pkgname}/config.php" ];
+then
+    backup=(
+	"${_confDir}/config.php"
+	   )
+fi
+
+build() {
+    # Build-Environment
+    _kopanoWebappDir="${srcdir}/kopano-webapp"
+    cp -R /usr/share/webapps/kopano-webapp \
+	${_kopanoWebappDir}
+    cp -R /usr/share/doc/kopano-webapp/tools \
+	${_kopanoWebappDir}/
+    mkdir -p ${_kopanoWebappDir}/plugins
+    mkdir -p ${_kopanoWebappDir}/deploy
+
+    cp -R ${srcdir}/${pkgname} \
+	kopano-webapp/plugins/${_pluginName}
+    cd kopano-webapp/plugins/${_pluginName}
+    if [ -f 'Makefile' ];
+    then
+	# htmleditor-quill, htmleditor-jodit, htmleditor-minimaltiny is using DESTDIR ?= deploy
+	# SMIME is using DEPLOY instead of standard variable DESTDIR
+	make deploy \
+	    DESTDIR="../../deploy/plugins/${_pluginName}" \
+	    DEPLOY="../../deploy/plugins/${_pluginName}"
+
+    elif [ -f "build.xml" ];
+    then
+	# Fetchmail is using different root-, target-folder
+	ant deploy \
+	    -Droot-folder="$(pwd)/../../" \
+	    -Dtarget-folder="$(pwd)/../../deploy/plugins"
+
+    else
+	echo "Nothing to build."
+
+    fi
+}
+
+package() {
+    # Override
+    _binDir=usr/share/webapps/kopano-webapp/plugins/${_pluginName}
+
+    # BIN
+    cd ${srcdir}/kopano-webapp/deploy/plugins/${_pluginName}
+    _install root:root ${_commonPermissions} . \
+        ${pkgdir}/${_binDir}
+    _compressStatic ${pkgdir}/${_binDir}
+
+    # CONF
+    if [ -e "${pkgdir}/${_binDir}/config.php" ];
+    then
+        cp ${pkgdir}/${_binDir}/config.php \
+	    ${pkgdir}/${_binDir}/config.php.dist
+	_install http:http ${_securePermissions} ${pkgdir}/${_confDir}
+	_install http:http ${_securePermissions} ${pkgdir}/${_binDir}/config.php \
+	    ${pkgdir}/${_confDir}/
+        ln -sf ${_confDir}/config.php \
+	    ${pkgdir}/${_binDir}/config.php
+    fi
+
+    # DOC
+    if [ -e "${srcdir}/${_phpIni}" ];
+    then
+	_install root:root ${_commonPermissions} ${pkgdir}/${_docDir}
+	_install root:root ${_commonPermissions} ${srcdir}/${_phpIni} \
+	    ${pkgdir}/${_docDir}/
+    fi
+
+    # LICENSE
+    for _licenseFile in LICENSE.txt AGPL-3
+    do
+	if [ -e "${pkgdir}/${_binDir}/${_licenseFile}" ];
+	then
+	    _install root:root ${_commonPermissions} ${pkgdir}/${_licenseDir}
+	    _install root:root ${_commonPermissions} ${pkgdir}/${_binDir}/${_licenseFile} \
+		${pkgdir}/${_licenseDir}/
+	fi
+    done
+
+    # STATE
+    _install http:http ${_securePermissions} ${pkgdir}/${_stateDir}
+
+    # OTHER: PHP
+    if [ -e '${srcdir}/${_phpIni}' ];
+    then
+	_install root:root ${_commonPermissions} ${srcdir}/${_phpIni} \
+	    ${pkgdir}/etc/php/conf.d/
+    fi
+}
+
+# _setConfig PLUGIN_MDM_USER_DEFAULT_ENABLE_MDM true config.php
+_setConfig() {
+    local _configAttribute="$1"
+    local _configValue="$2"
+    local _configFile="$(echo $3 | sed 's|\"|\\"|g')"
+    sed -i -e "s|\(${_configAttribute}', \)\(.*\)\();$\)|\1${_configValue}\3|" ${_configFile}
+}

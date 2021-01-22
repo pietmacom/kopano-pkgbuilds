@@ -1,0 +1,3 @@
+_binDir=usr/share/${_basePkgName}
+_confDir=etc/${_basePkgName}
+# template input; name=base-build

@@ -1,0 +1,13 @@
+pkgname='kopano-webapp-passwd-git'
+pkgver='1.1'
+
+_source='git+https://github.com/endrepavel/kopano-webapp-passwd.git'
+_tagPrefix=''
+_tagSuffix=''
+
+# template input; name=kopano-webapp-plugin
+
+prepare() {
+    cd ${srcdir}/${pkgname}
+    sed -i 's|Name|name|g' manifest.xml
+}

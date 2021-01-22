@@ -1,0 +1,19 @@
+pkgname='kopano-webapp-files'
+pkgver='4.0.1'
+
+_source='git+https://stash.kopano.io/scm/kwa/files.git'
+_tagPrefix='v'
+_tagSuffix=''
+
+depends=(
+    'php-memcache'
+    'memcached'
+	)
+
+# template input; name=kopano-webapp-plugin
+
+prepare() {
+    cd ${srcdir}/${pkgname}
+    _setConfig "PLUGIN_FILESBROWSER_LOGLEVEL" "'ERROR'" config.php
+    _setConfig "PLUGIN_FILES_CACHE_DIR" "'${_stateDir}'" config.php
+}

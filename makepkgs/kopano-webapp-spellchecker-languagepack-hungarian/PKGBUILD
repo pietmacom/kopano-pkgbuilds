@@ -1,0 +1,17 @@
+pkgname='kopano-webapp-spellchecker-languagepack-nl'
+pkgver='2.0.1'
+
+_source='git+https://github.com/djsmiley05/kopano-webapp-spellschecker-languagepack-hungarian.git'
+_tagPrefix='v'
+
+depends=(
+	'kopano-webapp-spellchecker'
+	)
+
+prepare() {
+    cd ${srcdir}/${pkgname}
+    cp -RT spellchecker-languagepack-hungarian .
+    rm -rf spellchecker-languagepack-hungarian
+}
+
+# template input; name=kopano-webapp-plugin

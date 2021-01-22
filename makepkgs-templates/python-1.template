@@ -1,0 +1,49 @@
+#_module=
+#pkgver=
+
+# https://wiki.archlinux.org/index.php/Python_package_guidelines
+pkgname=${_module,,}
+pkgrel=1
+arch=(
+    'any'
+     )
+source=(
+    "https://pypi.python.org/packages/source/${_module::1}/$_module/$_module-$pkgver.tar.gz"
+        )
+md5sums=(
+    'SKIP'
+        )
+makedepends+=(
+    'python-setuptools'
+            )
+
+pkgInfo() {
+    _pkgInfoFile="src/${_module}-${pkgver}/PKG-INFO"
+    if [ -e "${_pkgInfoFile}" ];
+    then
+        grep -o -m 1 "^$1: .*" ${_pkgInfoFile}  | sed 's|.*: ||'
+    else
+        echo
+    fi
+}
+pkgdesc="$(pkgInfo 'Summary')"
+url="$(pkgInfo 'Home-page')"
+license=("$(pkgInfo 'License')")
+
+_requirementsTxt="src/${_module}-${pkgver}/requirements.txt"
+if [ -e "${_requirementsTxt}" ];
+then
+    while read LINE; do
+	depends+=("python-$(echo $LINE | sed 's|==|=|')'")
+    done < ${_requirementsTxt}
+fi
+
+build() {
+    cd "${srcdir}/${_module}-${pkgver}"
+    python setup.py build
+}
+
+package() {
+    cd "${srcdir}/${_module}-${pkgver}"
+    python setup.py install --root="${pkgdir}" --optimize=1 --skip-build
+}

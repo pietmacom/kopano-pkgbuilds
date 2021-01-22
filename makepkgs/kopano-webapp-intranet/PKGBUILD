@@ -1,0 +1,7 @@
+pkgname='kopano-webapp-intranet'
+pkgver='1.0.1'
+
+_source='git+https://stash.kopano.io/scm/kwa/intranet.git'
+_tagPrefix='v'
+
+# template input; name=kopano-webapp-plugin

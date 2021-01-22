@@ -1,0 +1,17 @@
+pkgname='kopano-webapp-fetchmail-git'
+pkgver='1.0.2'
+
+_source='git+https://github.com/olia-dev/kopano-webapp-fetchmail.git'
+_tagPrefix=''
+_tagSuffix=''
+
+# template input; name=kopano-webapp-plugin
+
+prepare() {
+    cd ${srcdir}/${pkgname}
+
+    sed -i 's|example.config.php|config.php|g' build.xml
+    mv example.config.php config.php
+
+    sed -i 's|<arg value="${tools-folder}"/>|<arg value="${root-folder}/server"/>|' build.xml
+}

@@ -1,14 +1,25 @@
 #!/bin/bash
 
 post_install() {
-    post_install_always
+    # create tempdirs and users from /usr/lib/*.d
+    systemd-sysusers
+    systemd-tmpfiles --create
 
-    # CONFIG
-    # => defaults
-    for cfg in /usr/share/doc/kopano/installed-config/*.cfg; do
-	install --backup=simple --suffix .pacsave -o kopano -g kopano -m 0600  ${cfg} /etc/kopano
-    done
-  
+    chown -R kopano:kopano /etc/kopano
+
+    installdir kopano:kopano 0700 0600 /var/log/kopano
+    installdir kopano:kopano 0700 0600 /var/lib/kopano
+    installdir kopano:kopano 0700 0600 /var/lib/kopano/search
+
+    # due to a bug/exception it's impossible to execute phps mapi modul without browsable dir
+    installdir kopano:kopano 0755 0600 /etc/kopano
+
+    # fix missing python symlink for presence
+    if [[ ! -e "/usr/bin/python" ]];
+    then
+	ln -s /usr/bin/python2 /usr/bin/python
+    fi
+
     return 0
 }
 
@@ -21,13 +32,12 @@ post_upgrade() {
 	    ;;	
     esac
 
-    echo 
+    echo
     echo "Please restart kopano services"
     echo
     echo "   $ systemctl restart kopano-gateway"
     echo "   $ systemctl restart kopano-ical"
-    echo 
-    
+    echo
     return 0
 }
 
@@ -37,33 +47,13 @@ pre_remove() {
 
 # User Scripts
 
-post_install_always() {
-    # create tempdirs and users from /usr/lib/*.d
-    systemd-sysusers
-    systemd-tmpfiles --create
-
-    installdir kopano:kopano 0700 0600 /var/log/kopano
-    installdir kopano:kopano 0700 0600 /var/lib/kopano
-    installdir kopano:kopano 0700 0600 /var/lib/kopano/search
-    installdir kopano:kopano 0700 0600 /var/lib/kopano/presence
-    
-    # due to a bug/exception it's impossible to execute phps mapi modul without browsable dir
-    installdir kopano:kopano 0755 0600 /etc/kopano
-  
-    # fix missing python symlink for presence
-    if [[ ! -e "/usr/bin/python" ]];
-    then
-	ln -s /usr/bin/python2 /usr/bin/python
-    fi
-}
-
 # care about existing files
 installdir() {
     local owner="$1"
     local moddir="$2"
     local modfile="$3"
     local directory="$4"
-    
+
     mkdir -p "$directory"
     find $directory -exec chown "$owner" {} \;
     find $directory -type f -exec chmod "$modfile" {} \;

@@ -1,0 +1,16 @@
+pkgname='kopano-webapp-meet'
+pkgver='0.2.1'
+
+_source='git+https://stash.kopano.io/scm/kwa/meet.git'
+_tagPrefix='v'
+
+# template input; name=kopano-webapp-plugin
+
+prepare() {
+    cd ${srcdir}/${pkgname}
+    sed -i 's|config.php.dist|config.php|g' Makefile package.json
+    mv config.php.dist config.php
+
+    sed -i 's|cp -avR dist ../deploy/plugins/meet|cp -avRT dist/${PACKAGE_NAME}-${VERSION} ../../deploy/plugins/meet|g' Makefile
+    mkdir -p ${srcdir}/kopano-webapp/deploy/plugins/meet
+}

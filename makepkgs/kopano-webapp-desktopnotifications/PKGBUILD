@@ -1,0 +1,7 @@
+pkgname='kopano-webapp-desktopnotifications'
+pkgver='2.0.3'
+
+_source='git+https://stash.kopano.io/scm/kwa/desktopnotifications.git'
+_tagPrefix='v'
+
+# template input; name=kopano-webapp-plugin
