@@ -146,10 +146,10 @@ _officialVmimeParameter() {
 build() {
     cd ${srcdir}/${pkgname}
 
-    set -x
+#    $(_officialVmimeParameter) \
     ./configure \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt#68` \
-    $(_officialVmimeParameter) \
+    VMIME_CFLAGS=$(pkg-config vmime --cflags) VMIME_LIBS=$(pkg-config vmime --libs) \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile` \
     TCMALLOC_CFLAGS=' ' \
     TCMALLOC_LIBS='-ltcmalloc_minimal' \
@@ -173,7 +173,7 @@ build() {
     --localstatedir='/var' \
     --sysconfdir='/etc' \
     --with-searchscripts-prefix='/etc/kopano/searchscripts'
-    set +x
+
     make
 }
 
