@@ -149,7 +149,7 @@ build() {
 #    $(_officialVmimeParameter) \
     ./configure \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt#68` \
-    VMIME_CFLAGS=$(pkg-config vmime --cflags) VMIME_LIBS=$(pkg-config vmime --libs) \
+    VMIME_CFLAGS="$(pkg-config vmime --cflags)" VMIME_LIBS="$(pkg-config vmime --libs)" \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile` \
     TCMALLOC_CFLAGS=' ' \
     TCMALLOC_LIBS='-ltcmalloc_minimal' \
