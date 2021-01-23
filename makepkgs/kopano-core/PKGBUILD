@@ -146,6 +146,7 @@ _officialVmimeParameter() {
 build() {
     cd ${srcdir}/${pkgname}
 
+    set -x
     ./configure \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt#68` \
     $(_officialVmimeParameter) \
@@ -172,7 +173,7 @@ build() {
     --localstatedir='/var' \
     --sysconfdir='/etc' \
     --with-searchscripts-prefix='/etc/kopano/searchscripts'
-
+    set +x
     make
 }
 
