@@ -1,4 +1,4 @@
-pkgname='libvmime'
+pkgname='libvmime-git'
 pkgver=0.9.2
 pkgrel=1
 pkgdesc='A C++ class library for working with MIME messages'
@@ -16,7 +16,8 @@ license=(
 _tagPrefix="v"
 # template input; name=base-scm
 source=(
-    "${pkgname}::git+https://github.com/kisli/vmime.git${_sourceBranch}"
+    "${pkgname}::git+https://github.com/pietmacom/vmime.git${_sourceBranch}"
+#    "${pkgname}::git+https://github.com/kisli/vmime.git${_sourceBranch}"
 	)
 md5sums=(
     'SKIP'
