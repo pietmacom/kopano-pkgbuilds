@@ -85,10 +85,10 @@ _makepkgsClone=(
 
 _makepkgs=(
     # CORE
-    'libiconv#nogit'
+    'libiconv#nosync#nogit'
     'swig#nosync#nogit'
     'libvmime#nosync'
-    'kopano-libvmime'
+#    'kopano-libvmime'
     'kopano-core'
 
     # WEBAPP
@@ -215,14 +215,23 @@ _build() {
     _outH1 "FINISHED"
 }
 
+_outH1 "CHECKOUT"
+    for _makepkgClone in "${_makepkgsClone[@]}"
+    do
+	_makepkgCloneName=${_makepkgClone}
+	_makepkgCloneName="${_makepkgCloneName//*\//}"
+	_makepkgCloneName="${_makepkgCloneName//.git/}"
+	git clone ${_makepkgClone} makepkgs/${_makepkgCloneName}
+    done
+
 _outH1 "PREPARE"
-	_templateDir=$(realpath ./makepkgs-templates)
-	${_templateDir}/recreate-symlinks.sh
-	grep  -R -l "# template " makepkgs | while read _file
-	do
-	    echo "Replacing Template Markers: ${_file}"
-	    makepkg-template --template-dir ${_templateDir} --input ${_file}
-	done
+    _templateDir=$(realpath ./makepkgs-templates)
+    ${_templateDir}/recreate-symlinks.sh
+    grep  -R -l "# template " makepkgs | while read _file
+    do
+	echo "Replacing Template Markers: ${_file}"
+	makepkg-template --template-dir ${_templateDir} --input ${_file}
+    done
 
 
 for _task in "$@"
@@ -270,23 +279,12 @@ do
 	    done;
 	;;
 	"build")
-	    _outH1 "CHECKOUT"
-		for _makepkgClone in "${_makepkgsClone[@]}"
-		do
-		    _makepkgCloneName=${_makepkgClone}
-		    _makepkgCloneName="${_makepkgCloneName//*\//}"
-		    _makepkgCloneName="${_makepkgCloneName//.git/}"
-		    git clone ${_makepkgClone} makepkgs/${_makepkgCloneName}
-		done
-
 	    _outH1 "BUILD"
 		for _makepkg in "${_makepkgs[@]}"
 		do
 		    _makepkgname="${_makepkg//#*/}"
 		    _pkgBuild makepkgs/${_makepkgname}
 		done
-
-	    _outH1 "FINISHED"
 	;;
 	*)
 	;;
