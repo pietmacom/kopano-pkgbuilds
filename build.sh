@@ -87,12 +87,13 @@ clone=(
 build=(
     # CORE
     'libiconv'
-    'libvmime'
+    'swig#nosync#nogit'
+    'libvmime#nosync'
     'kopano-libvmime'
     'kopano-core'
-    
+
     # WEBAPP
-    # OPTIONAL 'jdk'
+    'jdk#optional'
     'kopano-webapp'
 #    'kopano-webapp-gmaps'
 #    'kopano-webapp-contactfax'
@@ -125,6 +126,7 @@ build=(
     'kopano-webapp-passwd'
     'kopano-webapp-fetchmail'
 #    'kopano-webapp-google2fa'
+    'z-push'
       )
 
 _build() {
@@ -149,6 +151,7 @@ _build() {
     _outH1 "BUILD"
 	    # CORE
 	    _pkgBuild makepkgs/libiconv
+	    _pkgBuild makepkgs/swig
 	    _pkgBuild makepkgs/libvmime
 #	    _pkgBuild makepkgs/kopano-libvmime
 	    _pkgBuild makepkgs/kopano-core
@@ -187,6 +190,8 @@ _build() {
 	    _pkgBuild makepkgs/kopano-webapp-passwd
 	    _pkgBuild makepkgs/kopano-webapp-fetchmail
 #	    _pkgBuild makepkgs/kopano-webapp-google2fa
+	    _pkgBuild makepkgs/z-push
+
 
 	    # DEPENDENCIES - KOPANO-CORE
 #	    _pkgBuild makepkgs/php-xapian
@@ -212,7 +217,6 @@ _build() {
 }
 
 makepkgs=(
-    'libvmime'
     'kopano-libvmime'
     'kopano-core'
     'kopano-webapp'
