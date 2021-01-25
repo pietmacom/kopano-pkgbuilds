@@ -85,7 +85,7 @@ _makepkgsClone=(
 
 _makepkgs=(
     # CORE
-    'libiconv'
+    'libiconv#nogit'
     'swig#nosync#nogit'
     'libvmime#nosync'
     'kopano-libvmime'
