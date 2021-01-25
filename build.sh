@@ -77,14 +77,13 @@ _pkgConvertToGitPackage() {
     sed -i "0,/${_pkgnameDeclaration}/s//pkgname='${pkgname}-git'/" ${1}/PKGBUILD
 }
 
-### STARR
+### START
 
-clone=(
+_makepkgsClone=(
     'https://aur.archlinux.org/libiconv.git'
-    'https://aur.archlinux.org/libvmime-git.git'
 	)
 
-build=(
+_makepkgs=(
     # CORE
     'libiconv'
     'swig#nosync#nogit'
@@ -93,7 +92,7 @@ build=(
     'kopano-core'
 
     # WEBAPP
-    'jdk#optional'
+# OPTIONAL 'jdk'
     'kopano-webapp'
 #    'kopano-webapp-gmaps'
 #    'kopano-webapp-contactfax'
@@ -216,43 +215,6 @@ _build() {
     _outH1 "FINISHED"
 }
 
-makepkgs=(
-    'kopano-libvmime'
-    'kopano-core'
-    'kopano-webapp'
-#    'kopano-webapp-gmaps'
-#    'kopano-webapp-contactfax'
-#    'kopano-webapp-pimfolder'
-    'kopano-webapp-nginx'
-    'kopano-webapp-files'
-    'kopano-webapp-files-owncloud-backend'
-    'kopano-webapp-files-smb-backend'
-    'kopano-webapp-filepreview'
-    'kopano-webapp-desktopnotifications'
-#    'kopano-webapp-htmleditor-jodit'
-    'kopano-webapp-htmleditor-minimaltiny'
-    'kopano-webapp-intranet'
-    'kopano-webapp-smime'
-    'kopano-webapp-spellchecker'
-    'kopano-webapp-spellchecker-languagepack-de-at'
-    'kopano-webapp-spellchecker-languagepack-de-ch'
-    'kopano-webapp-spellchecker-languagepack-de-de'
-    'kopano-webapp-spellchecker-languagepack-en-gb'
-    'kopano-webapp-spellchecker-languagepack-en-us'
-    'kopano-webapp-spellchecker-languagepack-es-es'
-    'kopano-webapp-spellchecker-languagepack-fr-fr'
-    'kopano-webapp-spellchecker-languagepack-italian-it'
-    'kopano-webapp-spellchecker-languagepack-nl'
-    'kopano-webapp-spellchecker-languagepack-pl-pl'
-    'kopano-webapp-mdm'
-    'kopano-webapp-mattermost'
-    'kopano-webapp-meet'
-    'kopano-webapp-webmeetings'
-    'kopano-webapp-passwd'
-    'kopano-webapp-fetchmail'
-    'kopano-webapp-google2fa'
-)
-
 _outH1 "PREPARE"
 	_templateDir=$(realpath ./makepkgs-templates)
 	${_templateDir}/recreate-symlinks.sh
@@ -268,12 +230,19 @@ do
     case "${_task}" in
 	"convertToGitPackage")
 	    _outH1 "CONVERT TO GIT PACKAGE"
-	    for makepkg in "${makepkgs[@]}"
+	    for _makepkg in "${_makepkgs[@]}"
 	    do
-		_pkgConvertToGitPackage makepkgs/${makepkg}
+		_makepkgname="${_makepkg//#*/}"
+		if [[ "${_makepkg}"  == *#nogit* ]];
+		then
+		    echo "NO GIT : ${_makepkgname}"
+		    continue
+		fi
+		_pkgConvertToGitPackage makepkgs/${_makepkgname}
 	    done
 	;;
 	"sync")
+	    _outH1 "SYNC"
 	    if [ -z "$(git config --global user.email)" ] \
 		|| [ -z "$(git config --global user.name)" ];
 	    then
@@ -281,10 +250,15 @@ do
 		git config --global user.name "Your Name"
 	    fi
 
-	    for makepkg in "${makepkgs[@]}"
+	    for _makepkg in "${_makepkgs[@]}"
 	    do
-		_outH1 "SYNCING ${makepkg}"
-		_pkgSync makepkgs/${makepkg}
+		_makepkgname="${_makepkg//#*/}"
+		if [[ "${_makepkgpkg}"  == *#nosync* ]];
+		then
+		    echo "NO SYNC : ${_makepkgname}"
+		    continue
+		fi
+		_pkgSync makepkgs/${_makepkgname}
 	    done
 	    cp -R makepkgs-sync /build-target/
 	;;
@@ -296,8 +270,23 @@ do
 	    done;
 	;;
 	"build")
+	    _outH1 "CHECKOUT"
+		for _makepkgClone in "${_makepkgsClone[@]}"
+		do
+		    _makepkgCloneName=${_makepkgClone}
+		    _makepkgCloneName="${_makepkgCloneName//*\//}"
+		    _makepkgCloneName="${_makepkgCloneName//.git/}"
+		    git clone ${_makepkgClone} makepkgs/${_makepkgCloneName}
+		done
+
 	    _outH1 "BUILD"
-	    _build
+		for _makepkg in "${_makepkgs[@]}"
+		do
+		    _makepkgname="${_makepkg//#*/}"
+		    _pkgBuild makepkgs/${_makepkgname}
+		done
+
+	    _outH1 "FINISHED"
 	;;
 	*)
 	;;
