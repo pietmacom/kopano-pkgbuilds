@@ -80,7 +80,7 @@ _pkgConvertToGitPackage() {
 ### START
 
 build_libvmime() {
-
+    echo "nothing"
 }
 
 _makepkgsClone=(
