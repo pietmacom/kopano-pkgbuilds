@@ -79,6 +79,10 @@ _pkgConvertToGitPackage() {
 
 ### START
 
+build_libvmime() {
+
+}
+
 _makepkgsClone=(
     'https://aur.archlinux.org/libiconv.git'
 	)
@@ -87,8 +91,8 @@ _makepkgs=(
     # CORE
     'libiconv#nosync#nogit'
     'swig#nosync#nogit'
-    'libvmime#nosync'
-#    'kopano-libvmime'
+#    'libvmime#nosync'
+    'kopano-libvmime'
     'kopano-core'
 
     # WEBAPP
@@ -128,93 +132,6 @@ _makepkgs=(
     'z-push'
       )
 
-_build() {
-    _outH1 "CHECKOUT"
-	    git clone https://aur.archlinux.org/libiconv.git makepkgs/libiconv
-#	    git clone https://aur.archlinux.org/libvmime-git.git makepkgs/libvmime
-
-	    # ARCHIVE
-	    # php
-	    # gcc
-	    # jdk
-	    # pip2pkgbuild
-#	    git clone https://aur.archlinux.org/python-sleekxmpp.git makepkgs/python-sleekxmpp
-	    #-git clone https://aur.archlinux.org/python2-vobject.git
-	    #git clone https://aur.archlinux.org/php-xapian.git
-	    #git clone https://aur.archlinux.org/python2-minimock.git
-	    #git clone https://aur.archlinux.org/perl-lockfile-simple.git
-
-	    # MAIN PACKAGES
-	    #-git clone ssh://aur@aur.archlinux.org/z-push.git ; cd z-push ; git checkout -b "v2.3.3" 56db7b35459438dc6228b307f0f8855ac7fd9138 ; cd ..
-
-    _outH1 "BUILD"
-	    # CORE
-	    _pkgBuild makepkgs/libiconv
-	    _pkgBuild makepkgs/swig
-	    _pkgBuild makepkgs/libvmime
-#	    _pkgBuild makepkgs/kopano-libvmime
-	    _pkgBuild makepkgs/kopano-core
-
-	    # WEBAPP
-	    # OPTIONAL _pkgBuild makepkgs/jdk
-	    _pkgBuild makepkgs/kopano-webapp
-#	    _pkgBuild makepkgs/kopano-webapp-gmaps
-#	    _pkgBuild makepkgs/kopano-webapp-contactfax
-#	    _pkgBuild makepkgs/kopano-webapp-pimfolder
-	    _pkgBuild makepkgs/kopano-webapp-nginx
-	    _pkgBuild makepkgs/kopano-webapp-files
-	    _pkgBuild makepkgs/kopano-webapp-files-owncloud-backend
-	    _pkgBuild makepkgs/kopano-webapp-files-smb-backend
-	    _pkgBuild makepkgs/kopano-webapp-filepreview
-	    _pkgBuild makepkgs/kopano-webapp-desktopnotifications
-#	    _pkgBuild makepkgs/kopano-webapp-htmleditor-jodit
-	    _pkgBuild makepkgs/kopano-webapp-htmleditor-minimaltiny
-	    _pkgBuild makepkgs/kopano-webapp-intranet
-	    _pkgBuild makepkgs/kopano-webapp-smime
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-de-at
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-de-ch
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-de-de
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-en-gb
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-en-us
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-es-es
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-fr-fr
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-italian-it
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-nl
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-pl-pl
-	    _pkgBuild makepkgs/kopano-webapp-mdm
-	    _pkgBuild makepkgs/kopano-webapp-mattermost
-	    _pkgBuild makepkgs/kopano-webapp-meet
-	    _pkgBuild makepkgs/kopano-webapp-webmeetings
-	    _pkgBuild makepkgs/kopano-webapp-passwd
-	    _pkgBuild makepkgs/kopano-webapp-fetchmail
-#	    _pkgBuild makepkgs/kopano-webapp-google2fa
-	    _pkgBuild makepkgs/z-push
-
-
-	    # DEPENDENCIES - KOPANO-CORE
-#	    _pkgBuild makepkgs/php-xapian
-#	    _pkgBuild makepkgs/python-sleekxmpp
-#	    _pkgBuild makepkgs/python2-minimock
-#	    #-$chroot_build ./makepkgs/python2-vobject
-
-#	    _pkgBuild makepkgs/libical2
-#	    _pkgBuild makepkgs/python2-tlslite
-
-	    # DEPENDENCIES - KOPANO-POSTFIXADMIN
-#	    _pkgBuild makepkgs/perl-lockfile-simple
-	    # MAIN PACKAGES
-
-#	    _pkgBuild makepkgs/z-push
-#	    _pkgBuild makepkgs/kopano-webapp
-
-#	    _pkgBuild makepkgs/kopano-sabre
-#	    _pkgBuild makepkgs/kopano-postfixadmin
-#	    _pkgBuild makepkgs/kopano-service-overview
-
-    _outH1 "FINISHED"
-}
-
 _outH1 "CHECKOUT"
     for _makepkgClone in "${_makepkgsClone[@]}"
     do
@@ -232,7 +149,6 @@ _outH1 "PREPARE"
 	echo "Replacing Template Markers: ${_file}"
 	makepkg-template --template-dir ${_templateDir} --input ${_file}
     done
-
 
 for _task in "$@"
 do
