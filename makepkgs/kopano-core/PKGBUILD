@@ -5,7 +5,7 @@
 # User Manual: http://documentation.kopano.io/user_manual_kopanocore
 # Migration 7.2.1: https://documentation.kopano.io/kopano_migration_manual/KopanoMigrationManual.pdf
 pkgname='kopano-core'
-pkgver='9.0.12'
+pkgver='10.0.7'
 pkgrel='1'
 pkgdesc='Foundation for groupware messaging enabling clients'
 groups=(
@@ -148,11 +148,9 @@ _officialVmimeParameter() {
 build() {
     cd ${srcdir}/${pkgname}
 
-#    $(_officialVmimeParameter) \
     ./configure \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt#68` \
-    VMIME_CFLAGS='-I/usr/include/vmime/'\
-    VMIME_LIBS='-lvmime' \
+    $(_officialVmimeParameter) \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile` \
     TCMALLOC_CFLAGS=' ' \
     TCMALLOC_LIBS='-ltcmalloc_minimal' \
