@@ -27,8 +27,9 @@ makedepends=(
     'git'
 	    )
 
-_tagPrefix="v"
+_tagPrefix="rel-"
 # template input; name=base-scm
+
 source=(
     "${pkgname}::git+https://github.com/swig/swig.git${_sourceBranch}"
 	)
