@@ -5,8 +5,8 @@
 # Contributor: Tom Newsom <Jeepster@gmx.co.uk>
 
 pkgname='swig'
-pkgrel=1
 pkgver=3.0.12
+pkgrel=1
 pkgdesc="Generate scripting interfaces to C/C++ code"
 arch=(
     'armv7l'
@@ -37,14 +37,14 @@ sha1sums=(
 	 )
 
 build() {
-  cd ${srcdir}/${pkgname}
+  cd ${pkgname}
   ./autogen.sh
   ./configure --prefix=/usr
   make
 }
 
 package() {
-  cd ${srcdir}/${pkgname}
+  cd ${pkgname}
   make DESTDIR="${pkgdir}" install
   install -D -m644 LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
   install -D -m644 LICENSE-UNIVERSITIES "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE-UNIVERSITIES
