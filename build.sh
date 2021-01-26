@@ -79,10 +79,6 @@ _pkgConvertToGitPackage() {
 
 ### START
 
-build_libvmime() {
-    echo "nothing"
-}
-
 _makepkgsClone=(
     'https://aur.archlinux.org/libiconv.git'
 	)
@@ -95,8 +91,11 @@ _makepkgs=(
     'kopano-libvmime'
     'kopano-core'
 
+    # z-push
+    'z-push'
+
     # WEBAPP
-# OPTIONAL 'jdk'
+# OPTIONAL 'jdk#nosync#nogit'
     'kopano-webapp'
 #    'kopano-webapp-gmaps'
 #    'kopano-webapp-contactfax'
@@ -129,8 +128,23 @@ _makepkgs=(
     'kopano-webapp-passwd'
     'kopano-webapp-fetchmail'
 #    'kopano-webapp-google2fa'
-    'z-push'
       )
+
+prebuild_kopano_libvmime() {
+    if [ "$(git branch  --show-current)" != "master" ];
+    then
+	sed -i "s|https://github.com/Kopano-dev/vmime.git|https://github.com/pietmacom/kopano-vmime.git|" \
+	    makepkgs/kopano-libvmime/PKGBUILD
+    fi
+}
+
+prebuild_kopano_core() {
+    if [ "$(git branch  --show-current)" != "master" ];
+    then
+	sed -i "s|https://stash.kopano.io/scm/kc/kopanocore.git|https://github.com/pietmacom/kopano-core.git|" \
+	    makepkgs/kopano-core/PKGBUILD
+    fi
+}
 
 _outH1 "CHECKOUT"
     for _makepkgClone in "${_makepkgsClone[@]}"
@@ -149,6 +163,7 @@ _outH1 "PREPARE"
 	echo "Replacing Template Markers: ${_file}"
 	makepkg-template --template-dir ${_templateDir} --input ${_file}
     done
+
 
 for _task in "$@"
 do
@@ -199,7 +214,28 @@ do
 		for _makepkg in "${_makepkgs[@]}"
 		do
 		    _makepkgname="${_makepkg//#*/}"
-		    _pkgBuild makepkgs/${_makepkgname}
+		    _prebuildFunction="prebuild_${_makepkgname//-/_}"
+		    if [ "$(LC_ALL=C type -t ${_prebuildFunction})" == "function" ];
+		    then
+			_outH1 "Pre-Build ${_makepkgname}"
+			${_prebuildFunction}
+		    fi
+
+		    _builFunction="build_${_makepkgname//-/_}"
+		    if [ "$(LC_ALL=C type -t ${_buildFunction})" == "function" ];
+		    then
+			_outH1 "Build ${_makepkgname}"
+			${_buildFunction}
+		    else
+			_pkgBuild makepkgs/${_makepkgname}
+		    fi
+
+		    _postbuildFunction="postbuild_${_makepkgname//-/_}"
+		    if [ "$(LC_ALL=C type -t ${_postbuildFunction})" == "function" ];
+		    then
+			_outH1 "Post-Build ${_makepkgname}"
+			${_postbuildFunction}
+		    fi
 		done
 	;;
 	*)

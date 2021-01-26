@@ -16,8 +16,7 @@ license=(
 _tagPrefix="v"
 # template input; name=base-scm
 source=(
-    "${pkgname}::git+https://github.com/pietmacom/vmime.git${_sourceBranch}"
-#    "${pkgname}::git+https://github.com/kisli/vmime.git${_sourceBranch}"
+    "${pkgname}::git+https://github.com/kisli/vmime.git${_sourceBranch}"
 	)
 md5sums=(
     'SKIP'
