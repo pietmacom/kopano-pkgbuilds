@@ -91,6 +91,9 @@ _makepkgs=(
     'kopano-libvmime'
     'kopano-core'
 
+    # z-push
+    'z-push'
+
     # WEBAPP
 # OPTIONAL 'jdk#nosync#nogit'
     'kopano-webapp'
@@ -125,7 +128,6 @@ _makepkgs=(
     'kopano-webapp-passwd'
     'kopano-webapp-fetchmail'
 #    'kopano-webapp-google2fa'
-    'z-push'
       )
 
 prebuild_kopano_libvmime() {
@@ -191,7 +193,7 @@ do
 	    for _makepkg in "${_makepkgs[@]}"
 	    do
 		_makepkgname="${_makepkg//#*/}"
-		if [[ "${_makepkgpkg}"  == *#nosync* ]];
+		if [[ "${_makepkg}"  == *#nosync* ]];
 		then
 		    echo "NO SYNC : ${_makepkgname}"
 		    continue
