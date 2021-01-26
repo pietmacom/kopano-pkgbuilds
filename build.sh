@@ -193,7 +193,7 @@ do
 	    for _makepkg in "${_makepkgs[@]}"
 	    do
 		_makepkgname="${_makepkg//#*/}"
-		if [[ "${_makepkgpkg}"  == *#nosync* ]];
+		if [[ "${_makepkg}"  == *#nosync* ]];
 		then
 		    echo "NO SYNC : ${_makepkgname}"
 		    continue
