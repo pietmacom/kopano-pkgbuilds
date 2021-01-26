@@ -79,9 +79,7 @@ _pkgConvertToGitPackage() {
 
 ### START
 
-build_libvmime() {
-    echo "nothing"
-}
+
 
 _makepkgsClone=(
     'https://aur.archlinux.org/libiconv.git'
@@ -132,6 +130,22 @@ _makepkgs=(
     'z-push'
       )
 
+prebuild_kopano-libvmime() {
+    if [ "$(git branch  --show-current)" != "master" ];
+    then
+	sed -i "s|https://github.com/Kopano-dev/vmime.git|https://github.com/pietmacom/kopano-vmime.git|" \
+	    makepkgs/kopano-libvmime/PKGBUILD
+    fi
+}
+
+prebuild_kopano-kopano-core() {
+    if [ "$(git branch  --show-current)" != "master" ];
+    then
+	sed -i "s|https://stash.kopano.io/scm/kc/kopanocore.git|https://github.com/pietmacom/kopano-core.git|" \
+	    makepkgs/kopano-core/PKGBUILD
+    fi
+}
+
 _outH1 "CHECKOUT"
     for _makepkgClone in "${_makepkgsClone[@]}"
     do
@@ -149,6 +163,7 @@ _outH1 "PREPARE"
 	echo "Replacing Template Markers: ${_file}"
 	makepkg-template --template-dir ${_templateDir} --input ${_file}
     done
+
 
 for _task in "$@"
 do
@@ -199,7 +214,28 @@ do
 		for _makepkg in "${_makepkgs[@]}"
 		do
 		    _makepkgname="${_makepkg//#*/}"
-		    _pkgBuild makepkgs/${_makepkgname}
+		    _prebuildFunction="prebuild_${_makepkgname}"
+		    if [ "$(LC_ALL=C type -t ${_prebuildFunction})" == "function" ];
+		    then
+			_outH1 "Pre-Build ${_makepkgname}"
+			${_prebuildFunction}
+		    fi
+
+		    _builFunction="build_${_makepkgname}"
+		    if [ "$(LC_ALL=C type -t ${_buildFunction})" == "function" ];
+		    then
+			_outH1 "Build ${_makepkgname}"
+			${_buildFunction}
+		    else
+			_pkgBuild makepkgs/${_makepkgname}
+		    fi
+
+		    _postbuildFunction="postbuild_${_makepkgname}"
+		    if [ "$(LC_ALL=C type -t ${_postbuildFunction})" == "function" ];
+		    then
+			_outH1 "Post-Build ${_makepkgname}"
+			${_postbuildFunction}
+		    fi
 		done
 	;;
 	*)
