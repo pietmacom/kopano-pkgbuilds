@@ -130,7 +130,7 @@ _makepkgs=(
     'z-push'
       )
 
-prebuild_kopano-libvmime() {
+prebuild_kopano_libvmime() {
     if [ "$(git branch  --show-current)" != "master" ];
     then
 	sed -i "s|https://github.com/Kopano-dev/vmime.git|https://github.com/pietmacom/kopano-vmime.git|" \
@@ -138,7 +138,7 @@ prebuild_kopano-libvmime() {
     fi
 }
 
-prebuild_kopano-kopano-core() {
+prebuild_kopano_core() {
     if [ "$(git branch  --show-current)" != "master" ];
     then
 	sed -i "s|https://stash.kopano.io/scm/kc/kopanocore.git|https://github.com/pietmacom/kopano-core.git|" \
@@ -214,14 +214,14 @@ do
 		for _makepkg in "${_makepkgs[@]}"
 		do
 		    _makepkgname="${_makepkg//#*/}"
-		    _prebuildFunction="prebuild_${_makepkgname}"
+		    _prebuildFunction="prebuild_${_makepkgname//-/_}"
 		    if [ "$(LC_ALL=C type -t ${_prebuildFunction})" == "function" ];
 		    then
 			_outH1 "Pre-Build ${_makepkgname}"
 			${_prebuildFunction}
 		    fi
 
-		    _builFunction="build_${_makepkgname}"
+		    _builFunction="build_${_makepkgname//-/_}"
 		    if [ "$(LC_ALL=C type -t ${_buildFunction})" == "function" ];
 		    then
 			_outH1 "Build ${_makepkgname}"
@@ -230,7 +230,7 @@ do
 			_pkgBuild makepkgs/${_makepkgname}
 		    fi
 
-		    _postbuildFunction="postbuild_${_makepkgname}"
+		    _postbuildFunction="postbuild_${_makepkgname//-/_}"
 		    if [ "$(LC_ALL=C type -t ${_postbuildFunction})" == "function" ];
 		    then
 			_outH1 "Post-Build ${_makepkgname}"
