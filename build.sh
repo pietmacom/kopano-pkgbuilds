@@ -79,8 +79,6 @@ _pkgConvertToGitPackage() {
 
 ### START
 
-
-
 _makepkgsClone=(
     'https://aur.archlinux.org/libiconv.git'
 	)
@@ -94,7 +92,7 @@ _makepkgs=(
     'kopano-core'
 
     # WEBAPP
-# OPTIONAL 'jdk'
+# OPTIONAL 'jdk#nosync#nogit'
     'kopano-webapp'
 #    'kopano-webapp-gmaps'
 #    'kopano-webapp-contactfax'
