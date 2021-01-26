@@ -29,6 +29,7 @@ _pkgBuild() {
     cd ${_pwd}
 }
 
+# TODO Increment pkgrel
 _pkgSync() {
     _pwd=$(pwd)
     _makepkg=$(realpath ${1})
