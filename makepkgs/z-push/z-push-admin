@@ -1,2 +1,0 @@
-#!/bin/bash
-/usr/share/webapps/z-push/z-push-admin.php "$@"
