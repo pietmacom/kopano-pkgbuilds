@@ -20,7 +20,7 @@
  
  Anyways you can build the releases packages of day they recently compiled successfully. Checkout the branch with the latest timestamp and compile.
  
- The script is setting up a Docker-Container with an Archlinux of that day and compile everything.
+ The script is setting up a Docker-Container with an Archlinux of that day and going to compile everything.
  
  $ ./build-docker.sh build
  
