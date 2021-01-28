@@ -1,8 +1,6 @@
 # _source=
 # _tagPrefix=kopanocore-
 
-_pluginName=${_basePkgName//kopano-webapp-/}
-
 pkgrel=1
 groups=(
     'kopano'
@@ -33,6 +31,7 @@ do
 done
 
 # template input; name=base-scm
+
 source+=(
     "${pkgname}::${_source}${_sourceBranch}"
 	)
@@ -79,6 +78,7 @@ then
 	   )
 fi
 
+_pluginName=${_basePkgName//kopano-webapp-/}
 build() {
     # Build-Environment
     _kopanoWebappDir="${srcdir}/kopano-webapp"
