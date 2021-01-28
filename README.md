@@ -8,11 +8,21 @@
  
  $ git submodule update --remote
  
-## Build Packages From Their Delevelopment/Master-Branch
+## Build Packages
+### From Delevelopment/Master-Branch
  $ ./build-docker.sh convertToGitPackage build
  
-### Without Docker
+####  Without Docker
  $ ./build.sh convertToGitPackage build
+ 
+### From Latest Release-Tag
+ Code from latest releases and their depencencies are fixed. For this reason they will have dependencies to older packages/libraries. This won't get along with Archlinuxs rolling release. The build will likely fail 
+ 
+ Anyways you can build the releases packages of day they recently compiled successfully. Checkout the branch with the latest timestamp and compile.
+ 
+ The script is setting up a Docker-Container with an Archlinux of that day and compile everything.
+ 
+ $ ./build-docker.sh build
  
 ## Milestones/Plans
  - (DONE) Make the existing packages compile with branch name => $VERSION
