@@ -5,7 +5,7 @@
 # User Manual: http://documentation.kopano.io/user_manual_kopanocore
 # Migration 7.2.1: https://documentation.kopano.io/kopano_migration_manual/KopanoMigrationManual.pdf
 pkgname='kopano-core'
-pkgver='9.0.12'
+pkgver='10.0.7'
 pkgrel='1'
 pkgdesc='Foundation for groupware messaging enabling clients'
 groups=(
@@ -64,6 +64,7 @@ makedepends=(
     #
     # Optional build-time dependencies: Unmentioned
     'libhx>=1.10'
+    'swig<4' # https://stash.kopano.io/projects/KC/repos/kopanocore/commits/c52118c180757e3c1d7bb9b44840edc526b6ca28
     #
     # Optional build-time dependencies: Unsupported
     # 'libs3' # src:https://aur.archlinux.org/packages/libs3-git/
@@ -148,11 +149,9 @@ _officialVmimeParameter() {
 build() {
     cd ${srcdir}/${pkgname}
 
-#    $(_officialVmimeParameter) \
     ./configure \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt#68` \
-    VMIME_CFLAGS='-I/usr/include/vmime/'\
-    VMIME_LIBS='-lvmime' \
+    $(_officialVmimeParameter) \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/Jenkinsfile` \
     TCMALLOC_CFLAGS=' ' \
     TCMALLOC_LIBS='-ltcmalloc_minimal' \

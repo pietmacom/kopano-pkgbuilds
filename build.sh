@@ -6,6 +6,15 @@ _outH1() {
     echo
 }
 
+_execFunction() {
+    _functionName=${1}
+    if [ "$(LC_ALL=C type -t ${_functionName})" == "function" ];
+    then
+	_outH1 "Execute ${_functionName}"
+	${_functionName}
+    fi
+}
+
 _pkgBuild() {
     _pwd=$(pwd)
     cd $1
@@ -29,6 +38,7 @@ _pkgBuild() {
     cd ${_pwd}
 }
 
+# TODO Increment pkgrel
 _pkgSync() {
     _pwd=$(pwd)
     _makepkg=$(realpath ${1})
@@ -77,22 +87,25 @@ _pkgConvertToGitPackage() {
     sed -i "0,/${_pkgnameDeclaration}/s//pkgname='${pkgname}-git'/" ${1}/PKGBUILD
 }
 
-### STARR
+### START
 
-clone=(
+makepkgsClone=(
     'https://aur.archlinux.org/libiconv.git'
-    'https://aur.archlinux.org/libvmime-git.git'
 	)
 
-build=(
+makepkgs=(
     # CORE
-    'libiconv'
-    'libvmime'
+    'libiconv#nosync#nogit'
+    'swig#nosync#nogit'
+#    'libvmime#nosync'
     'kopano-libvmime'
     'kopano-core'
-    
+
+    # z-push
+    'z-push'
+
     # WEBAPP
-    # OPTIONAL 'jdk'
+# OPTIONAL 'jdk#nosync#nogit'
     'kopano-webapp'
 #    'kopano-webapp-gmaps'
 #    'kopano-webapp-contactfax'
@@ -127,136 +140,45 @@ build=(
 #    'kopano-webapp-google2fa'
       )
 
-_build() {
-    _outH1 "CHECKOUT"
-	    git clone https://aur.archlinux.org/libiconv.git makepkgs/libiconv
-#	    git clone https://aur.archlinux.org/libvmime-git.git makepkgs/libvmime
-
-	    # ARCHIVE
-	    # php
-	    # gcc
-	    # jdk
-	    # pip2pkgbuild
-#	    git clone https://aur.archlinux.org/python-sleekxmpp.git makepkgs/python-sleekxmpp
-	    #-git clone https://aur.archlinux.org/python2-vobject.git
-	    #git clone https://aur.archlinux.org/php-xapian.git
-	    #git clone https://aur.archlinux.org/python2-minimock.git
-	    #git clone https://aur.archlinux.org/perl-lockfile-simple.git
-
-	    # MAIN PACKAGES
-	    #-git clone ssh://aur@aur.archlinux.org/z-push.git ; cd z-push ; git checkout -b "v2.3.3" 56db7b35459438dc6228b307f0f8855ac7fd9138 ; cd ..
-
-    _outH1 "BUILD"
-	    # CORE
-	    _pkgBuild makepkgs/libiconv
-	    _pkgBuild makepkgs/libvmime
-#	    _pkgBuild makepkgs/kopano-libvmime
-	    _pkgBuild makepkgs/kopano-core
-
-	    # WEBAPP
-	    # OPTIONAL _pkgBuild makepkgs/jdk
-	    _pkgBuild makepkgs/kopano-webapp
-#	    _pkgBuild makepkgs/kopano-webapp-gmaps
-#	    _pkgBuild makepkgs/kopano-webapp-contactfax
-#	    _pkgBuild makepkgs/kopano-webapp-pimfolder
-	    _pkgBuild makepkgs/kopano-webapp-nginx
-	    _pkgBuild makepkgs/kopano-webapp-files
-	    _pkgBuild makepkgs/kopano-webapp-files-owncloud-backend
-	    _pkgBuild makepkgs/kopano-webapp-files-smb-backend
-	    _pkgBuild makepkgs/kopano-webapp-filepreview
-	    _pkgBuild makepkgs/kopano-webapp-desktopnotifications
-#	    _pkgBuild makepkgs/kopano-webapp-htmleditor-jodit
-	    _pkgBuild makepkgs/kopano-webapp-htmleditor-minimaltiny
-	    _pkgBuild makepkgs/kopano-webapp-intranet
-	    _pkgBuild makepkgs/kopano-webapp-smime
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-de-at
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-de-ch
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-de-de
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-en-gb
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-en-us
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-es-es
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-fr-fr
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-italian-it
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-nl
-	    _pkgBuild makepkgs/kopano-webapp-spellchecker-languagepack-pl-pl
-	    _pkgBuild makepkgs/kopano-webapp-mdm
-	    _pkgBuild makepkgs/kopano-webapp-mattermost
-	    _pkgBuild makepkgs/kopano-webapp-meet
-	    _pkgBuild makepkgs/kopano-webapp-webmeetings
-	    _pkgBuild makepkgs/kopano-webapp-passwd
-	    _pkgBuild makepkgs/kopano-webapp-fetchmail
-#	    _pkgBuild makepkgs/kopano-webapp-google2fa
-
-	    # DEPENDENCIES - KOPANO-CORE
-#	    _pkgBuild makepkgs/php-xapian
-#	    _pkgBuild makepkgs/python-sleekxmpp
-#	    _pkgBuild makepkgs/python2-minimock
-#	    #-$chroot_build ./makepkgs/python2-vobject
-
-#	    _pkgBuild makepkgs/libical2
-#	    _pkgBuild makepkgs/python2-tlslite
-
-	    # DEPENDENCIES - KOPANO-POSTFIXADMIN
-#	    _pkgBuild makepkgs/perl-lockfile-simple
-	    # MAIN PACKAGES
-
-#	    _pkgBuild makepkgs/z-push
-#	    _pkgBuild makepkgs/kopano-webapp
-
-#	    _pkgBuild makepkgs/kopano-sabre
-#	    _pkgBuild makepkgs/kopano-postfixadmin
-#	    _pkgBuild makepkgs/kopano-service-overview
-
-    _outH1 "FINISHED"
+prebuild_kopano_libvmime() {
+#    if [ "$(git branch  --show-current)" != "master" ];
+#    then
+	sed -i "s|https://github.com/Kopano-dev/vmime.git|https://github.com/pietmacom/kopano-vmime.git|" \
+	    makepkgs/kopano-libvmime/PKGBUILD
+#    fi
+}
+presync_kopano_libvmime() {
+    prebuild_kopano_libvmime
 }
 
-makepkgs=(
-    'libvmime'
-    'kopano-libvmime'
-    'kopano-core'
-    'kopano-webapp'
-#    'kopano-webapp-gmaps'
-#    'kopano-webapp-contactfax'
-#    'kopano-webapp-pimfolder'
-    'kopano-webapp-nginx'
-    'kopano-webapp-files'
-    'kopano-webapp-files-owncloud-backend'
-    'kopano-webapp-files-smb-backend'
-    'kopano-webapp-filepreview'
-    'kopano-webapp-desktopnotifications'
-#    'kopano-webapp-htmleditor-jodit'
-    'kopano-webapp-htmleditor-minimaltiny'
-    'kopano-webapp-intranet'
-    'kopano-webapp-smime'
-    'kopano-webapp-spellchecker'
-    'kopano-webapp-spellchecker-languagepack-de-at'
-    'kopano-webapp-spellchecker-languagepack-de-ch'
-    'kopano-webapp-spellchecker-languagepack-de-de'
-    'kopano-webapp-spellchecker-languagepack-en-gb'
-    'kopano-webapp-spellchecker-languagepack-en-us'
-    'kopano-webapp-spellchecker-languagepack-es-es'
-    'kopano-webapp-spellchecker-languagepack-fr-fr'
-    'kopano-webapp-spellchecker-languagepack-italian-it'
-    'kopano-webapp-spellchecker-languagepack-nl'
-    'kopano-webapp-spellchecker-languagepack-pl-pl'
-    'kopano-webapp-mdm'
-    'kopano-webapp-mattermost'
-    'kopano-webapp-meet'
-    'kopano-webapp-webmeetings'
-    'kopano-webapp-passwd'
-    'kopano-webapp-fetchmail'
-    'kopano-webapp-google2fa'
-)
+prebuild_kopano_core() {
+#    if [ "$(git branch  --show-current)" != "master" ];
+#    then
+	sed -i "s|https://stash.kopano.io/scm/kc/kopanocore.git|https://github.com/pietmacom/kopano-core.git|" \
+	    makepkgs/kopano-core/PKGBUILD
+#    fi
+}
+presync_kopano_core() {
+    prebuild_kopano_core
+}
+
+_outH1 "CHECKOUT"
+    for makepkgClone in "${makepkgsClone[@]}"
+    do
+	makepkgCloneName=${makepkgClone}
+	makepkgCloneName="${makepkgCloneName//*\//}"
+	makepkgCloneName="${makepkgCloneName//.git/}"
+	git clone ${makepkgClone} makepkgs/${makepkgCloneName}
+    done
 
 _outH1 "PREPARE"
-	_templateDir=$(realpath ./makepkgs-templates)
-	${_templateDir}/recreate-symlinks.sh
-	grep  -R -l "# template " makepkgs | while read _file
-	do
-	    echo "Replacing Template Markers: ${_file}"
-	    makepkg-template --template-dir ${_templateDir} --input ${_file}
-	done
+    _templateDir=$(realpath ./makepkgs-templates)
+    ${_templateDir}/recreate-symlinks.sh
+    grep  -R -l "# template " makepkgs | while read _file
+    do
+	echo "Replacing Template Markers: ${_file}"
+	makepkg-template --template-dir ${_templateDir} --input ${_file}
+    done
 
 
 for _task in "$@"
@@ -266,10 +188,17 @@ do
 	    _outH1 "CONVERT TO GIT PACKAGE"
 	    for makepkg in "${makepkgs[@]}"
 	    do
-		_pkgConvertToGitPackage makepkgs/${makepkg}
+		makepkgname="${makepkg//#*/}"
+		if [[ "${makepkg}"  == *#nogit* ]];
+		then
+		    echo "NO GIT : ${makepkgname}"
+		    continue
+		fi
+		_pkgConvertToGitPackage makepkgs/${makepkgname}
 	    done
 	;;
 	"sync")
+	    _outH1 "SYNC"
 	    if [ -z "$(git config --global user.email)" ] \
 		|| [ -z "$(git config --global user.name)" ];
 	    then
@@ -279,8 +208,14 @@ do
 
 	    for makepkg in "${makepkgs[@]}"
 	    do
-		_outH1 "SYNCING ${makepkg}"
-		_pkgSync makepkgs/${makepkg}
+		makepkgname="${makepkg//#*/}"
+		if [[ "${makepkg}"  == *#nosync* ]];
+		then
+		    echo "NO SYNC : ${makepkgname}"
+		    continue
+		fi
+		_execFunction "presync_${makepkgname//-/_}"
+		_pkgSync makepkgs/${makepkgname}
 	    done
 	    cp -R makepkgs-sync /build-target/
 	;;
@@ -293,7 +228,15 @@ do
 	;;
 	"build")
 	    _outH1 "BUILD"
-	    _build
+		for makepkg in "${makepkgs[@]}"
+		do
+		    makepkgname="${makepkg//#*/}"
+
+		    _execFunction "prebuild_${makepkgname//-/_}"
+		    _execFunction "build_${makepkgname//-/_}"
+		    _pkgBuild makepkgs/${makepkgname}
+		    _execFunction "postbuild_${makepkgname//-/_}"
+		done
 	;;
 	*)
 	;;
