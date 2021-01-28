@@ -3,11 +3,17 @@
 ## Clone
  $ git clone --recursive https://github.com/pietmacom/kopano-pkgbuilds.git
 
-### Use latest environment
+### Update To Latest Environment
  $ cd kopano-pkgbuilds
  
  $ git submodule update --remote
-
+ 
+### Build from Master
+ $ ./build-docker.sh convertToGitPackage build
+ 
+## Without Docker
+ $ ./build.sh convertToGitPackage build
+ 
 ## Milestones/Plans
  - (DONE) Make the existing packages compile with branch name => $VERSION
  - Seperate kopano-configurator and kopano-core
