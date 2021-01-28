@@ -6,6 +6,15 @@ _outH1() {
     echo
 }
 
+_execFunction() {
+    _functionName=${1}
+    if [ "$(LC_ALL=C type -t ${_functionName})" == "function" ];
+    then
+	_outH1 "Execute ${_functionName}"
+	${_functionName}
+    fi
+}
+
 _pkgBuild() {
     _pwd=$(pwd)
     cd $1
@@ -29,6 +38,7 @@ _pkgBuild() {
     cd ${_pwd}
 }
 
+# TODO Increment pkgrel
 _pkgSync() {
     _pwd=$(pwd)
     _makepkg=$(realpath ${1})
@@ -79,11 +89,11 @@ _pkgConvertToGitPackage() {
 
 ### START
 
-_makepkgsClone=(
+makepkgsClone=(
     'https://aur.archlinux.org/libiconv.git'
 	)
 
-_makepkgs=(
+makepkgs=(
     # CORE
     'libiconv#nosync#nogit'
     'swig#nosync#nogit'
@@ -131,28 +141,34 @@ _makepkgs=(
       )
 
 prebuild_kopano_libvmime() {
-    if [ "$(git branch  --show-current)" != "master" ];
-    then
+#    if [ "$(git branch  --show-current)" != "master" ];
+#    then
 	sed -i "s|https://github.com/Kopano-dev/vmime.git|https://github.com/pietmacom/kopano-vmime.git|" \
 	    makepkgs/kopano-libvmime/PKGBUILD
-    fi
+#    fi
+}
+presync_kopano_libvmime() {
+    prebuild_kopano_libvmime
 }
 
 prebuild_kopano_core() {
-    if [ "$(git branch  --show-current)" != "master" ];
-    then
+#    if [ "$(git branch  --show-current)" != "master" ];
+#    then
 	sed -i "s|https://stash.kopano.io/scm/kc/kopanocore.git|https://github.com/pietmacom/kopano-core.git|" \
 	    makepkgs/kopano-core/PKGBUILD
-    fi
+#    fi
+}
+presync_kopano_core() {
+    prebuild_kopano_core
 }
 
 _outH1 "CHECKOUT"
-    for _makepkgClone in "${_makepkgsClone[@]}"
+    for makepkgClone in "${makepkgsClone[@]}"
     do
-	_makepkgCloneName=${_makepkgClone}
-	_makepkgCloneName="${_makepkgCloneName//*\//}"
-	_makepkgCloneName="${_makepkgCloneName//.git/}"
-	git clone ${_makepkgClone} makepkgs/${_makepkgCloneName}
+	makepkgCloneName=${makepkgClone}
+	makepkgCloneName="${makepkgCloneName//*\//}"
+	makepkgCloneName="${makepkgCloneName//.git/}"
+	git clone ${makepkgClone} makepkgs/${makepkgCloneName}
     done
 
 _outH1 "PREPARE"
@@ -170,15 +186,15 @@ do
     case "${_task}" in
 	"convertToGitPackage")
 	    _outH1 "CONVERT TO GIT PACKAGE"
-	    for _makepkg in "${_makepkgs[@]}"
+	    for makepkg in "${makepkgs[@]}"
 	    do
-		_makepkgname="${_makepkg//#*/}"
-		if [[ "${_makepkg}"  == *#nogit* ]];
+		makepkgname="${makepkg//#*/}"
+		if [[ "${makepkg}"  == *#nogit* ]];
 		then
-		    echo "NO GIT : ${_makepkgname}"
+		    echo "NO GIT : ${makepkgname}"
 		    continue
 		fi
-		_pkgConvertToGitPackage makepkgs/${_makepkgname}
+		_pkgConvertToGitPackage makepkgs/${makepkgname}
 	    done
 	;;
 	"sync")
@@ -190,15 +206,16 @@ do
 		git config --global user.name "Your Name"
 	    fi
 
-	    for _makepkg in "${_makepkgs[@]}"
+	    for makepkg in "${makepkgs[@]}"
 	    do
-		_makepkgname="${_makepkg//#*/}"
-		if [[ "${_makepkg}"  == *#nosync* ]];
+		makepkgname="${makepkg//#*/}"
+		if [[ "${makepkg}"  == *#nosync* ]];
 		then
-		    echo "NO SYNC : ${_makepkgname}"
+		    echo "NO SYNC : ${makepkgname}"
 		    continue
 		fi
-		_pkgSync makepkgs/${_makepkgname}
+		_execFunction "presync_${makepkgname//-/_}"
+		_pkgSync makepkgs/${makepkgname}
 	    done
 	    cp -R makepkgs-sync /build-target/
 	;;
@@ -211,31 +228,14 @@ do
 	;;
 	"build")
 	    _outH1 "BUILD"
-		for _makepkg in "${_makepkgs[@]}"
+		for makepkg in "${makepkgs[@]}"
 		do
-		    _makepkgname="${_makepkg//#*/}"
-		    _prebuildFunction="prebuild_${_makepkgname//-/_}"
-		    if [ "$(LC_ALL=C type -t ${_prebuildFunction})" == "function" ];
-		    then
-			_outH1 "Pre-Build ${_makepkgname}"
-			${_prebuildFunction}
-		    fi
+		    makepkgname="${makepkg//#*/}"
 
-		    _builFunction="build_${_makepkgname//-/_}"
-		    if [ "$(LC_ALL=C type -t ${_buildFunction})" == "function" ];
-		    then
-			_outH1 "Build ${_makepkgname}"
-			${_buildFunction}
-		    else
-			_pkgBuild makepkgs/${_makepkgname}
-		    fi
-
-		    _postbuildFunction="postbuild_${_makepkgname//-/_}"
-		    if [ "$(LC_ALL=C type -t ${_postbuildFunction})" == "function" ];
-		    then
-			_outH1 "Post-Build ${_makepkgname}"
-			${_postbuildFunction}
-		    fi
+		    _execFunction "prebuild_${makepkgname//-/_}"
+		    _execFunction "build_${makepkgname//-/_}"
+		    _pkgBuild makepkgs/${makepkgname}
+		    _execFunction "postbuild_${makepkgname//-/_}"
 		done
 	;;
 	*)
