@@ -1,10 +1,14 @@
 # kopano-pkgbuilds
 
 ## Clone
-``` $ git clone --recursive https://github.com/pietmacom/kopano-pkgbuilds.git ```
+```console
+$ git clone --recursive https://github.com/pietmacom/kopano-pkgbuilds.git
+```
 
 ## Update To Latest Environment
-``` $ cd kopano-pkgbuilds ```
+``` console
+$ cd kopano-pkgbuilds
+```
  
 ``` $ git submodule update --remote ```
  
