@@ -8,7 +8,7 @@
  
  $ git submodule update --remote
  
-## Build from Master
+## Build Packages From Their Master-Source
  $ ./build-docker.sh convertToGitPackage build
  
 ### Without Docker
