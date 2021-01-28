@@ -6,7 +6,7 @@ git clone --recursive https://github.com/pietmacom/kopano-pkgbuilds.git
 ```
 
 ## Update To Latest Environment
-```shell-session
+```console
 cd kopano-pkgbuilds
 git submodule update --remote
 ```
