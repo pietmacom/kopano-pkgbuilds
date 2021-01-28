@@ -18,7 +18,9 @@
 ### From Latest Release-Tag
  Code from latest releases and their depencencies are fixed. For this reason they will have dependencies to older packages/libraries. This won't get along with Archlinuxs rolling release. The build will likely fail 
  
- Anyways you can build the releases packages of day they recently compiled successfully. Checkout the branch with the latest timestamp and compile. The script is setting up a Docker-Container with an Archlinux of that day and compile everything.
+ Anyways you can build the releases packages of day they recently compiled successfully. Checkout the branch with the latest timestamp and compile.
+ 
+ The script is setting up a Docker-Container with an Archlinux of that day and compile everything.
  
  $ ./build-docker.sh build
  
