@@ -3,15 +3,15 @@
 ## Clone
  $ git clone --recursive https://github.com/pietmacom/kopano-pkgbuilds.git
 
-### Update To Latest Environment
+## Update To Latest Environment
  $ cd kopano-pkgbuilds
  
  $ git submodule update --remote
  
-### Build from Master
+## Build from Master
  $ ./build-docker.sh convertToGitPackage build
  
-## Without Docker
+### Without Docker
  $ ./build.sh convertToGitPackage build
  
 ## Milestones/Plans
