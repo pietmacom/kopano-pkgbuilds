@@ -141,7 +141,7 @@ makepkgs=(
       )
 
 prebuild_kopano_libvmime() {
-#    if [ "$(git branch  --show-current)" != "master" ];
+#    if [[ "$(git branch  --show-current)" != master* ]];
 #    then
 	sed -i "s|https://github.com/Kopano-dev/vmime.git|https://github.com/pietmacom/kopano-vmime.git|" \
 	    makepkgs/kopano-libvmime/PKGBUILD
@@ -152,7 +152,7 @@ presync_kopano_libvmime() {
 }
 
 prebuild_kopano_core() {
-#    if [ "$(git branch  --show-current)" != "master" ];
+#    if [[ "$(git branch  --show-current)" != master* ]];
 #    then
 	sed -i "s|https://stash.kopano.io/scm/kc/kopanocore.git|https://github.com/pietmacom/kopano-core.git|" \
 	    makepkgs/kopano-core/PKGBUILD

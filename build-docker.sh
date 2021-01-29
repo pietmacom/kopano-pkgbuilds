@@ -10,9 +10,10 @@ if [ -z "$VERSION" ];
 then
     echo "# RESOLVE VERSION"
     if BRANCH_CURRENT=$(git branch --show-current) \
-    && [ "$BRANCH_CURRENT" != "master" ];
+    && [[ "$BRANCH_CURRENT" != master* ]];
     then
-	VERSION="$BRANCH_CURRENT"
+	# Replace everything after "-" in "20210129-nextiteration" => 20210129
+	VERSION="${BRANCH_CURRENT//-*/}"
     else
 	VERSION="latest"
     fi

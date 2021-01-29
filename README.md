@@ -1,5 +1,11 @@
 # kopano-pkgbuilds
 
+## Branches
+
+- 20210102		Packages from latest Releases-Source build on Archlinux from that day (02.01.2021)
+- master		Packages from Development/Master-Source build on latest/todays Archlinux
+- master-nextiteration	Packages beeing reworked
+
 ## Clone
 ```console
 git clone --recursive https://github.com/pietmacom/kopano-pkgbuilds.git
