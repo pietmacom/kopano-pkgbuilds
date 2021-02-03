@@ -1,5 +1,11 @@
 # kopano-pkgbuilds
 
+## Branches
+
+- 20210102		Packages from latest Releases-Source build on Archlinux from that day (02.01.2021)
+- master		Packages from Development/Master-Source build on latest/todays Archlinux
+- master-nextiteration	Packages beeing reworked
+
 ## Clone
 ```console
 git clone --recursive https://github.com/pietmacom/kopano-pkgbuilds.git
@@ -39,3 +45,4 @@ git submodule update --remote
  - Compile package independently. Don't miss neccessary dependencies that had been installed indirectly by other packages.
  - Implement resume function to skip successfull build packages
  - Atomic releases for ARM devices.
+ 
