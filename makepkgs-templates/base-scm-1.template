@@ -74,7 +74,7 @@ _patchFromGit() {
 	git --git-dir="${_patchDir}" format-patch "^${_sourceBranch}" "${_sourceBranch}-patch" --stdout | git apply
 
     else
-	echo "No Patch Branch [${_sourceBranch}-patch] Found"
+	echo "No Patch Branch Found [${_sourceBranch}-patch]"
 
     fi
 }
