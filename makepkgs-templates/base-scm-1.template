@@ -51,14 +51,18 @@ pkgver() {
 _sourceBranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=${_tagPrefix}${pkgver}${_tagSuffix}"; fi)
 
 _patchFromGit() {
-    _patchDir="${srcdir}/${_patchName}-patch"
-    git clone ${1} ${_patchDir}
+    _patchDir="${srcdir}/${_patchName}-patch.git"
+    if [ ! -e "${_patchDir}" ];
+    then
+	git clone --bare ${1} ${_patchDir}
+    fi
 
-    _workDir="$(pwd)"
-    _patchFile="${srcdir}/$(basename ${_workDir}).patch"
-    cd ${_patchDir}
-    git format-patch ^${2} ${3} --stdout > ${_patchFile}
-
-    cd ${_workDir}
-    git am < ${_patchFile}
+    if [ ! -z "${3}" ];
+    then
+	 # Create Patch For A Range
+        git --git-dir=${_patchDir} format-patch ^${2} ${3} --stdout | git apply
+    else
+	# CherryPick one commit
+	git --git-dir=${_patchDir} format-patch -1 ${2} --stdout | git apply
+    fi
 }

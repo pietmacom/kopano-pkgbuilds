@@ -130,7 +130,7 @@ done
 
 prepare() {
     cd ${srcdir}/${pkgname}
-    _patchFromGit https://github.com/pietmacom/kopano-core.git 5bafb1e4fde2eccbc2c5e55c4c8898787ad0cd51 be771505113f396f48fecbaa170dee6b9046a1a8
+    _patchFromGit https://github.com/pietmacom/kopano-core.git be771505113f396f48fecbaa170dee6b9046a1a8
 }
 
 # When using official VMIME
