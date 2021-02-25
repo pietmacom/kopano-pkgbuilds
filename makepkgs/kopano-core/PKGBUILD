@@ -129,8 +129,7 @@ for _configFile in src/${pkgname}/installer/linux/*.cfg; do
 done
 
 prepare() {
-    cd ${srcdir}/${pkgname}
-    ./bootstrap.sh
+    _patchFromGit https://github.com/pietmacom/kopano-core.git 5bafb1e4fde2eccbc2c5e55c4c8898787ad0cd51 be771505113f396f48fecbaa170dee6b9046a1a8
 }
 
 # When using official VMIME
@@ -148,6 +147,7 @@ _officialVmimeParameter() {
 build() {
     cd ${srcdir}/${pkgname}
 
+    ./bootstrap.sh
     ./configure \
 `# https://stash.kopano.io/projects/KC/repos/kopanocore/browse/doc/install.txt#68` \
     $(_officialVmimeParameter) \

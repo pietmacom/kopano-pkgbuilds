@@ -154,8 +154,8 @@ presync_kopano_libvmime() {
 prebuild_kopano_core() {
 #    if [ "$(git branch  --show-current)" != "master" ];
 #    then
-	sed -i "s|https://stash.kopano.io/scm/kc/kopanocore.git|https://github.com/pietmacom/kopano-core.git|" \
-	    makepkgs/kopano-core/PKGBUILD
+#	sed -i "s|https://stash.kopano.io/scm/kc/kopanocore.git|https://github.com/pietmacom/kopano-core.git|" \
+#	    makepkgs/kopano-core/PKGBUILD
 #    fi
 }
 presync_kopano_core() {
