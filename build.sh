@@ -140,28 +140,6 @@ makepkgs=(
 #    'kopano-webapp-google2fa'
       )
 
-prebuild_kopano_libvmime() {
-#    if [ "$(git branch  --show-current)" != "master" ];
-#    then
-	sed -i "s|https://github.com/Kopano-dev/vmime.git|https://github.com/pietmacom/kopano-vmime.git|" \
-	    makepkgs/kopano-libvmime/PKGBUILD
-#    fi
-}
-presync_kopano_libvmime() {
-    prebuild_kopano_libvmime
-}
-
-#prebuild_kopano_core() {
-#    if [ "$(git branch  --show-current)" != "master" ];
-#    then
-#	sed -i "s|https://stash.kopano.io/scm/kc/kopanocore.git|https://github.com/pietmacom/kopano-core.git|" \
-#	    makepkgs/kopano-core/PKGBUILD
-#    fi
-#}
-#presync_kopano_core() {
-#    prebuild_kopano_core
-#}
-
 _outH1 "CHECKOUT"
     for makepkgClone in "${makepkgsClone[@]}"
     do

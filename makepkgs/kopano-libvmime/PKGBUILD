@@ -43,6 +43,11 @@ depends=(
     'gnutls'
 	)
 
+prepare() {
+    cd ${srcdir}/${pkgname}
+    _patchFromGit https://github.com/pietmacom/kopano-vmime.git
+}
+
 build() {
     mkdir build
     cd build
