@@ -60,24 +60,34 @@ _patchFromGit() {
     _branchName="${_sourceBranch//#*=/}"
     _patchBranchName="${_branchName}-patch"
     _patchGIT="git --git-dir="${_patchDir}""
+
     # Patch From Specific Range
     if [ ! -z "${3}" ];
     then
-        $_patchGIT format-patch "^${2}" "${3}" --stdout | git apply
+        if $_patchGIT format-patch "^${2}" "${3}" --stdout | git apply ;
+        then
+	    echo "Patch Applied From Commit Between ${2} to ${3}"
+        fi
 
     # Patch From Specific Commit
     elif [ ! -z "${2}" ];
     then
-	$_patchGIT format-patch -1 "${2}" --stdout | git apply
+	if $_patchGIT format-patch -1 "${2}" --stdout | git apply ;
+	then
+	    echo "Patch Applied From Commit ${2}"
+	fi
 
     # Patch From Dedicated Branch
     elif $_patchGIT rev-parse --verify --quiet "${_branchName}" > /dev/null \
          && $_patchGIT rev-parse --verify --quiet "${_patchBranchName}" > /dev/null ;
     then
-	$_patchGIT format-patch "^${_branchName}" "${_patchBranchName}" --stdout | git apply
+	if $_patchGIT format-patch "^${_branchName}" "${_patchBranchName}" --stdout | git apply ;
+	then
+	    echo "Patch Applied From Branch ${_patchBranchName}"
+	fi
 
     else
-	echo "No Patch Branch Found [${_patchBranchName}]"
+	echo "No Patch Branch Found ${_patchBranchName}"
 
     fi
 }
