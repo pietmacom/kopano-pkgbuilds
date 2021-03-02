@@ -4,8 +4,6 @@ echo
 echo "# CREATE BUILD ENVIRONMENT"
 echo
 
-
-
 if [ -z "$VERSION" ];
 then
     echo "# RESOLVE VERSION"

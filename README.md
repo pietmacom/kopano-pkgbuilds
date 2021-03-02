@@ -8,9 +8,9 @@
 
 ## Clone
 ```console
-git clone --recursive https://github.com/pietmacom/kopano-pkgbuilds.git
+git clone https://github.com/pietmacom/kopano-pkgbuilds.git
 cd kopano-pkgbuilds
-git submodule update --remote --merge
+git submodule update --init --recursive --remote --checkout
 ```
 
 ## Update To Latest Environment
