@@ -130,9 +130,10 @@ done
 
 prepare() {
     cd ${srcdir}/${pkgname}
-    case ${_sourceBranch}
-	kopanocore-10*)
-	kopanocore-11*)
+    case "${_sourceBranch}" in
+	${_tagPrefix}10*)
+	;&
+	${_tagPrefix}11*)
 	    _patchFromGit https://github.com/pietmacom/kopano-core.git master master-patch
 	;;
 	*)
