@@ -130,7 +130,15 @@ done
 
 prepare() {
     cd ${srcdir}/${pkgname}
-    _patchFromGit https://github.com/pietmacom/kopano-core.git
+    case ${_sourceBranch}
+	${_tagPrefix}10*)
+	${_tagPrefix}11*)
+	    _patchFromGit https://github.com/pietmacom/kopano-core.git master master-patch
+	;;
+	*)
+	    _patchFromGit https://github.com/pietmacom/kopano-core.git
+	;;
+    esac
 }
 
 # When using official VMIME
