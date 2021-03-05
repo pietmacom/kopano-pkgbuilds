@@ -33,10 +33,10 @@ git submodule update --remote
 ### From Kopanos Latest Release-Tag, For the Latest Arch Linux
  As you can read from the next chapter, this isn't realy planed. But with a little luck the patches from the Development/Master-Branch could work for the latest Release-Tag, too.
  
-``console
-./build-docker.sh build
+```console
+./build.sh build
 ```
- 
+
 ### From Kopanos Latest Release-Tag, For Specific Arch Linux
  Code from releases and their depencencies are fixed. For this reason they will have dependencies to older packages/libraries. This won't get along with Archlinux's rolling release. The build will likely fail.
  
