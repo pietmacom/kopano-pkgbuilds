@@ -26,7 +26,7 @@ All builds are done within a dynamicaly created docker container. This is meant 
 #### From Kopanos Delevelopment/Master-Branch
 Please make sure that your docker host-system is beeing up to date. Unexpected changes/incompatibilities could make the latest Arch Linux image fail to build.
 
-Of course you could try first and update second.
+Of course you can try first and update second.
 
 ```console
 ./build-docker.sh convertToGitPackage build
