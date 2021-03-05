@@ -20,7 +20,7 @@ git submodule update --remote
 ```
  
 ## Build Packages
-### From Kopanos Delevelopment/Master-Branch, For the Latest Arch Linux
+### From Kopanos Delevelopment/Master-Branch,<br>(For the Latest Arch Linux)
 ```console
 ./build-docker.sh convertToGitPackage build
 ```
@@ -30,14 +30,14 @@ git submodule update --remote
 ./build.sh convertToGitPackage build
 ```
  
-### From Kopanos Latest Release-Tag, For the Latest Arch Linux
+### From Kopanos Latest Release-Tag,<br>(For the Latest Arch Linux)
  As you can read from the next chapter, this isn't realy planed. But with a little luck the patches from the Development/Master-Branch could work for the latest Release-Tag, too.
  
 ```console
 ./build.sh build
 ```
 
-### From Kopanos Latest Release-Tag, For Specific Arch Linux
+### From Kopanos Latest Release-Tag,<br>(For Specific Arch Linux)
  Code from releases and their depencencies are fixed. For this reason they will have dependencies to older packages/libraries. This won't get along with Archlinux's rolling release. The build will likely fail.
  
  Anyways you can build the releases packages of the day they recently/successfully compiled. Checkout the branch with the latest timestamp and compile.
