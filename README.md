@@ -16,7 +16,8 @@ git submodule update --init --recursive --remote --checkout
 ## Update To Latest Environment
 ```console
 cd kopano-pkgbuilds
-git submodule update --remote
+git pull
+git submodule update --init --recursive --remote --checkout
 ```
  
 ## Build Packages
