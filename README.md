@@ -20,6 +20,8 @@ git submodule update --remote
 ```
  
 ## Build Packages
+All builds are done within a dynamicaly created docker container. This is meant to keep your hostsystem clean and untouched.
+
 ### For Latest Arch Linux
 #### From Kopanos Delevelopment/Master-Branch
 Please make sure that your docker host-system is beeing up to date. Unexpected changes/incompatibilities could make the latest Arch Linux image fail to build.
@@ -28,13 +30,6 @@ Of course you could try first and update second.
 
 ```console
 ./build-docker.sh convertToGitPackage build
-```
- 
-#####  Without Docker
-Please be carefull. This will clutter up your hostsystem with a lot of build dependencies.
-
-```console
-./build.sh convertToGitPackage build
 ```
  
 #### From Kopanos Latest Release-Tag
@@ -56,6 +51,15 @@ Please be carefull. This will clutter up your hostsystem with a lot of build dep
 ./build-docker.sh build
 ```
  
+### Without Docker
+Even I discourage you from doing so, you can build everything on your hostsystem (without docker). Just keep in mind, that this will clutter up your system with a lot of build dependencies.
+
+Simply call build.sh instead of build-docker.sh.
+
+```console
+./build.sh convertToGitPackage build
+```
+
 ## Milestones/Plans
  - (DONE) Make the existing packages compile with branch name => $VERSION
  - Seperate kopano-configurator and kopano-core
