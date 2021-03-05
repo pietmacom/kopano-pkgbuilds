@@ -31,6 +31,8 @@ Of course you could try first and update second.
 ```
  
 #####  Without Docker
+Please be carefull. This will clutter up your hostsystem with a lot of build depencies.
+
 ```console
 ./build.sh convertToGitPackage build
 ```
