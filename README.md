@@ -33,7 +33,7 @@ Of course you can try first and update second.
 ```
  
 #### From Kopanos Latest Release-Tag
- As you can read from the next chapter, this isn't realy planed. But with a little luck the patches (applied automaticly) from the development/master-branch could work for the latest release-tag, too.
+ As you can read from the next chapter, this isn't realy planed. But with a little luck the patches (applied automaticly) from the development/master-branch will work for the latest release-tag, too.
  
 ```console
 ./build-docker.sh build
