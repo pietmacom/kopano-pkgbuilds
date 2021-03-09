@@ -21,7 +21,7 @@ git submodule update --init --recursive --remote --checkout
 ```
  
 ## Build Packages
-All builds are done within a dynamicaly created docker container. This is meant to keep your hostsystem clean and untouched.
+All builds are done within a dynamically created docker container. This is meant to keep your hostsystem clean and untouched.
 
 ### For Latest Arch Linux
 #### From Kopanos Delevelopment/Master-Branch
