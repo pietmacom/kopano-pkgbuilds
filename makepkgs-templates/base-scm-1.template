@@ -86,7 +86,7 @@ _patchFromGit() {
 	fi
 
     # Patch From "*-latest-patch" Branch
-    elif [[ "${pkgname}" != *-git" ]] \
+    elif [[ "${pkgname}" != *-git ]] \
 	 && _sourceCommit=$($_patchGIT rev-parse --verify --quiet "remotes/origin/${_branchName}") \
 	 && _targetCommit=$($_patchGIT rev-parse --verify --quiet "remotes/origin/${_branchName}-latest-patch") ;
     then
