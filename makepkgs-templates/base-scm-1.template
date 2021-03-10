@@ -48,8 +48,6 @@ pkgver() {
     fi
 }
 
-_sourceBranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=${_tagPrefix}${pkgver}${_tagSuffix}"; fi)
-
 _patchFromGit() {
     _patchDir="${srcdir}/$(basename $(pwd))-patch.git"
     if [ ! -e "${_patchDir}" ];
@@ -58,36 +56,65 @@ _patchFromGit() {
     fi
 
     _branchName="${_sourceBranch//#*=/}"
-    _patchBranchName="${_branchName}-patch"
     _patchGIT="git --git-dir="${_patchDir}""
 
     # Patch From Specific Range
     if [ ! -z "${3}" ];
     then
-        if $_patchGIT format-patch "^${2}" "${3}" --stdout | git apply ;
-        then
+
+	_sourceCommit=$($_patchGIT rev-parse --verify --quiet "${2}")
+	_targetCommit=$($_patchGIT rev-parse --verify --quiet "${3}")
+	if $_patchGIT format-patch "^${_sourceCommit}" "${_targetCommit}" --stdout | git apply -v ;
+	then
 	    echo "Patch Applied From Commit Between ${2} to ${3}"
+	else
+	    echo "Patch Failed."
+	    exit 1
         fi
 
     # Patch From Specific Commit
     elif [ ! -z "${2}" ];
     then
-	if $_patchGIT format-patch -1 "${2}" --stdout | git apply ;
+
+	_sourceCommit=$($_patchGIT rev-parse --verify --quiet "${2}")
+	if $_patchGIT format-patch -1 "${_sourceCommit}" --stdout | git apply -v ;
 	then
 	    echo "Patch Applied From Commit ${2}"
+	else
+	    echo "Patch Failed."
+	    exit 1
 	fi
 
-    # Patch From Dedicated Branch
-    elif $_patchGIT rev-parse --verify --quiet "${_branchName}" > /dev/null \
-         && $_patchGIT rev-parse --verify --quiet "${_patchBranchName}" > /dev/null ;
-    then
-	if $_patchGIT format-patch "^${_branchName}" "${_patchBranchName}" --stdout | git apply ;
+    # Patch From "*-latest-patch" Branch
+    elif [[ "${pkgname}" != *-git" ]] \
+	 && _sourceCommit=$($_patchGIT rev-parse --verify --quiet "remotes/origin/${_branchName}") \
+	 && _targetCommit=$($_patchGIT rev-parse --verify --quiet "remotes/origin/${_branchName}-latest-patch" ;
+
+	if $_patchGIT format-patch "^${_sourceCommit}" "${_targetCommit}" --stdout | git apply -v ;
 	then
-	    echo "Patch Applied From Branch ${_patchBranchName}"
+	    echo "Patch Applied From Branch ${_branchName}-latest-patch"
+	else
+	    echo "Patch Failed."
+	    exit 1
+	fi
+
+    # Patch From "master-latest-patch" Branch
+    elif _sourceCommit=$($_patchGIT rev-parse --verify --quiet "remotes/origin/master") \
+         && _targetCommit=$($_patchGIT rev-parse --verify --quiet "remotes/origin/master-latest-patch") ;
+    then
+
+	if $_patchGIT format-patch "^${_sourceCommit}" "${_targetCommit}" --stdout | git apply -v ;
+	then
+	    echo "Patch Applied From Branch master-latest-patch"
+	else
+	    echo "Patch Failed."
+	    exit 1
 	fi
 
     else
-	echo "No Patch Branch Found ${_patchBranchName}"
+	# echo "No Patch Branch Found"
 
     fi
 }
+
+_sourceBranch=$(if [[ "${pkgname}" == *-git ]]; then echo "#branch=master"; else echo "#tag=${_tagPrefix}${pkgver}${_tagSuffix}"; fi)

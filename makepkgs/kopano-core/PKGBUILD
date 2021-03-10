@@ -130,6 +130,9 @@ done
 
 prepare() {
     cd ${srcdir}/${pkgname}
+    _patchFromGit https://github.com/pietmacom/kopano-core.git
+    return 0
+
     case "${_sourceBranch}" in
 	${_tagPrefix}10*)
 	;&
@@ -137,7 +140,6 @@ prepare() {
 	    _patchFromGit https://github.com/pietmacom/kopano-core.git master master-patch
 	;;
 	*)
-	    _patchFromGit https://github.com/pietmacom/kopano-core.git
 	;;
     esac
 }
