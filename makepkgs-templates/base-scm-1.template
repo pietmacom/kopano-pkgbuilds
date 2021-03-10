@@ -113,7 +113,7 @@ _patchFromGit() {
 	fi
 
     else
-	# echo "No Patch Branch Found"
+	echo "No Patch Branch Found"
 
     fi
 }
