@@ -65,7 +65,8 @@ Simply call build.sh instead of build-docker.sh.
 ### Does it compile?
 The last build results are shown next to the repository header and commits.
 
-![Commit History] (doc/images/buildresult1.png)
+![Commit History](doc/images/buildresult1.png)
+
 ![Repository Header](doc/images/buildresult2.png)
 
 ## Milestones/Plans
