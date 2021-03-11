@@ -61,6 +61,13 @@ Simply call build.sh instead of build-docker.sh.
 ./build.sh convertToGitPackage build
 ```
 
+## FAQ
+### Does it compile?
+The last build results are shown next to the repository header and commits.
+
+(doc/images/buildresult1.png)
+(doc/images/buildresult2.png)
+
 ## Milestones/Plans
  - (DONE) Make the existing packages compile with branch name => $VERSION
  - Seperate kopano-configurator and kopano-core
