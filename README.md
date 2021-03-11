@@ -63,13 +63,13 @@ Simply call build.sh instead of build-docker.sh.
 
 ## FAQ
 ### Does it compile?
-The last build results are shown next to the repository header and commits.
+The last build results are shown next to the repositories commits and header.
 
 ![Commit History](doc/images/buildresult1.png)
 
 ![Repository Header](doc/images/buildresult2.png)
 
-## Milestones/Plans
+### What' next?
  - (DONE) Make the existing packages compile with branch name => $VERSION
  - Seperate kopano-configurator and kopano-core
  - Compile package independently. Don't miss neccessary dependencies that had been installed indirectly by other packages.
