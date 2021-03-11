@@ -69,7 +69,7 @@ The last build results are shown next to the repositories commits and header.
 
 ![Repository Header](doc/images/buildresult2.png)
 
-### What' next?
+### What's next?
  - (DONE) Make the existing packages compile with branch name => $VERSION
  - Seperate kopano-configurator and kopano-core
  - Compile package independently. Don't miss neccessary dependencies that had been installed indirectly by other packages.
