@@ -63,7 +63,7 @@ Simply call build.sh instead of build-docker.sh.
 
 ## FAQ
 ### Does it compile?
-The last build results are shown next to the repositories commits and header.
+All packages are build weekly, on every monday. The last build results are shown next to the repositories commits and header.
 
 ![Commit History](doc/images/buildresult1.png)
 
