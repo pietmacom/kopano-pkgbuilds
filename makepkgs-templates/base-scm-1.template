@@ -1,6 +1,11 @@
 #_tagPrefix=""
 #_tagSuffix=""
-#_tagReleaseFormat="^[0-9]*(\.[0-9])*$"
+#_remoteGit=""
+
+if [[ "${pkgname}" == *-latest ]] && [ ! -z "${_remoteGit}" ];
+then
+    pkgver=$(git ls-remote --refs --tags "${_remoteGitUrl}" | sed 's|.*tags/\(.*\)$|\1|' | sort -u | grep -vE "(beta|alpha|test)" | tail -n 1)
+fi
 
 _basePkgName="${pkgname//-git/}"
 if [[ "${pkgname}" == *-git ]];
@@ -44,10 +49,11 @@ pkgver() {
 	else
 	    echo "${pkgver}" | sed "s|\(.*\)-git|1.r${_revision}|"
 	fi
-    elif [ ! -z "${_tagReleaseFormat}" ];
-    then
-	_lastRelease=$(git tag -l "${_tagPrefix}*" --sort=v:refname | grep -E "${_tagReleaseFormat}"  | tail -n 1)
-	echo "${_lastRelease}" | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1|"
+#    elif [[ "${pkgname}" == *-latest ]];
+#    then
+#	#_tagReleaseFormat="^[0-9]*(\.[0-9])*$"
+#	_lastRelease=$(git tag -l "${_tagPrefix}*" --sort=v:refname | grep -v "(alpha|beta|test)"  | tail -n 1)
+#	echo "${_lastRelease}" | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1|"
     else
         echo "${pkgver}"
     fi
