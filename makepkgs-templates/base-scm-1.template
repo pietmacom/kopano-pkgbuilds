@@ -1,5 +1,6 @@
 #_tagPrefix=""
 #_tagSuffix=""
+#_tagReleaseFormat="^[0-9]*(\.[0-9])*$"
 
 _basePkgName="${pkgname//-git/}"
 if [[ "${pkgname}" == *-git ]];
@@ -43,8 +44,12 @@ pkgver() {
 	else
 	    echo "${pkgver}" | sed "s|\(.*\)-git|1.r${_revision}|"
 	fi
+    elif [ ! -z "${_tagReleaseFormat}" ];
+    then
+	_lastRelease=$(git tag -l "${_tagPrefix}*" --sort=v:refname | grep -E "${_tagReleaseFormat}"  | tail -n 1)
+	echo "${_lastRelease}" | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1|"
     else
-        echo ${pkgver}
+        echo "${pkgver}"
     fi
 }
 
