@@ -91,6 +91,7 @@ _pkgConvertToGitPackage() {
 
 makepkgsClone=(
     'https://aur.archlinux.org/libiconv.git'
+    'https://aur.archlinux.org/php74.git'
 	)
 
 makepkgs=(
@@ -98,6 +99,7 @@ makepkgs=(
     'libiconv#nosync#nogit'
     'swig#nosync#nogit'
 #    'libvmime#nosync'
+    'php74'
     'kopano-libvmime'
     'kopano-core'
 
