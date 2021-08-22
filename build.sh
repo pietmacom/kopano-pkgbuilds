@@ -99,8 +99,8 @@ makepkgs=(
     'libiconv#nosync#nogit'
     'swig#nosync#nogit'
 #    'libvmime#nosync'
-    'php74#nosync#nogit'
     'kopano-libvmime'
+    'php74#nosync#nogit'
     'kopano-core'
 
     # z-push
