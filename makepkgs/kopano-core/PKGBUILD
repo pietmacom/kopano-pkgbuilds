@@ -58,8 +58,7 @@ makedepends=(
     'curl>=7' # libcurl
     'pam>=1'
     'openldap>=2.4'
-    'php>=7'
-    'php<8'
+    'php=7'
     'python>=3'
     'swig>=2.0'
     #
