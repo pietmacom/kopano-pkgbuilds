@@ -1,0 +1,21 @@
+pkgname='php-base'
+provides='php'
+pkgver=7.4.22
+pkgrel=1
+pkgdesc="Sets PHP ${pkgver} as standard."
+arch=(
+    'armv7l'
+    'aarch64'
+    'i686'
+    'x86_64'
+     )
+depends=(
+    'php74'
+	)
+
+package() {
+    # Make phpXX the default
+    find /usr/bin -type f -regex ".*/php.*74$" -exec sh -c 'ln -sfv -t ${pkgdir} {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
+
+    # Common $ find /usr/bin -type f -regex ".*/php.*[0-9]+$" -exec sh -c 'ln -sfv {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
+}
