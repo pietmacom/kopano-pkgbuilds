@@ -185,10 +185,7 @@ build() {
     --sbindir='$(prefix)/bin' \
     --localstatedir='/var' \
     --sysconfdir='/etc' \
-    --with-searchscripts-prefix='/etc/kopano/searchscripts' \
-    \
-`# Compatibility` \
-    --with-php-config='/usr/bin/php-config74'
+    --with-searchscripts-prefix='/etc/kopano/searchscripts'
 
     make
 }
