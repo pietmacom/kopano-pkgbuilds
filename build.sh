@@ -101,6 +101,7 @@ makepkgs=(
 #    'libvmime#nosync'
     'kopano-libvmime'
     'php74#nosync#nogit'
+    'php#nosync#nogit'
     'kopano-core'
 
     # z-push
@@ -141,13 +142,6 @@ makepkgs=(
     'kopano-webapp-fetchmail'
 #    'kopano-webapp-google2fa'
       )
-
-postbuild_php74() {
-    # Make php74 the default
-    sudo find /usr/bin -type f -regex ".*/php.*74$" -exec sh -c 'ln -sfv {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
-
-    # Common $ find /usr/bin -type f -regex ".*/php.*[0-9]+$" -exec sh -c 'ln -sfv {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
-}
 
 _outH1 "CHECKOUT"
     for makepkgClone in "${makepkgsClone[@]}"
