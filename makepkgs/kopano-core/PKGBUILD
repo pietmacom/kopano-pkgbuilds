@@ -58,7 +58,7 @@ makedepends=(
     'curl>=7' # libcurl
     'pam>=1'
     'openldap>=2.4'
-    'php74'
+    'php74<8'
     'python>=3'
     'swig>=2.0'
     #
@@ -185,7 +185,10 @@ build() {
     --sbindir='$(prefix)/bin' \
     --localstatedir='/var' \
     --sysconfdir='/etc' \
-    --with-searchscripts-prefix='/etc/kopano/searchscripts'
+    --with-searchscripts-prefix='/etc/kopano/searchscripts' \
+    \
+`# Compatibility` \
+    --with-php-config='/usr/bin/php-config74'
 
     make
 }
