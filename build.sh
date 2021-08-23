@@ -144,7 +144,7 @@ makepkgs=(
 
 postbuild_php74() {
     # Make php74 the default
-    find /usr/bin -type f -regex ".*/php.*74$" -exec sh -c 'ln -sfv {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
+    sudo find /usr/bin -type f -regex ".*/php.*74$" -exec sh -c 'ln -sfv {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
 
     # Common $ find /usr/bin -type f -regex ".*/php.*[0-9]+$" -exec sh -c 'ln -sfv {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
 }
