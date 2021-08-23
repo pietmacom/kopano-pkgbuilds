@@ -1,5 +1,5 @@
-pkgname='php-base'
-provides='php'
+pkgname='php'
+#provides='php'
 pkgver=7.4.22
 pkgrel=1
 pkgdesc="Sets PHP ${pkgver} as standard."
