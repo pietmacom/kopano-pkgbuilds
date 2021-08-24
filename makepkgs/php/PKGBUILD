@@ -11,6 +11,3 @@ arch=('any')
 depends=("${_phpLatestPkgName}")
 install='install'
 
-package() {
-    echo "package()"
-}
