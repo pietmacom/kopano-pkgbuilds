@@ -15,7 +15,7 @@ depends=(
 
 package() {
     # Make phpXX the default
-    find /usr/bin -type f -regex ".*/php.*74$" -exec sh -c 'ln -sfv -t ${pkgdir} {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
+    find /usr/bin -type f -regex ".*/php.*74$" -exec sh -c 'ln -sfv {} ${pkgdir}/$(echo -n {} | sed -E "s|[0-9]+$||")' \;
 
     # Common $ find /usr/bin -type f -regex ".*/php.*[0-9]+$" -exec sh -c 'ln -sfv {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
 }
