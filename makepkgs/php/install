@@ -2,7 +2,7 @@ post_install() {
     # Make phpXX the default
     _phpPostfix="$(pacman -Qq | grep -oE 'php[0-9]+$' | sort -r | head -n 1 | sed 's|^php||')"
     find /usr/bin -type f -regex ".*/php.*${_phpPostfix}$" -exec sh -c 'ln -sfv {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
-    find /usr/etc -type d -regex ".*/php.*${_phpPostfix}$" -exec sh -c 'ln -sfv {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
+    find /etc -type d -regex ".*/php.*${_phpPostfix}$" -exec sh -c 'ln -sfv {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
 
     # Commonly
     # $ find /usr/bin -type f -regex ".*/php.*[0-9]+$" -exec sh -c 'ln -sfv {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
