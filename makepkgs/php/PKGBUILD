@@ -3,8 +3,8 @@ _phpLatestPkgName="$(pacman -Qq | grep -oE 'php[0-9]+$' | sort -r | head -n 1)"
 pkgver="$(pacman -Q ${_phpLatestPkgName} | cut -d ' ' -f 2 | sed 's|-.*||')"
 pkgrel=1
 pkgdesc="Sets PHP ${pkgver} as standard."
-provides=('php=${pkgver}'
-	`pacman -Qq | grep -oE "${_phpLatestPkgName}-.*" | sed -E "s|^${_phpLatestPkgName}|php|"`)
+provides=("php=${pkgver}"
+	`pacman -Qq | grep -oE "${_phpLatestPkgName}-.*" | sed -E "s|^${_phpLatestPkgName}(.*)|php\1=${pkgver}|"`)
 conflicts=('php'
 	`pacman -Qq | grep -oE "${_phpLatestPkgName}-.*" | sed -E "s|^${_phpLatestPkgName}|php|"`)
 arch=('any')
