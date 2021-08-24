@@ -1,17 +1,14 @@
-pkgname='php'
+pkgname='php-binding'
 _phpLatestPkgName="$(pacman -Qq | grep -o 'php[0-9]+$' | sort -r | head -n 1)"
 pkgver="$(pacman -Q ${_phpLatestPkgName} | cut -d ' ' -f 2 | sed 's|-.*||')"
 pkgrel=1
 pkgdesc="Sets PHP ${pkgver} as standard."
-arch=(
-    'armv7l'
-    'aarch64'
-    'i686'
-    'x86_64'
-     )
-depends=(
-    "${_phpLatestPkgName}"
-	 )
+provides=('php'
+	`pacman -Qq | grep -o "${_phpLatestPkgName}-.*" | sed -E "s|^${_phpLatestPkgName}|php|"`)
+conflicts=('php'
+	`pacman -Qq | grep -o "${_phpLatestPkgName}-.*" | sed -E "s|^${_phpLatestPkgName}|php|"`)
+arch=('any')
+depends=("${_phpLatestPkgName}")
 install='install'
 
 package() {
