@@ -1,6 +1,6 @@
 pkgname='php'
-#provides='php'
-pkgver=7.4.22
+_phpLatestPkgName="$(pacman -Qq | grep -o 'php[0-9]+$' | sort -r | head -n 1)"
+pkgver="$(pacman -Q ${_phpLatestPkgName} | cut -d ' ' -f 2 | sed 's|-.*||')"
 pkgrel=1
 pkgdesc="Sets PHP ${pkgver} as standard."
 arch=(
@@ -10,12 +10,10 @@ arch=(
     'x86_64'
      )
 depends=(
-    'php74'
-	)
+    "${_phpLatestPkgName}"
+	 )
+install='install'
 
 package() {
-    # Make phpXX the default
-    find /usr/bin -type f -regex ".*/php.*74$" -exec sh -c 'ln -sfv {} ${pkgdir}/$(echo -n {} | sed -E "s|[0-9]+$||")' \;
-
-    # Common $ find /usr/bin -type f -regex ".*/php.*[0-9]+$" -exec sh -c 'ln -sfv {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
+    echo "package()"
 }
