@@ -1,5 +1,5 @@
 post_install() {
-    if [ pacman -Qq php ];
+    if [ ! -z "$(pacman -Qq | grep -oE '^php$')" ];
     then
 	echo "PHP found. Skip setting default."
 	exit
