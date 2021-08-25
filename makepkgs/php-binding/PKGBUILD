@@ -10,4 +10,10 @@ conflicts=('php'
 arch=('any')
 depends=("${_phpLatestPkgName}")
 install='install'
+source=('php-bind')
+md5sums=('SKIP')
 
+package() {
+    cp php-bind /usr/bin
+    chmod +x /usr/bin/php-bind
+}

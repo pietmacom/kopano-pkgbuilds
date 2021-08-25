@@ -1,0 +1,18 @@
+#!/bin/sh -ex
+
+phpPostfix=$1
+if [ -z "${phpPostfix}" ];
+then
+	echo "No PHP-Postfix provided."
+	echo " $ php-bin 74"
+	exit 1
+fi
+
+if [ ! -e "/usr/bin/php${phpPostfix}" ];
+then
+	echo "No PHP with Postfix ${phpPostfix} found."
+	exit 1
+fi
+
+# Make phpXX the default
+find /usr/bin -type f -regex ".*/php.*${phpPostfix}$" -exec sh -c 'ln -sfv {} $(echo -n {} | sed -E "s|[0-9]+$||")' \;
