@@ -14,7 +14,7 @@ source=('php-bind')
 md5sums=('SKIP')
 
 package() {
-    mkdir ${pkgdir}/usr/bin
+    mkdir -p ${pkgdir}/usr/bin
     cp php-bind ${pkgdir}/usr/bin/
     chmod +x ${pkgdir}/usr/bin/php-bind
 }
