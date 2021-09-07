@@ -1,4 +1,7 @@
 # kopano-pkgbuilds
+This project is building kopano groupware packages for Archlinux. That packages can be installed directly on your Archlinux.
+
+The building process is run in a docker container. If docker is not available, the build can be run on the installed Archlinux as well.
 
 ## Branches
 
