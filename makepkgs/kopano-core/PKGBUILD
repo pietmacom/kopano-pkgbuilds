@@ -32,8 +32,8 @@ md5sums=(
 	)
 	
 conflicts=(
-    'libldap>=2.6' # Not working with openldap 2.6
-    'openldap>=2.6' # Not working with openldap 2.6
+    'libldap' # Not working with openldap 2.6
+    'openldap' # Not working with openldap 2.6
 	  )
 	  
 makedepends=(
