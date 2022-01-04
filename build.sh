@@ -45,10 +45,9 @@ _pkgSync() {
     
     cd ${_makepkg}
     eval local $(grep -o -m 1 '^\s*pkgname\s*=\s*.*' PKGBUILD)
-    # Dummy Call. Create Changelog And Other Resources
+    # Create .SRCINFO and other resources
     makepkg --printsrcinfo > .SRCINFO
     
-    # Prepare Sync-Path
     _syncPath="${_pwd}/makepkgs-sync/${pkgname}"
     if ! git clone http://aur.archlinux.org/${pkgname}.git ${_syncPath} ;
     then
@@ -60,13 +59,12 @@ _pkgSync() {
     cp -RT ${_makepkg} .
         
     # Create checksums at last. This will download sourcefiles and changes the source directory.
-    cd ${_makepkg}
-    updpkgsums
-    makepkg --printsrcinfo > .SRCINFO
-    ls -al
-    cat PKGBUILD
-    cp -rf PKGBUILD ${_syncPath}
-    cp -rf .SRCINFO  ${_syncPath}
+    # Will break dynamic array extension.
+    #cd ${_makepkg}
+    #updpkgsums
+    #makepkg --printsrcinfo > .SRCINFO
+    #cp -rf PKGBUILD ${_syncPath}
+    #cp -rf .SRCINFO  ${_syncPath}
     
     cd ${_syncPath}
     git add -A || true
