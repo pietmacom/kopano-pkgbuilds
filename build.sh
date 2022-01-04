@@ -38,13 +38,13 @@ _pkgBuild() {
     cd ${_pwd}
 }
 
-# TODO Increment pkgrel
+# TODO Increment pkgrel if changes found
 _pkgSync() {
     _pwd=$(pwd)
     _makepkg=$(realpath ${1})   
     
     cd ${_makepkg}
-    eval local $(grep -o -m 1 '^\s*pkgname\s*=\s*.*' PKGBUILD)
+    (echo "# Find this package on $(git remote get-url origin)" | cat - PKGBUILD) > PKGBUILD.new && mv PKGBUILD.new PKGBUILD
     # Create .SRCINFO and other resources
     makepkg --printsrcinfo > .SRCINFO
     
