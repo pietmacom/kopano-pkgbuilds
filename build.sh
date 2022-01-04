@@ -61,8 +61,8 @@ _pkgSync() {
     makepkg --printsrcinfo > .SRCINFO
     ls -al
     cat PKGBUILD
-    cp --remove-destination PKGBUILD ${_syncPath}/
-    cp --remove-destination .SRCINFO  ${_syncPath}/
+    cp -rf PKGBUILD ${_syncPath}/
+    cp -rf .SRCINFO  ${_syncPath}/
     
     cd ${_syncPath}
     git add -A || true
