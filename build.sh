@@ -42,8 +42,12 @@ _pkgBuild() {
 _pkgSync() {
     _pwd=$(pwd)
     _makepkg=$(realpath ${1})   
-    eval local $(grep -o -m 1 '^\s*pkgname\s*=\s*.*' ${_makepkg}/PKGBUILD)
-
+    
+    cd ${_makepkg}
+    eval local $(grep -o -m 1 '^\s*pkgname\s*=\s*.*' PKGBUILD)
+    # Dummy Call. Create Changelog And Other Resources
+    makepkg --printsrcinfo > .SRCINFO
+    
     # Prepare Sync-Path
     _syncPath="${_pwd}/makepkgs-sync/${pkgname}"
     if ! git clone http://aur.archlinux.org/${pkgname}.git ${_syncPath} ;
@@ -55,7 +59,7 @@ _pkgSync() {
     find  ./ -maxdepth 1 -mindepth 1 -not -name ".git*" -exec rm -rf {} \;
     cp -RT ${_makepkg} .
         
-    # Do this at last because it will download sourcefiles and changes the source directory
+    # Create checksums at last. This will download sourcefiles and changes the source directory.
     cd ${_makepkg}
     updpkgsums
     makepkg --printsrcinfo > .SRCINFO
