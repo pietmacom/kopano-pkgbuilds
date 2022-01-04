@@ -41,23 +41,28 @@ _pkgBuild() {
 # TODO Increment pkgrel
 _pkgSync() {
     _pwd=$(pwd)
-    _makepkg=$(realpath ${1})
+    _makepkg=$(realpath ${1})   
+    eval local $(grep -o -m 1 '^\s*pkgname\s*=\s*.*' ${_makepkg}/PKGBUILD)
 
-    cd ${_makepkg}
-    makepkg --printsrcinfo > .SRCINFO
-    eval local $(grep -o -m 1 '^\s*pkgname\s*=\s*.*' PKGBUILD)
-
-    cd ${_pwd}
+    # Prepare Sync-Path
     _syncPath="makepkgs-sync/${pkgname}"
     if ! git clone http://aur.archlinux.org/${pkgname}.git ${_syncPath} ;
     then
 	echo "Clone failed ${pkgname}"
 	return $?
     fi
-
     cd ${_syncPath}
     find  ./ -maxdepth 1 -mindepth 1 -not -name ".git*" -exec rm -rf {} \;
     cp -RT ${_makepkg} .
+        
+    # Do this at last because it will download sourcefiles and changes the source directory
+    cd ${_makepkg}
+    updpkgsums
+    makepkg --printsrcinfo > .SRCINFO
+    cp -f PKGBUILD ${_syncPath}/
+    cp -f .SRCINFO  ${_syncPath}/         
+    
+    cd ${_syncPath}
     git add -A || true
     git commit -a -m "next iteration" || true
 
