@@ -45,7 +45,7 @@ _pkgSync() {
     eval local $(grep -o -m 1 '^\s*pkgname\s*=\s*.*' ${_makepkg}/PKGBUILD)
 
     # Prepare Sync-Path
-    _syncPath="makepkgs-sync/${pkgname}"
+    _syncPath="${_pwd}/makepkgs-sync/${pkgname}"
     if ! git clone http://aur.archlinux.org/${pkgname}.git ${_syncPath} ;
     then
 	echo "Clone failed ${pkgname}"
@@ -61,8 +61,8 @@ _pkgSync() {
     makepkg --printsrcinfo > .SRCINFO
     ls -al
     cat PKGBUILD
-    cp -f PKGBUILD ${_syncPath}/PKGBUILD
-    cp -f .SRCINFO  ${_syncPath}/.SRCINFO
+    cp -rf PKGBUILD ${_syncPath}
+    cp -rf .SRCINFO  ${_syncPath}
     
     cd ${_syncPath}
     git add -A || true
