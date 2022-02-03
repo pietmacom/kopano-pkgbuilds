@@ -80,6 +80,7 @@ All packages are build weekly, on every monday. The last build results are shown
  - Atomic releases for ARM devices.
 
 ### Possible extensions
+ - https://github.com/olia-dev/kopano-webapp-fetchmail
  - https://github.com/kissze/kopano-webapp-spellschecker-languagepack-hungarian
  - https://github.com/h44z/kopano_webapp_calendarimporter
  - https://github.com/h44z/kopano_webapp_contactimporter
