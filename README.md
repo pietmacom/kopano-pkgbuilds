@@ -78,4 +78,12 @@ All packages are build weekly, on every monday. The last build results are shown
  - Compile package independently. Don't miss neccessary dependencies that had been installed indirectly by other packages.
  - Implement resume function to skip successfull build packages
  - Atomic releases for ARM devices.
+
+### Possible extensions
+ - https://github.com/kissze/kopano-webapp-spellschecker-languagepack-hungarian
+ - https://github.com/h44z/kopano_webapp_calendarimporter
+ - https://github.com/h44z/kopano_webapp_contactimporter
+ - https://github.com/bytemine/webapp-google2fa
+ - https://github.com/gitsnuit/itemdata
+ - https://github.com/gitsnuit/switcheditor
  
