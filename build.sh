@@ -98,19 +98,19 @@ _pkgConvertToGitPackage() {
 }
 
 _pkgUpdateToLatestVersion() {
-    _pkgverDeclaration="$(grep -o -m 1 '^\s*pkgver\s*=\s*.*$' ${1}/PKGBUILD)"
-    _remoteGitDeclaration="$(grep -o -m 1 '^\s*_remoteGit\s*=\s*.*$' ${1}/PKGBUILD)"	
-    eval ${_pkgverDeclaration}
-	
-    if [ -z "${_remoteGitDeclaration}" ];
+    #_remoteGitDeclaration="$(grep -o -m 1 '^\s*_remoteGit\s*=\s*.*$' ${1}/PKGBUILD)"	
+    #if [ -z "${_remoteGitDeclaration}" ];
+    if ! _remoteGitDeclaration="$(grep -o -m 1 '^\s*_remoteGit\s*=\s*.*$' ${1}/PKGBUILD)" ;
     then
     	echo "No _remoteGit deaclared ${1}"
 	return 0
-    fi
-	
+    fi	
     eval ${_remoteGitDeclaration}	
+
+    _pkgverDeclaration="$(grep -o -m 1 '^\s*pkgver\s*=\s*.*$' ${1}/PKGBUILD)"	
+    eval ${_pkgverDeclaration}
+
     _latestPkgver=$(git ls-remote --refs --tags "${_remoteGit}" | sed 's|.*tags/\(.*\)$|\1|' | sort -u | grep -vE "(beta|alpha|test)" | tail -n 1)
-	
     if [[ "${pkgver}" == "${_latestPkgver}" ]];
     then
 	echo "Is already Latest-Package-Version ${1}"
