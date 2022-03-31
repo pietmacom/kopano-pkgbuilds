@@ -107,10 +107,20 @@ _pkgUpdateToLatestVersion() {
     fi	
     eval ${_remoteGitDeclaration}	
 
-    _pkgverDeclaration="$(grep -o -m 1 '^\s*pkgver\s*=\s*.*$' ${1}/PKGBUILD)"	
+    if ! eval $(grep -o -m 1 '^\s*_tagPrefix\s*=\s*.*$' ${1}/PKGBUILD) ;
+    then
+    	echo "No _tagPrefix declared"
+    fi
+    
+    if ! eval $(grep -o -m 1 '^\s*_tagSuffix\s*=\s*.*$' ${1}/PKGBUILD) ;
+    then
+    	echo "No _tagSuffix declared"
+    fi
+    
+    _pkgverDeclaration="$(grep -o -m 1 '^\s*pkgver\s*=\s*.*$' ${1}/PKGBUILD)"    
     eval ${_pkgverDeclaration}
-
-    _latestPkgver=$(git ls-remote --refs --tags "${_remoteGit}" | sed 's|.*tags/\(.*\)$|\1|' | sort -u -V | grep -vE "(beta|alpha|test)" | tail -n 1)
+    
+    _latestPkgver=$(git ls-remote --refs --tags "${_remoteGit}" | sed 's|.*tags/\(.*\)$|\1|' | grep "^${_tagPrefix}.*" | grep ".*${_tagSuffix}$" | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1|" | sort -u -V |  grep -vE "(beta|alpha|test)" | tail -n 1)
     if [[ "${pkgver}" == "${_latestPkgver}" ]];
     then
 	echo "Is already Latest-Package-Version ${1}"
