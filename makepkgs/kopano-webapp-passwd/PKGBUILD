@@ -1,4 +1,4 @@
-pkgname='kopano-webapp-passwd-git'
+pkgname='kopano-webapp-passwd'
 pkgver='1.1'
 
 _source='git+https://github.com/endrepavel/kopano-webapp-passwd.git'
