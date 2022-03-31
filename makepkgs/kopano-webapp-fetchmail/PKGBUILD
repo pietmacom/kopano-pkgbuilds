@@ -1,4 +1,4 @@
-pkgname='kopano-webapp-fetchmail-git'
+pkgname='kopano-webapp-fetchmail'
 pkgver='1.0.2'
 
 _source='git+https://github.com/olia-dev/kopano-webapp-fetchmail.git'
