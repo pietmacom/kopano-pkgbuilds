@@ -105,7 +105,7 @@ _pkgUpdateToLatestVersion() {
     fi
     
     eval local ${_sourceDeclaration}	    
-    if [[ "${_source}" != git+ ]];
+    if [[ "${_source}" != git+* ]];
     then
     	echo "No supported location declared in _source ${1} (${_source})"
 	return 0
