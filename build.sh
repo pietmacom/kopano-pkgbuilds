@@ -97,6 +97,27 @@ _pkgConvertToGitPackage() {
     sed -i "0,/${_pkgnameDeclaration}/s//pkgname='${pkgname}-git'/" ${1}/PKGBUILD
 }
 
+_pkgUpdateToLatestVersion() {
+    _pkgverDeclaration="$(grep -o -m 1 '^\s*pkgver\s*=\s*.*$' ${1}/PKGBUILD)"
+    eval ${_pkgverDeclaration}
+	if [ -z "${_remoteGit}" ];
+	then
+	    echo "No _remoteGit deaclared ${1} (${pkgname})"
+		return 0
+	fi
+	
+	_latestPkgver=$(git ls-remote --refs --tags "${_remoteGit}" | sed 's|.*tags/\(.*\)$|\1|' | sort -u | grep -vE "(beta|alpha|test)" | tail -n 1)
+	
+    if [[ "${pkgver}" == "${_latestPkgver}" ]];
+    then
+		echo "Is already Latest-Package-Version ${1} (${pkgname})"
+		return 0
+    fi
+
+    # Only first occurence
+    sed -i "0,/${_pkgverDeclaration}/s//pkgver='${_latestPkgver}'/" ${1}/PKGBUILD
+}
+
 ### START
 
 makepkgsClone=(
@@ -186,6 +207,19 @@ do
 		    continue
 		fi
 		_pkgConvertToGitPackage makepkgs/${makepkgname}
+	    done
+	;;
+	"updateToLatestVersion")
+	    _outH1 "UPDATE PACKAGE TO LATEST VERSION"
+	    for makepkg in "${makepkgs[@]}"
+	    do
+		makepkgname="${makepkg//#*/}"
+		if [[ "${makepkg}"  == *#nogit* ]];
+		then
+		    echo "NO GIT : ${makepkgname}"
+		    continue
+		fi
+		_pkgUpdateToLatestVersion makepkgs/${makepkgname}
 	    done
 	;;
 	"sync")
