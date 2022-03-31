@@ -15,10 +15,11 @@ url='http://www.kopano.com/'
 license=('AGPL3')
 
 _tagPrefix="v"
+_remoteGit="https://stash.kopano.io/scm/kw/kopano-webapp.git"
 # template input; name=base-scm
 _phpIni="${_basePkgName}.ini"
 source=(
-    "${pkgname}::git+https://stash.kopano.io/scm/kw/kopano-webapp.git${_sourceBranch}"
+    "${pkgname}::git+${_remoteGit}${_sourceBranch}"
     "${_phpIni}"
 	)
 md5sums=(
