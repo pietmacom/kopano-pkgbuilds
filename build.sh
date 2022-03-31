@@ -98,13 +98,19 @@ _pkgConvertToGitPackage() {
 }
 
 _pkgUpdateToLatestVersion() {
-    if _sourceDeclaration="$(grep -o -m 1 '^\s*_source\s*=\s*.*$' ${1}/PKGBUILD)" ;
+    if ! _sourceDeclaration="$(grep -o -m 1 '^\s*_source\s*=\s*.*$' ${1}/PKGBUILD)" ;
     then
-    	eval local ${_sourceDeclaration}	
-    else
     	echo "No _source deaclared ${1}"
 	return 0
-    fi    
+    fi
+    
+    eval local ${_sourceDeclaration}	    
+    if [[ "${_source}" != git+ ]];
+    then
+    	echo "No supported location declared in _source ${1} (${_source})"
+	return 0
+    fi
+    
     if _tagPrefixDeclaration="$(grep -o -m 1 '^\s*_tagPrefix\s*=\s*.*$' ${1}/PKGBUILD)" ;
     then
     	eval local ${_tagPrefixDeclaration}
