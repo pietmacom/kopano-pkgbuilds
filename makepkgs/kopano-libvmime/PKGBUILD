@@ -1,4 +1,4 @@
-pkgname='kopano-libvmime-git'
+pkgname='kopano-libvmime'
 pkgver=0.9.2k4
 pkgrel=1
 provides=(
