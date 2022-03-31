@@ -98,11 +98,11 @@ _pkgConvertToGitPackage() {
 }
 
 _pkgUpdateToLatestVersion() {
-    if _remoteGitDeclaration="$(grep -o -m 1 '^\s*_remoteGit\s*=\s*.*$' ${1}/PKGBUILD)" ;
+    if _sourceDeclaration="$(grep -o -m 1 '^\s*_source\s*=\s*.*$' ${1}/PKGBUILD)" ;
     then
-    	eval local ${_remoteGitDeclaration}	
+    	eval local ${_sourceDeclaration}	
     else
-    	echo "No _remoteGit deaclared ${1}"
+    	echo "No _source deaclared ${1}"
 	return 0
     fi    
     if _tagPrefixDeclaration="$(grep -o -m 1 '^\s*_tagPrefix\s*=\s*.*$' ${1}/PKGBUILD)" ;
@@ -117,7 +117,7 @@ _pkgUpdateToLatestVersion() {
     _pkgverDeclaration="$(grep -o -m 1 '^\s*pkgver\s*=\s*.*$' ${1}/PKGBUILD)"    
     eval local ${_pkgverDeclaration}
     
-    _latestPkgver=$(git ls-remote --refs --tags "${_remoteGit}" | sed 's|.*tags/\(.*\)$|\1|' | grep "^${_tagPrefix}.*" | grep ".*${_tagSuffix}$" | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1|" | sort -u -V |  grep -vE "(beta|alpha|test)" | tail -n 1)
+    _latestPkgver=$(git ls-remote --refs --tags "$(sed "s|${_source}|^git+|")" | sed 's|.*tags/\(.*\)$|\1|' | grep "^${_tagPrefix}.*" | grep ".*${_tagSuffix}$" | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1|" | sort -u -V |  grep -vE "(beta|alpha|test)" | tail -n 1)
     if [[ "${pkgver}" == "${_latestPkgver}" ]];
     then
 	echo "Is already Latest Version ${1}"
