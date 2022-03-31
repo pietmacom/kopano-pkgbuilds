@@ -23,9 +23,10 @@ license=(
 	)
 
 _tagPrefix="kopanocore-"
+_remoteGit="https://stash.kopano.io/scm/kc/kopanocore.git"
 # template input; name=base-scm
 source=(
-    "${pkgname}::git+https://stash.kopano.io/scm/kc/kopanocore.git${_sourceBranch}"
+    "${pkgname}::git+${_remoteGit}${_sourceBranch}"
 	)
 md5sums=(
     'SKIP'
