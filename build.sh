@@ -117,7 +117,7 @@ _pkgUpdateToLatestVersion() {
     _pkgverDeclaration="$(grep -o -m 1 '^\s*pkgver\s*=\s*.*$' ${1}/PKGBUILD)"    
     eval local ${_pkgverDeclaration}
     
-    _latestPkgver=$(git ls-remote --refs --tags "$(sed "s|${_source}|^git+|")" | sed 's|.*tags/\(.*\)$|\1|' | grep "^${_tagPrefix}.*" | grep ".*${_tagSuffix}$" | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1|" | sort -u -V |  grep -vE "(beta|alpha|test)" | tail -n 1)
+    _latestPkgver=$(git ls-remote --refs --tags "$(echo "${_source}" | sed 's|^git+||')" | sed 's|.*tags/\(.*\)$|\1|' | grep "^${_tagPrefix}.*" | grep ".*${_tagSuffix}$" | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1|" | sort -u -V |  grep -vE "(beta|alpha|test)" | tail -n 1)
     if [[ "${pkgver}" == "${_latestPkgver}" ]];
     then
 	echo "Is already Latest Version ${1}"
