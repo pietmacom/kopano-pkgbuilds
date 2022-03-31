@@ -120,7 +120,7 @@ _pkgUpdateToLatestVersion() {
     _latestPkgver=$(git ls-remote --refs --tags "${_remoteGit}" | sed 's|.*tags/\(.*\)$|\1|' | grep "^${_tagPrefix}.*" | grep ".*${_tagSuffix}$" | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1|" | sort -u -V |  grep -vE "(beta|alpha|test)" | tail -n 1)
     if [[ "${pkgver}" == "${_latestPkgver}" ]];
     then
-	echo "Is already Latest-Package-Version ${1}"
+	echo "Is already Latest Version ${1}"
 	return 0
     fi
 
