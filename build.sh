@@ -86,7 +86,7 @@ _pkgPush() {
 
 _pkgConvertToGitPackage() {
     _pkgnameDeclaration="$(grep -o -m 1 '^\s*pkgname\s*=\s*.*$' ${1}/PKGBUILD)"
-    eval ${_pkgnameDeclaration}
+    eval local ${_pkgnameDeclaration}
     if [[ "${pkgname}" == *-git ]];
     then
 	echo "Is already Git-Package ${1} (${pkgname})"
@@ -98,27 +98,24 @@ _pkgConvertToGitPackage() {
 }
 
 _pkgUpdateToLatestVersion() {
-    #_remoteGitDeclaration="$(grep -o -m 1 '^\s*_remoteGit\s*=\s*.*$' ${1}/PKGBUILD)"	
-    #if [ -z "${_remoteGitDeclaration}" ];
-    if ! _remoteGitDeclaration="$(grep -o -m 1 '^\s*_remoteGit\s*=\s*.*$' ${1}/PKGBUILD)" ;
+    if _remoteGitDeclaration="$(grep -o -m 1 '^\s*_remoteGit\s*=\s*.*$' ${1}/PKGBUILD)" ;
     then
+    	eval local ${_remoteGitDeclaration}	
+    else
     	echo "No _remoteGit deaclared ${1}"
 	return 0
-    fi	
-    eval ${_remoteGitDeclaration}	
-
-    if ! eval $(grep -o -m 1 '^\s*_tagPrefix\s*=\s*.*$' ${1}/PKGBUILD) ;
+    fi    
+    if _tagPrefixDeclaration="$(grep -o -m 1 '^\s*_tagPrefix\s*=\s*.*$' ${1}/PKGBUILD)" ;
     then
-    	echo "No _tagPrefix declared"
-    fi
-    
-    if ! eval $(grep -o -m 1 '^\s*_tagSuffix\s*=\s*.*$' ${1}/PKGBUILD) ;
+    	eval local ${_tagPrefixDeclaration}
+    fi    
+    if _tagSuffixDeclaration="$(grep -o -m 1 '^\s*_tagSuffix\s*=\s*.*$' ${1}/PKGBUILD)" ;
     then
-    	echo "No _tagSuffix declared"
+	eval local ${_tagSuffixDeclaration}
     fi
     
     _pkgverDeclaration="$(grep -o -m 1 '^\s*pkgver\s*=\s*.*$' ${1}/PKGBUILD)"    
-    eval ${_pkgverDeclaration}
+    eval local ${_pkgverDeclaration}
     
     _latestPkgver=$(git ls-remote --refs --tags "${_remoteGit}" | sed 's|.*tags/\(.*\)$|\1|' | grep "^${_tagPrefix}.*" | grep ".*${_tagSuffix}$" | sed "s|${_tagPrefix}\(.*\)${_tagSuffix}|\1|" | sort -u -V |  grep -vE "(beta|alpha|test)" | tail -n 1)
     if [[ "${pkgver}" == "${_latestPkgver}" ]];
