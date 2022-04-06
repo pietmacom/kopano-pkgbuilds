@@ -40,12 +40,12 @@ Of course you can try first and update second.
  As you can read from the next chapter, this isn't realy planed. But with a little luck the patches (applied automaticly) from the development/master-branch will work for the latest release-tag, too.
  
 ```console
-./build-docker.sh build
+./build-docker.sh updateToLatestVersion build
 ```
 
 ### For Specific Arch Linux
 #### From Kopanos Latest Release-Tag
- Code from releases and their depencencies are fixed. For this reason they will have dependencies to older packages/libraries. This won't get along with Archlinux's rolling release. The build will likely fail.
+ Code from releases and their depencencies are fixed. For this reason they will have dependencies to older packages/libraries. This won't neccessary get along with Archlinux's rolling release. The build will likely fail.
  
  Anyways you can build the release packages of the day they recently/successfully compiled. Checkout the branch with the latest timestamp and compile.
  
