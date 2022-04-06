@@ -43,7 +43,7 @@ Of course you can try first and update second.
 ./build-docker.sh updateToLatestVersion build
 ```
 
-### For Specific Arch Linux
+### For An Arch Linux From Of Certain Date
 #### From Kopanos Latest Release-Tag
  Code from releases and their depencencies are fixed. For this reason they will have dependencies to older packages/libraries. This won't neccessary get along with Archlinux's rolling release. The build will likely fail.
  
