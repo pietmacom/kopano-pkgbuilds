@@ -148,7 +148,7 @@ makepkgs=(
     'libvmime#nosync'
 #    'kopano-libvmime'
 #    'php74#nosync#nogit'
-    'php-binding#nosync#nogit'
+#    'php-binding#nosync#nogit'
     'kopano-core'
 
     # z-push
