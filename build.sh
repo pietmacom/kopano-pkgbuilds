@@ -196,11 +196,11 @@ makepkgs=(
 _outH1 "CHECKOUT"
     for makepkgClone in "${makepkgsClone[@]}"
     do
-	makepkgClone=${makepkgClone//*#commit=/}
+	makepkgClone="${makepkgClone//#commit=*/}"
 	makepkgCheckOut="${makepkgClone//*#commit=/}"
-#	makepkgClone=${makepkgClone//*#tag=/}
+#	makepkgClone="${makepkgClone//*#tag=/}"
 
-	makepkgCloneName=${makepkgClone}
+	makepkgCloneName="${makepkgClone}"
 	makepkgCloneName="${makepkgCloneName//*\//}"
 	makepkgCloneName="${makepkgCloneName//.git/}"
 	
