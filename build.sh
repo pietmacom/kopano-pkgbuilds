@@ -148,8 +148,8 @@ makepkgs=(
     # CORE
     'libiconv#nosync#nogit'
     'swig#nosync#nogit'
-#    'libvmime#nosync'
-    'kopano-libvmime'
+    'libvmime#nosync'
+#    'kopano-libvmime'
     'php74#nosync#nogit'
     'php-binding#nosync#nogit'
     'kopano-core'
