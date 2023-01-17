@@ -138,7 +138,7 @@ _pkgUpdateToLatestVersion() {
 
 makepkgsClone=(
     'https://aur.archlinux.org/libiconv.git'
-    'https://aur.archlinux.org/php74.git'
+    'https://aur.archlinux.org/php74.git#commit=d0c51cee72473216f9b1cd83a8a0bb3b596ec81e'
 	)
 
 makepkgs=(
@@ -146,12 +146,12 @@ makepkgs=(
 #	'test#nosync#nogit'
 	
     # CORE
+    'php74#nosync#nogit'
+    'php-binding#nosync#nogit'
     'libiconv#nosync#nogit'
     'swig#nosync#nogit'
     'libvmime#nosync'
 #    'kopano-libvmime'
-    'php74#nosync#nogit'
-    'php-binding#nosync#nogit'
     'kopano-core'
 
     # z-push
@@ -196,10 +196,22 @@ makepkgs=(
 _outH1 "CHECKOUT"
     for makepkgClone in "${makepkgsClone[@]}"
     do
+	makepkgClone=${makepkgClone//*#commit=/}
+	makepkgCheckOut="${makepkgClone//*#commit=/}"
+#	makepkgClone=${makepkgClone//*#tag=/}
+
 	makepkgCloneName=${makepkgClone}
 	makepkgCloneName="${makepkgCloneName//*\//}"
 	makepkgCloneName="${makepkgCloneName//.git/}"
-	git clone ${makepkgClone} makepkgs/${makepkgCloneName}
+	
+	git clone ${makepkgClone} makepkgs/${makepkgCloneName}	
+	if [[ ! -z "${makepkgCheckOut}" ]];
+	then
+		wd="$(pwd)"
+		cd makepkgs/${makepkgCloneName}
+		git checkout ${makepkgCheckOut}
+		cd ${wd}
+	fi
     done
 
 _outH1 "PREPARE"
