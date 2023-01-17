@@ -142,6 +142,9 @@ makepkgsClone=(
 	)
 
 makepkgs=(
+	# TESTING BUILD
+	'test#nosync#nogit'
+	
     # CORE
     'libiconv#nosync#nogit'
     'swig#nosync#nogit'
