@@ -59,7 +59,7 @@ makedepends=(
     'curl>=7' # libcurl
     'pam>=1'
     # 'openldap>=2.4' # Not working with openldap 2.6
-    'php'
+    'php<8'
     'python>=3'
     'swig>=2.0'
     #
