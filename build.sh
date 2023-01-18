@@ -202,7 +202,7 @@ _outH1 "CHECKOUT"
 		makepkgCheckoutBranch="${makepkgCloneUrl//${makepkgClone}/}"
 		makepkgCheckoutBranch="${makepkgCheckoutBranch//*#branch=/}"
 
-		makepkgCloneName="${makepkgCloneUrl}"
+		makepkgCloneName="${makepkgClone}"
 		makepkgCloneName="${makepkgCloneName//*\//}"
 		makepkgCloneName="${makepkgCloneName//.git/}"
 		
