@@ -194,24 +194,26 @@ makepkgs=(
       )
 
 _outH1 "CHECKOUT"
-    for makepkgClone in "${makepkgsClone[@]}"
+    for makepkgCloneUrl in "${makepkgsClone[@]}"
     do
-	makepkgClone="${makepkgClone//#commit=*/}"
-	makepkgCheckOut="${makepkgClone//*#commit=/}"
-#	makepkgClone="${makepkgClone//*#tag=/}"
+		makepkgClone="${makepkgCloneUrl//#*/}"
+		
+		# Avoid url in checkout
+		makepkgCheckoutBranch="${makepkgCloneUrl//${makepkgClone}/}"
+		makepkgCheckoutBranch="${makepkgCloneUrl//*#branch=/}"
 
-	makepkgCloneName="${makepkgClone}"
-	makepkgCloneName="${makepkgCloneName//*\//}"
-	makepkgCloneName="${makepkgCloneName//.git/}"
-	
-	git clone ${makepkgClone} makepkgs/${makepkgCloneName}	
-	if [[ ! -z "${makepkgCheckOut}" ]];
-	then
-		wd="$(pwd)"
-		cd makepkgs/${makepkgCloneName}
-		git checkout ${makepkgCheckOut}
-		cd ${wd}
-	fi
+		makepkgCloneName="${makepkgCloneUrl}"
+		makepkgCloneName="${makepkgCloneName//*\//}"
+		makepkgCloneName="${makepkgCloneName//.git/}"
+		
+		git clone ${makepkgClone} makepkgs/${makepkgCloneName}	
+		if [[ ! -z "${makepkgCheckoutBranch}" ]];
+		then
+			_pwd="$(pwd)"
+			cd makepkgs/${makepkgCloneName}
+			git checkout ${makepkgCheckoutBranch}
+			cd ${_pwd}
+		fi
     done
 
 _outH1 "PREPARE"
