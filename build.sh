@@ -200,7 +200,7 @@ _outH1 "CHECKOUT"
 		
 		# Avoid url in checkout
 		makepkgCheckoutBranch="${makepkgCloneUrl//${makepkgClone}/}"
-		makepkgCheckoutBranch="${makepkgCloneUrl//*#branch=/}"
+		makepkgCheckoutBranch="${makepkgCheckoutBranch//*#branch=/}"
 
 		makepkgCloneName="${makepkgCloneUrl}"
 		makepkgCloneName="${makepkgCloneName//*\//}"
