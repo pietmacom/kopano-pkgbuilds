@@ -31,7 +31,7 @@ _pkgBuild() {
     cp -n *.pkg.* /build-target || true
     
     mkdir -p /build-target/dependencies
-    cp -n /var/cache/pacman/pkg/*.pkg.* /build-target/dependencies || true
+    cp -n /var/cache/pacman/pkg/*.pkg.* /build-target || true
 
     # Install packages separately.
     # When building multiple packages with different version numbers and in one PKGBUILD,
@@ -149,10 +149,10 @@ makepkgs=(
 #	'test#nosync#nogit'
 	
     # CORE
-    'kopano-libvmime'
     'libiconv#nosync#nogit'
     'swig#nosync#nogit'
 #    'libvmime#nosync'
+    'kopano-libvmime'
     'php74#nosync#nogit'
     'php-binding#nosync#nogit'
     'kopano-core'
