@@ -29,6 +29,9 @@ _pkgBuild() {
 
     # in case there's nothing to copy, don't fail
     cp -n *.pkg.* /build-target || true
+    
+    mkdir -p /build-target/dependencies
+    cp -n /var/cache/pacman/pkg/*.pkg.* /build-target/dependencies || true
 
     # Install packages separately.
     # When building multiple packages with different version numbers and in one PKGBUILD,
