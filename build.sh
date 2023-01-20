@@ -138,8 +138,8 @@ _pkgUpdateToLatestVersion() {
 ### START
 
 makepkgsClone=(
-    'https://aur.archlinux.org/libiconv.git'
-    'https://aur.archlinux.org/php74.git#branch=d0c51cee72473216f9b1cd83a8a0bb3b596ec81e'
+    'https://aur.archlinux.org/libiconv.git' # 6dc641f9374cfa7054555ecdb8dbbd5531008795
+    'https://aur.archlinux.org/php74.git#branch=26c41fcec7d1bfa8ed0bc847b55ad910a9717f65'
 	)
 
 makepkgs=(
