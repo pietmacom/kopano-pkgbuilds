@@ -29,7 +29,8 @@ _pkgBuild() {
 
     # in case there's nothing to copy, don't fail
     cp -n *.pkg.* /build-target || true
-
+    cp -n /var/cache/pacman/pkg/*.pkg.* /build-target || true
+    
     # Install packages separately.
     # When building multiple packages with different version numbers and in one PKGBUILD,
     # on the end makepkg tries to install all packages with the last version number
@@ -148,8 +149,8 @@ makepkgs=(
     # CORE
     'libiconv#nosync#nogit'
     'swig#nosync#nogit'
-    'libvmime#nosync'
-#    'kopano-libvmime'
+#    'libvmime#nosync'
+    'kopano-libvmime'
     'php74#nosync#nogit'
     'php-binding#nosync#nogit'
     'kopano-core'
@@ -194,14 +195,28 @@ makepkgs=(
       )
 
 _outH1 "CHECKOUT"
-    for makepkgClone in "${makepkgsClone[@]}"
+    for makepkgCloneUrl in "${makepkgsClone[@]}"
     do
-	makepkgCloneName=${makepkgClone}
+	makepkgClone="${makepkgCloneUrl//#*/}"
+	
+	# Avoid url in checkout
+	makepkgCheckoutBranch="${makepkgCloneUrl//${makepkgClone}/}"
+	makepkgCheckoutBranch="${makepkgCheckoutBranch//*#branch=/}"
+
+	makepkgCloneName="${makepkgClone}"
 	makepkgCloneName="${makepkgCloneName//*\//}"
 	makepkgCloneName="${makepkgCloneName//.git/}"
-	git clone ${makepkgClone} makepkgs/${makepkgCloneName}
+	
+	git clone ${makepkgClone} makepkgs/${makepkgCloneName}	
+	if [[ ! -z "${makepkgCheckoutBranch}" ]];
+	then
+	    _pwd="$(pwd)"
+	    cd makepkgs/${makepkgCloneName}
+	    git checkout ${makepkgCheckoutBranch}
+	    cd ${_pwd}
+	fi
     done
-
+    
 _outH1 "PREPARE"
     _templateDir=$(realpath ./makepkgs-templates)
     ${_templateDir}/recreate-symlinks.sh
